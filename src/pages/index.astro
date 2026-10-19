@@ -1,0 +1,223 @@
+---
+import Base from "../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const books = (await getCollection("books")).map((e) => e.data);
+const reading = books.filter((b) => b.status === "reading");
+const toRead = books.filter((b) => b.status === "to-read");
+const read = books.filter((b) => b.status === "read");
+
+/**
+ * The room, before it is a room.
+ * Temporary blueprint: the four subjects, the materials, the arrangement.
+ */
+const subjects = [
+  {
+    key: "reading",
+    period: "01",
+    name: "Reading",
+    object: "The shelf",
+    surface: "A book, pulled out",
+    material: "oak · cloth · gold foil",
+    count: read.length + reading.length + toRead.length,
+    href: "/reading/",
+    tone: "oak",
+  },
+  {
+    key: "writing",
+    period: "02",
+    name: "Writing",
+    object: "The desk",
+    surface: "A typed sheet of paper",
+    material: "cream stock · ink",
+    count: null,
+    href: "https://blog.missingsemester.in/",
+    tone: "paper",
+  },
+  {
+    key: "building",
+    period: "03",
+    name: "Building",
+    object: "The terminal",
+    surface: "A prompt, mid-build",
+    material: "dark glass · phosphor",
+    count: null,
+    href: "https://github.com/vineetverma321/",
+    tone: "glass",
+  },
+  {
+    key: "lifting",
+    period: "04",
+    name: "Lifting",
+    object: "The plate tree",
+    surface: "The chalkboard",
+    material: "iron · slate · chalk",
+    count: null,
+    href: "/lifting/",
+    tone: "slate",
+  },
+];
+---
+
+<Base>
+  <main class="blueprint">
+    <header class="blueprint__head">
+      <p class="blueprint__eyebrow">One-room schoolhouse</p>
+      <h1>The Missing Semester of Life's Education</h1>
+      <p class="blueprint__sub">what we should have been taught in school but didn't</p>
+    </header>
+
+    <p class="blueprint__note">
+      Blueprint view — the room is still being built. Four subjects, four
+      materials, four voices.
+    </p>
+
+    <ol class="subjects">
+      {
+        subjects.map((s) => (
+          <li class={`subject subject--${s.tone}`}>
+            <a href={s.href}>
+              <p class="subject__period">Period {s.period}</p>
+              <h2 class="subject__name">{s.name}</h2>
+              <dl class="subject__spec">
+                <div>
+                  <dt>Object</dt>
+                  <dd>{s.object}</dd>
+                </div>
+                <div>
+                  <dt>Read on</dt>
+                  <dd>{s.surface}</dd>
+                </div>
+                <div>
+                  <dt>Material</dt>
+                  <dd>{s.material}</dd>
+                </div>
+              </dl>
+              {s.count !== null && <p class="subject__count">{s.count} books</p>}
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </main>
+</Base>
+
+<style>
+  .blueprint {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-m) var(--space-2xl);
+  }
+
+  .blueprint__eyebrow {
+    font-family: var(--font-sign);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: var(--step--1);
+    color: var(--green-600);
+  }
+
+  h1 {
+    font-size: var(--step-4);
+    max-width: 18ch;
+    letter-spacing: -0.035em;
+    margin-top: var(--space-2xs);
+  }
+
+  .blueprint__sub {
+    font-family: var(--font-hand);
+    font-size: var(--step-2);
+    color: var(--fg-muted);
+    margin-bottom: var(--space-l);
+  }
+
+  .blueprint__note {
+    font-family: var(--font-sign);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--step--1);
+    color: var(--ink-300);
+    border-top: 1px solid var(--paper-400);
+    padding-top: var(--space-s);
+  }
+
+  .subjects {
+    list-style: none;
+    margin: var(--space-l) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-m);
+  }
+
+  .subject {
+    background: var(--bg-paper);
+    border: 1px solid var(--paper-300);
+    border-top: 6px solid var(--tone, var(--oak-500));
+    border-radius: 3px;
+    transition: transform var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+  }
+
+  .subject:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px -18px rgba(34, 31, 26, 0.6);
+  }
+
+  .subject a {
+    display: block;
+    padding: var(--space-m);
+    text-decoration: none;
+  }
+
+  .subject--oak { --tone: var(--oak-500); }
+  .subject--paper { --tone: var(--paper-400); }
+  .subject--glass { --tone: var(--slate-700); }
+  .subject--slate { --tone: var(--green-600); }
+
+  .subject__period {
+    font-family: var(--font-sign);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: var(--step--1);
+    color: var(--fg-muted);
+    margin: 0;
+  }
+
+  .subject__name {
+    font-size: var(--step-2);
+    margin: var(--space-3xs) 0 var(--space-s);
+  }
+
+  .subject__spec {
+    margin: 0;
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .subject__spec div {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: var(--space-2xs);
+  }
+
+  .subject__spec dt {
+    font-family: var(--font-sign);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: var(--step--1);
+    color: var(--ink-300);
+  }
+
+  .subject__spec dd {
+    margin: 0;
+    font-size: var(--step--1);
+  }
+
+  .subject__count {
+    margin: var(--space-s) 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--green-600);
+  }
+</style>

@@ -1,0 +1,242 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const books = (await getCollection("books")).map((entry) => entry.data);
+
+const groups = [
+  {
+    status: "reading",
+    label: "On loan",
+    note: "Out with me now — one at a time, because that is how reading works.",
+  },
+  {
+    status: "to-read",
+    label: "On hold",
+    note: "Requests in the drawer. The pile grows faster than it shrinks.",
+  },
+  {
+    status: "read",
+    label: "On the shelf",
+    note: "Finished, and kept.",
+  },
+] as const;
+
+const byStatus = (status: string) =>
+  books
+    .filter((b) => b.status === status)
+    .sort((a, b) => String(a.author).localeCompare(String(b.author)));
+
+const counts = {
+  read: byStatus("read").length,
+  reading: byStatus("reading").length,
+  "to-read": byStatus("to-read").length,
+};
+---
+
+<Base
+  title="The Library — The Missing Semester of Life's Education"
+  description="Books read, being read, and waiting to be read."
+>
+  <main class="library">
+    <header class="library__head">
+      <p class="library__eyebrow">Subject 01</p>
+      <h1>The Library</h1>
+      <p class="library__lede">
+        Every book I own, in the state I own it in: out with me, waiting on the
+        holds drawer, or back on the shelf.
+      </p>
+      <dl class="counts">
+        <div><dt>On the shelf</dt><dd>{counts.read}</dd></div>
+        <div><dt>On loan</dt><dd>{counts.reading}</dd></div>
+        <div><dt>On hold</dt><dd>{counts["to-read"]}</dd></div>
+      </dl>
+    </header>
+
+    {
+      groups.map((group) => {
+        const items = byStatus(group.status);
+        if (items.length === 0) return null;
+        return (
+          <section class="group" data-status={group.status}>
+            <div class="group__head">
+              <h2>{group.label}</h2>
+              <p class="group__note">{group.note}</p>
+            </div>
+            <ul class="shelf">
+              {items.map((book) => (
+                <li class="book" style={`--spine: ${book.spineColor ?? "var(--oak-500)"}`}>
+                  <span class="book__spine" aria-hidden="true" />
+                  <div class="book__body">
+                    <h3 class="book__title">{book.title}</h3>
+                    <p class="book__author">{book.author}</p>
+                    <p class="book__meta">
+                      {book.year && <span>{book.year}</span>}
+                      {book.publisher && <span>{book.publisher}</span>}
+                      {book.pages && <span>{book.pages}pp</span>}
+                      {book.category && <span class="book__cat">{book.category}</span>}
+                      {book.rating ? <span class="book__rating" aria-label={`Rated ${book.rating} of 5`}>{"★".repeat(Math.round(book.rating))}</span> : null}
+                    </p>
+                    {book.notes && <p class="book__notes">{book.notes}</p>}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })
+    }
+  </main>
+</Base>
+
+<style>
+  .library {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-m) var(--space-2xl);
+  }
+
+  .library__eyebrow {
+    font-family: var(--font-sign);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: var(--step--1);
+    color: var(--green-600);
+    margin-bottom: var(--space-2xs);
+  }
+
+  h1 {
+    font-size: var(--step-4);
+    letter-spacing: -0.03em;
+  }
+
+  .library__lede {
+    max-width: 44ch;
+    color: var(--fg-muted);
+    font-size: var(--step-1);
+    line-height: 1.45;
+  }
+
+  .counts {
+    display: flex;
+    gap: var(--space-l);
+    margin: var(--space-l) 0 0;
+    padding: var(--space-s) 0;
+    border-top: 1px solid var(--paper-400);
+    border-bottom: 1px solid var(--paper-400);
+  }
+
+  .counts div {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .counts dt {
+    font-family: var(--font-sign);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--step--1);
+    color: var(--fg-muted);
+  }
+
+  .counts dd {
+    margin: 0;
+    font-size: var(--step-2);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .group {
+    margin-top: var(--space-xl);
+  }
+
+  .group__head h2 {
+    font-family: var(--font-sign);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: var(--step-1);
+    margin-bottom: var(--space-3xs);
+  }
+
+  .group__note {
+    color: var(--fg-muted);
+    font-size: var(--step--1);
+    margin-bottom: var(--space-m);
+  }
+
+  .shelf {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .book {
+    display: grid;
+    grid-template-columns: 10px 1fr;
+    gap: var(--space-m);
+    align-items: stretch;
+    padding: var(--space-s) var(--space-s) var(--space-s) 0;
+    background: var(--bg-paper);
+    border: 1px solid var(--paper-300);
+    border-radius: 3px;
+    transition: transform var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+  }
+
+  .book:hover {
+    transform: translateX(3px);
+    box-shadow: -3px 3px 0 var(--paper-300);
+  }
+
+  .book__spine {
+    background: var(--spine);
+    border-radius: 3px 0 0 3px;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25),
+      inset 1px 0 0 rgba(255, 255, 255, 0.12);
+  }
+
+  .book__title {
+    margin: 0;
+    font-size: var(--step-1);
+    font-weight: 600;
+  }
+
+  .book__author {
+    margin: 0 0 var(--space-3xs);
+    color: var(--fg-muted);
+    font-style: italic;
+  }
+
+  .book__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    margin: 0;
+    font-family: var(--font-sign);
+    font-size: var(--step--1);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fg-muted);
+  }
+
+  .book__cat::before {
+    content: "▪ ";
+    color: var(--brass-500);
+  }
+
+  .book__rating {
+    color: var(--brass-500);
+    letter-spacing: 0.1em;
+  }
+
+  .book__notes {
+    margin: var(--space-xs) 0 0;
+    padding-left: var(--space-s);
+    border-left: 2px solid var(--paper-400);
+    color: var(--fg-muted);
+    font-size: var(--step--1);
+    font-style: italic;
+  }
+</style>

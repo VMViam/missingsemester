@@ -1,0 +1,72 @@
+[
+  {
+    "id": "sacks-1985-man-who-mistook-his-wife",
+    "title": "The Man Who Mistook His Wife for a Hat",
+    "author": "Oliver Sacks",
+    "status": "read",
+    "category": "mind",
+    "rating": 5,
+    "dateAdded": "2026-01-11",
+    "dateRead": "2026-01-24",
+    "year": 1985,
+    "publisher": "Picador",
+    "pages": 240,
+    "spineColor": "#2f4858",
+    "spineWidth": 24
+  },
+  {
+    "id": "kahneman-2011-thinking-fast-and-slow",
+    "title": "Thinking, Fast and Slow",
+    "author": "Daniel Kahneman",
+    "status": "reading",
+    "category": "mind",
+    "rating": 4,
+    "dateAdded": "2026-02-02",
+    "year": 2011,
+    "publisher": "Farrar, Straus and Giroux",
+    "pages": 499,
+    "spineColor": "#6b4a2f",
+    "spineWidth": 38
+  },
+  {
+    "id": "harari-2011-sapiens",
+    "title": "Sapiens: A Brief History of Humankind",
+    "author": "Yuval Noah Harari",
+    "status": "read",
+    "category": "history",
+    "rating": 4,
+    "dateAdded": "2025-11-30",
+    "dateRead": "2025-12-19",
+    "year": 2011,
+    "publisher": "Harper",
+    "pages": 443,
+    "spineColor": "#7a2e2e",
+    "spineWidth": 32
+  },
+  {
+    "id": "clear-2018-atomic-habits",
+    "title": "Atomic Habits",
+    "author": "James Clear",
+    "status": "to-read",
+    "category": "practice",
+    "dateAdded": "2026-03-04",
+    "year": 2018,
+    "publisher": "Avery",
+    "pages": 320,
+    "spineColor": "#3f6b45",
+    "spineWidth": 27
+  },
+  {
+    "id": "aurelius-2006-meditations",
+    "title": "Meditations",
+    "author": "Marcus Aurelius",
+    "status": "to-read",
+    "category": "philosophy",
+    "dateAdded": "2026-03-05",
+    "year": 2006,
+    "publisher": "Penguin Classics",
+    "pages": 304,
+    "spineColor": "#4a4a52",
+    "spineWidth": 20
+  }
+]

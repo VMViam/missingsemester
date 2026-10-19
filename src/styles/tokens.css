@@ -1,0 +1,132 @@
+/*
+ * Design tokens — "One-Room Schoolhouse"
+ *
+ * Four subjects, four materials, four voices:
+ *   READING   — oak + cloth + gold foil    (printed, formal)
+ *   WRITING   — cream paper + ink          (typed, composed)
+ *   BUILDING  — dark glass + phosphor      (monospace, exact)
+ *   LIFTING   — slate + chalk dust         (scrawled, aphoristic)
+ *
+ * Keep the room legible through materials, not through words.
+ */
+
+:root {
+  /* --- Materials ------------------------------------------------------ */
+
+  /* Slate: the blackboard, the dark end of the room */
+  --slate-900: #1c1d1c;
+  --slate-800: #26282a;
+  --slate-700: #33363a;
+  --slate-600: #454a4f;
+
+  /* Oak: the school desk, the shelf, the floor */
+  --oak-700: #6b4526;
+  --oak-600: #8a5a32;
+  --oak-500: #a9784e;
+  --oak-400: #c19168;
+  --oak-300: #d9b18d;
+
+  /* Paper: the writing surface */
+  --paper-100: #f6f1e6;
+  --paper-200: #efe9dd;
+  --paper-300: #e3dac9;
+  --paper-400: #d2c6b0;
+
+  /* Chalk */
+  --chalk-100: #f7f5ef;
+  --chalk-200: #e8e4da;
+  --chalk-300: #cfc9bb;
+
+  /* Institutional green: old paint, chalkboard frame, notice boards */
+  --green-600: #3f4d3f;
+  --green-500: #4f6152;
+  --green-400: #647a66;
+
+  /* Brass: foil on spines, lamp fittings, hardware */
+  --brass-600: #8f6f1e;
+  --brass-500: #b58c26;
+  --brass-400: #c9a227;
+  --brass-300: #dfc05a;
+
+  /* Gym: the rubber mat, the plates */
+  --gym-red-500: #a03b2f;
+  --gym-red-400: #bc4c3e;
+  --gym-blue-500: #2f5f8f;
+  --gym-blue-400: #3d76ad;
+  --gym-yellow-500: #c9a32b;
+  --gym-yellow-400: #dcbb45;
+  --gym-green-500: #3d6b45;
+  --gym-green-400: #4d8459;
+
+  /* Terminal phosphor */
+  --phosphor: #7ee787;
+  --phosphor-dim: #3f6b45;
+  --amber-glow: #ffb454;
+
+  /* Ink */
+  --ink-900: #221f1a;
+  --ink-700: #3c3830;
+  --ink-500: #5f594c;
+  --ink-300: #8c8577;
+
+  /* --- Semantic surfaces ---------------------------------------------- */
+
+  --bg-room: var(--slate-900);
+  --bg-page: var(--paper-200);
+  --bg-paper: var(--paper-100);
+  --bg-slate: var(--slate-800);
+  --fg-ink: var(--ink-900);
+  --fg-muted: var(--ink-500);
+  --fg-chalk: var(--chalk-100);
+  --fg-faint: var(--chalk-300);
+
+  --accent: var(--brass-400);
+  --accent-ink: var(--ink-900);
+  --focus: var(--amber-glow);
+
+  /* --- Type ------------------------------------------------------------ */
+
+  /* Four voices. One per subject. */
+  --font-print: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-type: "Special Elite", "Courier Prime", ui-monospace, monospace;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-hand: "Caveat", "Bradley Hand", cursive;
+  --font-sign: "Archivo Narrow", "Helvetica Neue Condensed", Arial, sans-serif;
+
+  --step--1: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);
+  --step-0: clamp(0.95rem, 0.92rem + 0.15vw, 1.05rem);
+  --step-1: clamp(1.15rem, 1.08rem + 0.35vw, 1.4rem);
+  --step-2: clamp(1.45rem, 1.3rem + 0.7vw, 1.95rem);
+  --step-3: clamp(1.9rem, 1.6rem + 1.4vw, 2.9rem);
+  --step-4: clamp(2.4rem, 1.9rem + 2.4vw, 4.2rem);
+
+  /* --- Space ----------------------------------------------------------- */
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6.5rem;
+
+  --measure: 68ch;
+  --room-max: 78rem;
+
+  /* --- Motion ---------------------------------------------------------- */
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 160ms;
+  --dur-slow: 520ms;
+  --dur-zoom: 900ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur-slow: 1ms;
+    --dur-zoom: 1ms;
+  }
+}
