@@ -1,0 +1,226 @@
+---
+import Book from "./Book.astro";
+import type { Book as BookType } from "../lib/books";
+
+/**
+ * A shelf of books.
+ *
+ * The signature object of the library: real spines, standing in a row, that
+ * pull out when you reach for them. Everything is CSS 3D — no canvas, no
+ * WebGL — so it stays sharp at any size and costs nothing to load.
+ *
+ * The markup is deliberately flat: each book is a link with the title as its
+ * direct child, because deep nesting hides text from screen readers.
+ */
+interface Props {
+  books: BookType[];
+  /** Books currently on loan are pulled out of the row. */
+  pulledId?: string;
+  /** Books in this group get a link to their detail page. */
+  linked?: boolean;
+  /** Accessible name for the list. */
+  label: string;
+}
+
+const { books, pulledId, linked = true, label } = Astro.props;
+
+/** A short stack of books lying flat at the end of the row. */
+const stackCount = books.length > 6 ? 3 : books.length > 3 ? 2 : 0;
+const stackColors = ["#3f4d3f", "#7a2e2e", "#2f4858"];
+---
+
+<div class="shelf">
+  <ol class="shelf__row" aria-label={label}>
+    {
+      books.map((book) => (
+        <li class="shelf__slot">
+          <Book
+            book={book}
+            pulled={book.id === pulledId}
+            href={linked ? `/reading/${book.id}/` : undefined}
+          />
+        </li>
+      ))
+    }
+
+    {
+      stackCount > 0 && (
+        <li class="shelf__slot shelf__slot--stack" aria-hidden="true">
+          <div class="stack">
+            {Array.from({ length: stackCount }, (_, i) => (
+              <div class="stack__book" style={`--c:${stackColors[i % stackColors.length]}`}>
+                <span class="stack__pages" />
+              </div>
+            ))}
+          </div>
+        </li>
+      )
+    }
+
+    <li class="shelf__slot shelf__slot--end" aria-hidden="true">
+      <div class="bookend"><span class="bookend__foot" /></div>
+    </li>
+  </ol>
+
+  <div class="shelf__plank" aria-hidden="true"></div>
+</div>
+
+<style>
+  .shelf {
+    --plank-h: 22px;
+    margin: var(--space-l) 0;
+  }
+
+  /* The row scrolls sideways; the perspective lives on each book so the
+     scroll container stays a plain 2D box. */
+  .shelf__row {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    width: max-content;
+    min-width: 100%;
+    margin: 0;
+    padding: var(--space-s) var(--space-s) var(--space-2xs) var(--space-2xs);
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--paper-400) transparent;
+    /* A slight downward tilt, so you look into the shelf a little. */
+    transform: rotateX(-4deg);
+    transform-origin: 50% 100%;
+  }
+
+  .shelf__slot {
+    display: block;
+    /* Each book gets its own vanishing point. */
+    perspective: 800px;
+    perspective-origin: 50% 45%;
+  }
+
+  /* --- The plank -------------------------------------------------------- */
+
+  .shelf__plank {
+    position: relative;
+    height: var(--plank-h);
+    margin: -2px 0 0 -2%;
+    width: 104%;
+    background:
+      repeating-linear-gradient(
+        92deg,
+        rgba(107, 69, 38, 0.16) 0 2px,
+        rgba(169, 120, 78, 0.1) 2px 7px,
+        rgba(107, 69, 38, 0.08) 7px 9px
+      ),
+      linear-gradient(180deg, #b5834f 0%, #8a5a32 55%, #6b4526 100%);
+    border-radius: 2px 2px 3px 3px;
+    box-shadow:
+      inset 0 3px 5px -2px rgba(0, 0, 0, 0.5),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+      0 18px 26px -18px rgba(28, 25, 20, 0.75);
+  }
+
+  /* The contact shadow the books cast onto the plank. */
+  .shelf__plank::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -10px;
+    height: 12px;
+    background: linear-gradient(180deg, transparent, rgba(28, 25, 20, 0.3));
+    filter: blur(4px);
+    pointer-events: none;
+  }
+
+  /* --- Books lying flat at the end of the row --------------------------- */
+
+  .stack {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    padding-bottom: 1px;
+  }
+
+  .stack__book {
+    position: relative;
+    width: 132px;
+    height: 17px;
+    background: var(--c);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 3px 5px -2px rgba(28, 25, 20, 0.55);
+    border-radius: 1px;
+  }
+
+  .stack__book + .stack__book {
+    margin-bottom: 2px;
+  }
+
+  .stack__book:nth-child(2) {
+    width: 124px;
+    margin-left: 5px;
+  }
+
+  .stack__book:nth-child(3) {
+    width: 130px;
+    margin-left: 2px;
+  }
+
+  .stack__pages {
+    position: absolute;
+    right: 0;
+    top: 2px;
+    bottom: 2px;
+    width: 26px;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        rgba(120, 105, 80, 0.35) 0 1px,
+        transparent 1px 2px
+      ),
+      linear-gradient(180deg, #efe9dd, #d8cdb6);
+    border-radius: 0 1px 1px 0;
+  }
+
+  /* --- The bookend: why the books stop where they do -------------------- */
+
+  .bookend {
+    position: relative;
+    width: 8px;
+    height: 214px;
+    border-radius: 2px 2px 0 0;
+    background: linear-gradient(
+      90deg,
+      #565c61 0%,
+      #a3abb0 26%,
+      #dbe1e4 44%,
+      #9aa1a6 66%,
+      #4a5055 100%
+    );
+    box-shadow:
+      2px 0 4px -1px rgba(28, 25, 20, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  }
+
+  .bookend__foot {
+    position: absolute;
+    left: -26px;
+    bottom: 2px;
+    width: 34px;
+    height: 5px;
+    background: linear-gradient(180deg, #e2e7ea 0%, #9aa1a6 40%, #5b6166 100%);
+    border-radius: 1px;
+    box-shadow: 0 2px 3px -1px rgba(28, 25, 20, 0.55);
+  }
+
+  .bookend::after {
+    content: "";
+    position: absolute;
+    left: -3px;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0,  0, 0, 0.3), transparent);
+  }
+</style>

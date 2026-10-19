@@ -1,37 +1,17 @@
 ---
 import Base from "../../layouts/Base.astro";
+import Shelf from "../../components/Shelf.astro";
 import { getCollection } from "astro:content";
 
 const books = (await getCollection("books")).map((entry) => entry.data);
 
-const groups = [
-  {
-    status: "reading",
-    label: "On loan",
-    note: "Out with me now — one at a time, because that is how reading works.",
-  },
-  {
-    status: "to-read",
-    label: "On hold",
-    note: "Requests in the drawer. The pile grows faster than it shrinks.",
-  },
-  {
-    status: "read",
-    label: "On the shelf",
-    note: "Finished, and kept.",
-  },
-] as const;
+const onLoan = books.filter((b) => b.status === "reading");
+const onHold = books.filter((b) => b.status === "to-read");
+const onShelf = books.filter((b) => b.status === "read");
 
-const byStatus = (status: string) =>
-  books
-    .filter((b) => b.status === status)
-    .sort((a, b) => String(a.author).localeCompare(String(b.author)));
-
-const counts = {
-  read: byStatus("read").length,
-  reading: byStatus("reading").length,
-  "to-read": byStatus("to-read").length,
-};
+const byAuthor = (a: Book, b: Book) => String(a.author).localeCompare(String(b.author));
+onShelf.sort(byAuthor);
+onHold.sort(byAuthor);
 ---
 
 <Base
@@ -47,51 +27,69 @@ const counts = {
         holds drawer, or back on the shelf.
       </p>
       <dl class="counts">
-        <div><dt>On the shelf</dt><dd>{counts.read}</dd></div>
-        <div><dt>On loan</dt><dd>{counts.reading}</dd></div>
-        <div><dt>On hold</dt><dd>{counts["to-read"]}</dd></div>
+        <div><dt>On the shelf</dt><dd>{onShelf.length}</dd></div>
+        <div><dt>On loan</dt><dd>{onLoan.length}</dd></div>
+        <div><dt>On hold</dt><dd>{onHold.length}</dd></div>
       </dl>
     </header>
 
     {
-      groups.map((group) => {
-        const items = byStatus(group.status);
-        if (items.length === 0) return null;
-        return (
-          <section class="group" data-status={group.status}>
-            <div class="group__head">
-              <h2>{group.label}</h2>
-              <p class="group__note">{group.note}</p>
-            </div>
-            <ul class="shelf">
-              {items.map((book) => (
-                <li class="book" style={`--spine: ${book.spineColor ?? "var(--oak-500)"}`}>
-                  <span class="book__spine" aria-hidden="true" />
-                  <div class="book__body">
-                    <h3 class="book__title">{book.title}</h3>
-                    <p class="book__author">{book.author}</p>
-                    <p class="book__meta">
-                      {book.year && <span>{book.year}</span>}
-                      {book.publisher && <span>{book.publisher}</span>}
-                      {book.pages && <span>{book.pages}pp</span>}
-                      {book.category && <span class="book__cat">{book.category}</span>}
-                      {book.rating ? <span class="book__rating" aria-label={`Rated ${book.rating} of 5`}>{"★".repeat(Math.round(book.rating))}</span> : null}
-                    </p>
-                    {book.notes && <p class="book__notes">{book.notes}</p>}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
-        );
-      })
+      onShelf.length > 0 && (
+        <section class="group">
+          <div class="group__head">
+            <h2>On the shelf</h2>
+            <p class="group__note">
+              Finished, and kept. Reach for one and it comes off the shelf.
+            </p>
+          </div>
+          <Shelf books={onShelf} label="Books on the shelf" />
+        </section>
+      )
+    }
+
+    {
+      onLoan.length > 0 && (
+        <section class="group">
+          <div class="group__head">
+            <h2>On loan</h2>
+            <p class="group__note">
+              Out with me now. A due-date slip, and a page left folded.
+            </p>
+          </div>
+          <Shelf books={onLoan} pulledId={onLoan[0]?.id} label="Books currently out" />
+        </section>
+      )
+    }
+
+    {
+      onHold.length > 0 && (
+        <section class="group">
+          <div class="group__head">
+            <h2>On hold</h2>
+            <p class="group__note">
+              Requests in the drawer. The pile grows faster than it shrinks.
+            </p>
+          </div>
+          <ul class="holds">
+            {onHold.map((book) => (
+              <li class="hold">
+                <a href={`/reading/${book.id}/`}>
+                  <span class="hold__title">{book.title}</span>
+                  <span class="hold__author">{book.author}</span>
+                  {book.year && <span class="hold__year">{book.year}</span>}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
     }
   </main>
 </Base>
 
 <style>
   .library {
-    max-width: 62rem;
+    max-width: 68rem;
     margin: 0 auto;
     padding: var(--space-xl) var(--space-m) var(--space-2xl);
   }
@@ -161,82 +159,52 @@ const counts = {
   .group__note {
     color: var(--fg-muted);
     font-size: var(--step--1);
-    margin-bottom: var(--space-m);
+    margin-bottom: var(--space-s);
   }
 
-  .shelf {
+  /* --- Holds drawer ----------------------------------------------------- */
+
+  .holds {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
     gap: var(--space-2xs);
   }
 
-  .book {
-    display: grid;
-    grid-template-columns: 10px 1fr;
-    gap: var(--space-m);
-    align-items: stretch;
-    padding: var(--space-s) var(--space-s) var(--space-s) 0;
+  .hold {
     background: var(--bg-paper);
     border: 1px solid var(--paper-300);
-    border-radius: 3px;
-    transition: transform var(--dur-fast) var(--ease-out),
-      box-shadow var(--dur-fast) var(--ease-out);
+    border-left: 3px solid var(--paper-400);
+    border-radius: 2px;
   }
 
-  .book:hover {
-    transform: translateX(3px);
-    box-shadow: -3px 3px 0 var(--paper-300);
+  .hold a {
+    display: grid;
+    gap: 2px;
+    padding: var(--space-s);
+    text-decoration: none;
   }
 
-  .book__spine {
-    background: var(--spine);
-    border-radius: 3px 0 0 3px;
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25),
-      inset 1px 0 0 rgba(255, 255, 255, 0.12);
+  .hold a:hover {
+    background: var(--paper-100);
   }
 
-  .book__title {
-    margin: 0;
-    font-size: var(--step-1);
+  .hold__title {
     font-weight: 600;
+    font-size: var(--step-0);
   }
 
-  .book__author {
-    margin: 0 0 var(--space-3xs);
-    color: var(--fg-muted);
+  .hold__author {
     font-style: italic;
-  }
-
-  .book__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-s);
-    margin: 0;
-    font-family: var(--font-sign);
-    font-size: var(--step--1);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--fg-muted);
-  }
-
-  .book__cat::before {
-    content: "▪ ";
-    color: var(--brass-500);
-  }
-
-  .book__rating {
-    color: var(--brass-500);
-    letter-spacing: 0.1em;
-  }
-
-  .book__notes {
-    margin: var(--space-xs) 0 0;
-    padding-left: var(--space-s);
-    border-left: 2px solid var(--paper-400);
     color: var(--fg-muted);
     font-size: var(--step--1);
-    font-style: italic;
+  }
+
+  .hold__year {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--ink-300);
   }
 </style>

@@ -1,0 +1,204 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (async () => {
+  const books = await getCollection("books");
+  return books.map((entry) => ({
+    params: { id: entry.id },
+    props: { book: entry.data },
+  }));
+}) satisfies GetStaticPaths;
+
+const { book } = Astro.props;
+
+const state =
+  book.status === "reading"
+    ? "On loan"
+    : book.status === "read"
+      ? "On the shelf"
+      : "On hold";
+
+const stateNote =
+  book.status === "reading"
+    ? "Out with me now. A due-date slip, and a page left folded."
+    : book.status === "read"
+      ? "Finished, and kept."
+      : "A request in the holds drawer.";
+---
+
+<Base title={`${book.title} — The Library`} description={`${book.title} by ${book.author}`}>
+  <main class="book-page">
+    <p class="book-page__crumb">
+      <a href="/reading/">The Library</a> <span aria-hidden="true">/</span>
+      <span class="book-page__state">{state}</span>
+    </p>
+
+    <article class="card">
+      {
+        book.coverUrl && (
+          <div class="card__cover">
+            <img src={book.coverUrl} alt={`Cover of ${book.title}`} loading="eager" />
+          </div>
+        )
+      }
+
+      <div class="card__body">
+        <h1>{book.title}</h1>
+        <p class="card__author">{book.author}</p>
+
+        <dl class="card__facts">
+          {book.year && <div><dt>Published</dt><dd>{book.year}</dd></div>}
+          {book.publisher && <div><dt>Publisher</dt><dd>{book.publisher}</dd></div>}
+          {book.pages && <div><dt>Length</dt><dd>{book.pages} pages</dd></div>}
+          {book.rating && (
+            <div>
+              <dt>Rating</dt>
+              <dd class="card__rating" aria-label={`${book.rating} out of 5`}>
+                {"★".repeat(Math.round(book.rating))}
+                <span class="card__rating-empty">
+                  {"★".repeat(5 - Math.round(book.rating))}
+                </span>
+              </dd>
+            </div>
+          )}
+          {book.dateRead && <div><dt>Finished</dt><dd>{book.dateRead}</dd></div>}
+          {book.dateAdded && <div><dt>Acquired</dt><dd>{book.dateAdded}</dd></div>}
+          {typeof book.progress === "number" && (
+            <div><dt>Progress</dt><dd>{book.progress}%</dd></div>
+          )}
+        </dl>
+
+        <p class="card__state">{stateNote}</p>
+
+        {
+          book.quote && (
+            <blockquote class="card__quote">
+              <p>{book.quote}</p>
+            </blockquote>
+          )
+        }
+
+        {book.notes && <p class="card__notes">{book.notes}</p>}
+      </div>
+    </article>
+  </main>
+</Base>
+
+<style>
+  .book-page {
+    max-width: 54rem;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-m) var(--space-2xl);
+  }
+
+  .book-page__crumb {
+    font-family: var(--font-sign);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--step--1);
+    margin-bottom: var(--space-m);
+  }
+
+  .book-page__crumb a {
+    color: var(--green-600);
+  }
+
+  .book-page__state {
+    color: var(--ink-300);
+  }
+
+  .card {
+    display: grid;
+    grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+    gap: var(--space-l);
+    align-items: start;
+  }
+
+  @media (max-width: 40rem) {
+    .card {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card__cover img {
+    display: block;
+    width: 100%;
+    border-radius: 2px;
+    box-shadow:
+      0 2px 4px -2px rgba(28, 25, 20, 0.5),
+      0 18px 30px -20px rgba(28, 25, 20, 0.6);
+  }
+
+  h1 {
+    font-size: var(--step-3);
+    letter-spacing: -0.025em;
+    margin-bottom: var(--space-2xs);
+  }
+
+  .card__author {
+    font-style: italic;
+    color: var(--fg-muted);
+    font-size: var(--step-1);
+    margin-bottom: var(--space-m);
+  }
+
+  .card__facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, max-content));
+    gap: var(--space-s) var(--space-l);
+    margin: 0 0 var(--space-m);
+    padding: var(--space-s) 0;
+    border-top: 1px solid var(--paper-400);
+    border-bottom: 1px solid var(--paper-400);
+  }
+
+  .card__facts div {
+    display: grid;
+    gap: 2px;
+  }
+
+  .card__facts dt {
+    font-family: var(--font-sign);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--step--1);
+    color: var(--ink-300);
+  }
+
+  .card__facts dd {
+    margin: 0;
+    font-size: var(--step-0);
+  }
+
+  .card__rating {
+    color: var(--brass-500);
+    letter-spacing: 0.15em;
+  }
+
+  .card__rating-empty {
+    color: var(--paper-400);
+  }
+
+  .card__state {
+    font-family: var(--font-hand);
+    font-size: var(--step-1);
+    color: var(--green-600);
+  }
+
+  .card__quote {
+    margin: var(--space-l) 0;
+    padding-left: var(--space-m);
+    border-left: 3px solid var(--brass-400);
+    font-family: var(--font-type);
+    font-size: var(--step-1);
+    line-height: 1.5;
+    color: var(--ink-700);
+  }
+
+  .card__notes {
+    color: var(--fg-muted);
+    font-style: italic;
+  }
+</style>
