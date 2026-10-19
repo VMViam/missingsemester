@@ -98,6 +98,18 @@ const stackColors = ["#3f4d3f", "#7a2e2e", "#2f4858"];
     perspective-origin: 50% 45%;
   }
 
+  /* A book pulled out of the row must paint over whatever is beside it. */
+  .shelf__slot:has(.book:hover),
+  .shelf__slot:has(.book:focus-visible) {
+    position: relative;
+    z-index: 10;
+  }
+
+  .shelf__slot--end {
+    position: relative;
+    z-index: 1;
+  }
+
   /* --- The plank -------------------------------------------------------- */
 
   .shelf__plank {

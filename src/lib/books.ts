@@ -70,10 +70,10 @@ export function geometryFor(book: Book): Geometry {
   );
 
   const h = MIN_H + ((seed >>> 3) % (MAX_H - MIN_H));
-  // Depth is proportional to height — a book is roughly as deep as it is
-  // tall, scaled down. A 240mm hardcover is ~45mm deep; that ratio reads
-  // correctly, whereas a fixed pixel depth makes big books look like boxes.
-  const d = Math.round(h * (0.17 + ((seed >>> 7) % 9) / 100));
+  // Depth is proportional to height: a 240mm book is ~140mm deep, and the
+  // cover face is what you see when you pull a book out, so it has to be a
+  // real cover — not a sliver.
+  const d = Math.round(h * (0.5 + ((seed >>> 7) % 12) / 100));
 
   // Roughly one book in seven leans into its neighbour.
   const leans = (seed >>> 11) % 7 === 0;
