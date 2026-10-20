@@ -34,7 +34,24 @@ const TOKEN = process.env.READER_API_TOKEN;
 /** Fields that belong to the owner. Preserved across every sync. */
 const YOUR_FIELDS = ["rating", "category", "notes", "quote", "spineColor", "spineWidth", "status"];
 
+/** The list endpoint is rate limited to 20 requests per minute. */
+const RATE_LIMIT = 20;
+const requestTimes = [];
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/** Wait until we are under the rate limit, then record the request. */
+async function throttle() {
+  const now = Date.now();
+  requestTimes.push(now);
+  while (requestTimes.length > RATE_LIMIT) {
+    const oldest = requestTimes[0];
+    const waitMs = 60_000 - (now - oldest);
+    if (waitMs <= 0) break;
+    await sleep(waitMs + 250);
+    requestTimes.shift();
+  }
+}
 
 /** A book's spine gets thicker with its page count. */
 function spineWidthFor(pages) {
@@ -56,6 +73,7 @@ async function fetchPage(category, cursor) {
 
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
+      await throttle();
       const res = await fetch(url, {
         headers: { Authorization: `Token ${TOKEN}` },
         signal: AbortSignal.timeout(20000),
@@ -71,7 +89,9 @@ async function fetchPage(category, cursor) {
 
 async function fetchAllBooks() {
   const books = [];
-  for (const category of ["epub", "pdf", "audiobook", "web"]) {
+  // Books live in Reader as epubs and pdfs. Everything else in the library
+  // is an article, a highlight or a note — not a book.
+  for (const category of ["epub", "pdf"]) {
     let cursor = null;
     try {
       do {
@@ -86,6 +106,14 @@ async function fetchAllBooks() {
   return books;
 }
 
+/**
+ * Map a Reader document onto a library entry.
+ *
+ * Field names come from the Reader API docs (readwise.io/reader_api):
+ *   image_url, published_date, last_opened_at, saved_at, reading_progress
+ * with fallbacks to the older book_details block, which some library
+ * imports still carry.
+ */
 function toLibraryEntry(book) {
   const details = book.book_details ?? {};
   const progress = Number(book.reading_progress ?? 0);
@@ -102,14 +130,25 @@ function toLibraryEntry(book) {
   if (progress > 0 && progress < 0.99) {
     entry.progress = Math.round(progress * 100);
   }
-  if (book.added_at) entry.dateAdded = String(book.added_at).slice(0, 10);
-  if (book.last_read_at && progress >= 0.99) {
-    entry.dateRead = String(book.last_read_at).slice(0, 10);
+
+  const added = book.saved_at ?? book.created_at;
+  if (added) entry.dateAdded = String(added).slice(0, 10);
+
+  const read = book.last_opened_at ?? book.last_read_at;
+  if (read && progress >= 0.99) entry.dateRead = String(read).slice(0, 10);
+
+  const published = details.published_year ?? book.published_date;
+  if (published) {
+    const year = Number(String(published).slice(0, 4));
+    if (!Number.isNaN(year)) entry.year = year;
   }
-  if (details.published_year) entry.year = details.published_year;
+
   if (details.publisher) entry.publisher = details.publisher;
   if (details.number_of_pages) entry.pages = details.number_of_pages;
-  if (details.cover_url) entry.coverUrl = details.cover_url;
+
+  const cover = details.cover_url ?? book.image_url;
+  if (cover) entry.coverUrl = cover;
+
   if (details.isbn) entry.isbn = String(details.isbn);
   if (details.asin) entry.asin = details.asin;
   if (details.number_of_pages) entry.spineWidth = spineWidthFor(details.number_of_pages);
