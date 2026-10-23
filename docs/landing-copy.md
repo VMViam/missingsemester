@@ -19,11 +19,11 @@ voice.
 
 ---
 
-## 2. Top rail
+## 2. Top nav
 
 **Left:** missingsemester.in
 
-**Centre:** A one-room schoolhouse
+**Links:** Reading · Writing · Building · Lifting
 
 **Right:** No. 01 · Est. 2026
 
@@ -31,7 +31,7 @@ voice.
 
 ## 3. Hero
 
-**Eyebrow:** For everything school didn't bother to keep in
+**Eyebrow:** For everything school didn't bother to cover.
 
 **Headline, line 1:** The Missing
 
@@ -65,8 +65,8 @@ Four subjects, one room, no graduation. A public record of the education that ne
 ### Period 01
 
 - **Name:** Reading
-- **One line:** Mastering what others have already figured out.
-- **Place:** The shelf
+- **One line:** Learning what others already figured out.
+- **Place:** The Library
 - **Detail:** {total} books
 - **Goes to:** /reading/
 
@@ -84,7 +84,7 @@ Four subjects, one room, no graduation. A public record of the education that ne
 - **One line:** Make the thing before you feel ready.
 - **Place:** The terminal
 - **Detail:** Projects
-- **Goes to:** https://github.com/vmviam/
+- **Goes to:** /building/
 
 ### Period 04
 
@@ -136,23 +136,53 @@ Four subjects, one room, no graduation. A public record of the education that ne
 
 **Links:** Top ↑
 
+The same footer closes every page.
+
 ---
 
-## 9. The Lifting holding page
+## 9. The Lifting page
 
-This is the small chalkboard page at `/lifting/`, so the timetable row does not
-dead-end.
+The page at `/lifting/`.
 
-**Headline:** Still being written.
+**Rail:** ← Back to school / Period 04 · Lifting
 
-**Paragraph:**
-I haven’t decided what belongs on this chalkboard yet — the program, the numbers, or the days I didn’t want to show up at all.
+**Title:** The Plate Tree
+
+**Lede:** The body is a subject, too.
+
+**Chalkboard kicker:** The chalkboard
+
+**Chalkboard headline:** Still being written.
+
+**Chalkboard paragraph:** I haven’t decided what belongs on this chalkboard yet — the program, the numbers, or the days I didn’t want to show up at all.
 
 **Chalk rules:** Show up. / Add a little weight. / Repeat.
 
-**Note:** — the only three rules that ever stuck
+**Chalk note:** — the only three rules that ever stuck
 
-**Link out:** Meanwhile, the library is open →
+**Footer:** same as the main page.
+
+---
+
+## 10. The Building page
+
+The page at `/building/`. Project rows live in `src/data/projects.ts`.
+
+**Rail:** ← Back to school / Period 03 · Building
+
+**Headline:** The Terminal
+
+**Lede:** Things I have built, broken, and put back together. Each project is a question I shipped; the link goes to the repository.
+
+**Counts:** Repositories / Languages / Latest push
+
+**Terminal bar:** ~/projects · {count} repos
+
+**Prompt:** $ ls -la
+
+**Rows:** Project name, one-line description, language, year, link to its GitHub repository. Only public repositories are listed.
+
+**Footer:** same as the main page.
 
 ---
 

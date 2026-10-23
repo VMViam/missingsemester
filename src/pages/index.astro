@@ -22,12 +22,6 @@ const periods = copy.timetable.periods.map((period) => ({
 <Base title={copy.meta.title} description={copy.meta.description}>
   <a class="skip" href="#main">Skip to the room</a>
 
-  <header class="rail">
-    <p class="rail__mark">{copy.rail.mark}</p>
-    <p class="rail__line">{copy.rail.line}</p>
-    <p class="rail__year">{copy.rail.year}</p>
-  </header>
-
   <main id="main">
     <section class="hero" aria-labelledby="title">
       <div class="hero__inner">
@@ -97,7 +91,7 @@ const periods = copy.timetable.periods.map((period) => ({
                       <span class="period__line">{period.line}</span>
                     </span>
                     <span class="period__place">
-                      {period.place}
+                      {period.place}{" "}
                       <span class="period__detail">{period.detail}</span>
                     </span>
                     <span class="period__arrow" aria-hidden="true">
@@ -145,20 +139,6 @@ const periods = copy.timetable.periods.map((period) => ({
       </div>
     </section>
   </main>
-
-  <footer class="foot">
-    <div class="foot__inner">
-      <p>{copy.footer.left}</p>
-      <p>{copy.footer.middle}</p>
-      <p class="foot__links">
-        {
-          copy.footer.links.map((link) => (
-            <a href={link.href}>{link.label}</a>
-          ))
-        }
-      </p>
-    </div>
-  </footer>
 </Base>
 
 <style>
@@ -182,38 +162,6 @@ const periods = copy.timetable.periods.map((period) => ({
 
   .skip:focus {
     top: var(--space-s);
-  }
-
-  /* ------------------------------------------------------------------ */
-  /*  Masthead rail                                                     */
-  /* ------------------------------------------------------------------ */
-
-  .rail {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-m);
-    max-width: var(--room-max);
-    margin: 0 auto;
-    padding: var(--space-s) var(--space-m);
-    border-bottom: 1px solid var(--paper-400);
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-300);
-  }
-
-  .rail p {
-    margin: 0;
-  }
-
-  .rail__mark {
-    color: var(--ink-700);
-  }
-
-  .rail__line {
-    color: var(--green-600);
   }
 
   /* ------------------------------------------------------------------ */
@@ -693,50 +641,6 @@ const periods = copy.timetable.periods.map((period) => ({
   }
 
   /* ------------------------------------------------------------------ */
-  /*  Footer                                                            */
-  /* ------------------------------------------------------------------ */
-
-  .foot {
-    border-top: 1px solid var(--paper-400);
-    background: var(--paper-200);
-  }
-
-  .foot__inner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-xs) var(--space-m);
-    max-width: var(--room-max);
-    margin: 0 auto;
-    padding: var(--space-m) var(--space-m) var(--space-xl);
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-300);
-  }
-
-  .foot__inner p {
-    margin: 0;
-  }
-
-  .foot__links {
-    display: flex;
-    gap: var(--space-s);
-  }
-
-  .foot__links a {
-    text-decoration: none;
-    color: var(--ink-500);
-  }
-
-  .foot__links a:hover {
-    color: var(--ink-900);
-    text-decoration: underline;
-  }
-
-  /* ------------------------------------------------------------------ */
   /*  Motion                                                            */
   /* ------------------------------------------------------------------ */
 
@@ -798,10 +702,6 @@ const periods = copy.timetable.periods.map((period) => ({
   }
 
   @media (max-width: 760px) {
-    .rail__line {
-      display: none;
-    }
-
     .hero::before {
       -webkit-mask-image: radial-gradient(ellipse at 50% 10%, #000 0%, transparent 70%);
       mask-image: radial-gradient(ellipse at 50% 10%, #000 0%, transparent 70%);
@@ -830,10 +730,6 @@ const periods = copy.timetable.periods.map((period) => ({
   }
 
   @media (max-width: 560px) {
-    .rail {
-      padding: var(--space-2xs) var(--space-s);
-    }
-
     .hero__inner {
       padding: var(--space-xl) var(--space-s) var(--space-xl);
     }
@@ -877,10 +773,6 @@ const periods = copy.timetable.periods.map((period) => ({
     .rule:first-child {
       padding-top: 0;
       border-top: 0;
-    }
-
-    .foot__inner {
-      padding: var(--space-m) var(--space-s) var(--space-l);
     }
   }
 </style>

@@ -55,7 +55,8 @@ data/             books.inbox.json — your plain book list (input to the pipeli
 2. **Objects, not words.** Communicate through materials and objects. No
    explanatory banners or labels in the UI.
 3. **Every subject: one object to grab, one surface to read it on.**
-4. **No nav bar.** Navigation is the room: a timetable strip, keys 1–4, Esc.
+4. **A persistent top nav.** A thin sticky bar carries the four subjects on
+   every page. The room is still the front door; the nav is the sign above it.
    Every subject still needs a real route.
 5. **The room is a front door, not the only door.** Semantic HTML for all
    content must exist underneath, and pages must work without JavaScript.

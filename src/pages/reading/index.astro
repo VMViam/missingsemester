@@ -20,12 +20,11 @@ onHold.sort(byAuthor);
 >
   <main class="library">
     <nav class="library__rail" aria-label="Breadcrumb">
-      <a href="/">&larr; The room</a>
+      <a href="/">&larr; Back to school</a>
       <span>Period 01 &middot; Reading</span>
     </nav>
 
     <header class="library__head">
-      <p class="library__eyebrow">Subject 01</p>
       <h1>The Library</h1>
       <p class="library__lede">
         Every book I own, in the state I own it in: out with me, waiting on the
@@ -90,15 +89,11 @@ onHold.sort(byAuthor);
       )
     }
 
-    <p class="library__back">
-      <a href="/">&larr; The room</a>
-    </p>
-  </main>
-</Base>
+  </main></Base>
 
 <style>
   .library {
-    max-width: 68rem;
+    max-width: var(--room-max);
     margin: 0 auto;
     padding: var(--space-xl) var(--space-m) var(--space-2xl);
   }
@@ -118,34 +113,13 @@ onHold.sort(byAuthor);
     color: var(--ink-300);
   }
 
-  .library__rail a,
-  .library__back a {
+  .library__rail a {
     color: var(--ink-700);
     text-decoration: none;
   }
 
-  .library__rail a:hover,
-  .library__back a:hover {
+  .library__rail a:hover {
     color: var(--oak-700);
-  }
-
-  .library__back {
-    margin: var(--space-xl) 0 0;
-    padding-top: var(--space-s);
-    border-top: 1px solid var(--paper-400);
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .library__eyebrow {
-    font-family: var(--font-sign);
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    font-size: var(--step--1);
-    color: var(--green-600);
-    margin-bottom: var(--space-2xs);
   }
 
   h1 {

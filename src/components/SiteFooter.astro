@@ -1,0 +1,65 @@
+---
+import { landing } from "../data/landing";
+---
+
+<footer class="foot">
+  <div class="foot__inner">
+    <p>{landing.footer.left}</p>
+    <p>{landing.footer.middle}</p>
+    <p class="foot__links">
+      {
+        landing.footer.links.map((link) => (
+          <a href={link.href}>{link.label}</a>
+        ))
+      }
+    </p>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    border-top: 1px solid var(--paper-400);
+    background: var(--paper-200);
+  }
+
+  .foot__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-xs) var(--space-m);
+    max-width: var(--room-max);
+    margin: 0 auto;
+    padding: var(--space-m) var(--space-m) var(--space-xl);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-300);
+  }
+
+  .foot__inner p {
+    margin: 0;
+  }
+
+  .foot__links {
+    display: flex;
+    gap: var(--space-s);
+  }
+
+  .foot__links a {
+    text-decoration: none;
+    color: var(--ink-500);
+  }
+
+  .foot__links a:hover {
+    color: var(--ink-900);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 560px) {
+    .foot__inner {
+      padding: var(--space-m) var(--space-s) var(--space-l);
+    }
+  }
+</style>

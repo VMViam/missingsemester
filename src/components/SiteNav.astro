@@ -1,0 +1,169 @@
+---
+import { landing } from "../data/landing";
+
+type Subject = "reading" | "writing" | "building" | "lifting";
+
+interface Props {
+  active?: Subject;
+}
+
+const { active } = Astro.props;
+const path = Astro.url.pathname;
+
+const current =
+  active ??
+  (path.startsWith("/reading")
+    ? "reading"
+    : path.startsWith("/building")
+      ? "building"
+      : path.startsWith("/lifting")
+        ? "lifting"
+        : undefined);
+
+const subjects: { id: Subject; label: string; href: string }[] = [
+  { id: "reading", label: "Reading", href: "/reading/" },
+  { id: "writing", label: "Writing", href: "https://letters.missingsemester.in/" },
+  { id: "building", label: "Building", href: "/building/" },
+  { id: "lifting", label: "Lifting", href: "/lifting/" },
+];
+---
+
+<header class="site-nav">
+  <div class="site-nav__inner">
+    <a class="site-nav__brand" href="/" aria-label="The Missing Semester, home">
+      <span class="site-nav__mark">{landing.rail.mark}</span>
+    </a>
+
+    <nav class="site-nav__links" aria-label="Subjects">
+      {
+        subjects.map((subject) => (
+          <a
+            href={subject.href}
+            class:list={[
+              "site-nav__link",
+              { "is-active": current === subject.id },
+            ]}
+            aria-current={current === subject.id ? "page" : undefined}
+          >
+            {subject.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <p class="site-nav__year">{landing.rail.year}</p>
+  </div>
+</header>
+
+<style>
+  .site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    background: var(--bg-paper);
+    background: color-mix(in srgb, var(--bg-paper) 94%, transparent);
+    border-bottom: 1px solid var(--paper-400);
+    backdrop-filter: blur(12px);
+  }
+
+  .site-nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    max-width: var(--room-max);
+    margin: 0 auto;
+    padding: 0.55rem var(--space-m);
+  }
+
+  .site-nav__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.08rem;
+    line-height: 1.1;
+    text-decoration: none;
+  }
+
+  .site-nav__mark {
+    font-family: var(--font-sign);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-900);
+  }
+
+  .site-nav__links {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.7rem, 1.8vw, 1.75rem);
+  }
+
+  .site-nav__link {
+    padding: 0.35rem 0;
+    border-bottom: 1px solid transparent;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink-500);
+    white-space: nowrap;
+  }
+
+  .site-nav__link:hover {
+    color: var(--ink-900);
+  }
+
+  .site-nav__link.is-active {
+    border-bottom-color: var(--brass-500);
+    color: var(--ink-900);
+  }
+
+  .site-nav__year {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.52rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-300);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1000px) {
+    .site-nav__year {
+      display: none;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .site-nav__inner {
+      gap: var(--space-2xs);
+      padding: 0.45rem var(--space-s);
+    }
+
+    .site-nav__mark {
+      font-size: 0.66rem;
+      letter-spacing: 0.08em;
+    }
+
+    .site-nav__links {
+      gap: 0.55rem;
+    }
+
+    .site-nav__link {
+      font-size: 0.52rem;
+      letter-spacing: 0.06em;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .site-nav__mark {
+      font-size: 0.6rem;
+    }
+
+    .site-nav__link {
+      font-size: 0.48rem;
+    }
+  }
+</style>

@@ -1,6 +1,8 @@
 ---
 import "../styles/tokens.css";
 import "../styles/global.css";
+import SiteNav from "../components/SiteNav.astro";
+import SiteFooter from "../components/SiteFooter.astro";
 
 interface Props {
   title?: string;
@@ -44,7 +46,9 @@ const canonical = Astro.site
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="The Missing Semester" />
   </head>
-  <body class={bodyClass}>
+  <body id="top" class={bodyClass}>
+    <SiteNav />
     <slot />
+    <SiteFooter />
   </body>
 </html>

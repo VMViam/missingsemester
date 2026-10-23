@@ -3,213 +3,212 @@ import Base from "../../layouts/Base.astro";
 ---
 
 <Base
-  title="Lifting — The Missing Semester"
+  title="The Plate Tree — The Missing Semester"
   description="Period 04 of the one-room schoolhouse: the body is a subject too."
 >
-  <div class="chalk">
-    <div class="chalk__frame">
-      <header class="chalk__rail">
-        <a href="/">&larr; The room</a>
-        <p>Period 04 &middot; Lifting</p>
-        <p class="chalk__object">The plate tree</p>
-      </header>
+  <main class="lifting">
+    <nav class="lifting__rail" aria-label="Breadcrumb">
+      <a href="/">&larr; Back to school</a>
+      <span>Period 04 &middot; Lifting</span>
+    </nav>
 
-      <main class="chalk__main">
-        <p class="chalk__kicker">Subject 04 &middot; The chalkboard</p>
+    <header class="lifting__head">
+      <h1>The Plate Tree</h1>
+      <p class="lifting__lede">The body is a subject, too.</p>
+    </header>
 
-        <h1>Still being<br />written.</h1>
+    <section class="lifting__board" aria-labelledby="board-title">
+      <div class="chalkboard">
+        <div class="chalkboard__copy">
+          <p class="chalkboard__kicker">The chalkboard</p>
 
-        <p class="chalk__lede">
-          I haven&rsquo;t decided what belongs on this chalkboard yet &mdash; the
-          program, the numbers, or the days I didn&rsquo;t want to show up at all.
-        </p>
+          <h2 id="board-title">Still being<br />written.</h2>
 
-        <ol class="chalk__rules">
-          <li><span aria-hidden="true">i.</span>Show up.</li>
-          <li><span aria-hidden="true">ii.</span>Add a little weight.</li>
-          <li><span aria-hidden="true">iii.</span>Repeat.</li>
-        </ol>
+          <p class="chalkboard__lede">
+            I haven&rsquo;t decided what belongs on this chalkboard yet &mdash;
+            the program, the numbers, or the days I didn&rsquo;t want to show up
+            at all.
+          </p>
+        </div>
 
-        <p class="chalk__note">&mdash; the only three rules that ever stuck</p>
-      </main>
+        <div class="chalkboard__side">
+          <ol class="chalkboard__rules">
+            <li><span aria-hidden="true">i.</span>Show up.</li>
+            <li><span aria-hidden="true">ii.</span>Add a little weight.</li>
+            <li><span aria-hidden="true">iii.</span>Repeat.</li>
+          </ol>
 
-      <footer class="chalk__foot">
-        <a href="/reading/">Meanwhile, the library is open &rarr;</a>
-        <p>The Missing Semester &middot; missingsemester.in</p>
-      </footer>
-    </div>
-  </div>
+          <p class="chalkboard__note">
+            &mdash; the only three rules that ever stuck
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
 </Base>
 
 <style>
-  .chalk {
-    min-height: 100vh;
-    padding: var(--space-s);
-    background: var(--bg-page);
+  .lifting {
+    max-width: var(--room-max);
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-m) var(--space-2xl);
   }
 
-  .chalk__frame {
+  .lifting__rail {
     display: flex;
-    flex-direction: column;
-    min-height: calc(100vh - 2 * var(--space-s));
-    padding: 0 clamp(1.25rem, 5vw, 4rem);
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-s);
+    margin-bottom: var(--space-l);
+    padding-bottom: var(--space-s);
+    border-bottom: 1px solid var(--paper-400);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-300);
+  }
+
+  .lifting__rail a {
+    color: var(--ink-700);
+    text-decoration: none;
+  }
+
+  .lifting__rail a:hover {
+    color: var(--oak-700);
+  }
+
+  .lifting__head {
+    margin-bottom: var(--space-l);
+  }
+
+  h1 {
+    font-size: var(--step-4);
+    letter-spacing: -0.03em;
+  }
+
+  .lifting__lede {
+    max-width: 44ch;
+    margin: 0;
+    color: var(--fg-muted);
+    font-size: var(--step-1);
+    line-height: 1.45;
+  }
+
+  .lifting__board {
+    margin-top: var(--space-xl);
+  }
+
+  .chalkboard {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: start;
+    gap: clamp(2rem, 6vw, 6rem);
+    min-height: 30rem;
+    padding: clamp(2.5rem, 5vw, 5rem);
     background:
-      radial-gradient(ellipse at 20% 8%, color-mix(in srgb, var(--chalk-100) 6%, transparent), transparent 55%),
-      radial-gradient(ellipse at 85% 95%, color-mix(in srgb, var(--chalk-100) 4%, transparent), transparent 50%),
+      radial-gradient(ellipse at 18% 8%, color-mix(in srgb, var(--chalk-100) 7%, transparent), transparent 55%),
+      radial-gradient(ellipse at 85% 92%, color-mix(in srgb, var(--chalk-100) 5%, transparent), transparent 50%),
       var(--slate-900);
     border: 10px solid var(--oak-700);
     box-shadow:
       inset 0 0 0 1px color-mix(in srgb, var(--brass-500) 35%, transparent),
-      0 30px 60px -40px color-mix(in srgb, var(--ink-900) 70%, transparent);
+      0 30px 60px -42px color-mix(in srgb, var(--ink-900) 75%, transparent);
     color: var(--chalk-100);
   }
 
-  .chalk__rail {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-s);
-    padding: var(--space-s) 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--chalk-100) 16%, transparent);
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--chalk-300);
-  }
-
-  .chalk__rail p {
-    margin: 0;
-  }
-
-  .chalk__rail a {
-    color: var(--chalk-100);
-    text-decoration: none;
-  }
-
-  .chalk__rail a:hover {
-    color: var(--brass-300);
-  }
-
-  .chalk__main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 48rem;
-    padding: clamp(3.5rem, 9vw, 7rem) 0;
-  }
-
-  .chalk__kicker {
+  .chalkboard__kicker {
     margin: 0 0 var(--space-m);
     font-family: var(--font-mono);
     font-size: 0.62rem;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--chalk-300);
   }
 
-  h1 {
+  .chalkboard h2 {
     margin: 0 0 var(--space-m);
     font-family: var(--font-hand);
-    font-size: clamp(3.4rem, 9vw, 6.5rem);
+    font-size: clamp(3rem, 6vw, 6rem);
     font-weight: 600;
-    line-height: 0.92;
+    line-height: 0.9;
     letter-spacing: -0.015em;
     color: var(--chalk-100);
     text-shadow: 0 0 22px color-mix(in srgb, var(--chalk-100) 12%, transparent);
   }
 
-  .chalk__lede {
-    max-width: 44ch;
-    margin: 0 0 var(--space-l);
-    font-size: var(--step-1);
-    line-height: 1.55;
+  .chalkboard__lede {
+    max-width: 42ch;
+    margin: 0;
+    font-size: var(--step-0);
+    line-height: 1.65;
     color: var(--chalk-300);
   }
 
-  .chalk__rules {
+  .chalkboard__side {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-s) clamp(1.5rem, 5vw, 4rem);
-    margin: 0 0 var(--space-l);
+    flex-direction: column;
+    min-height: 100%;
+    padding-top: var(--space-m);
+  }
+
+  .chalkboard__rules {
+    display: grid;
+    gap: var(--space-s);
+    margin: 0;
     padding: var(--space-m) 0 0;
     border-top: 1px dashed color-mix(in srgb, var(--chalk-100) 20%, transparent);
     list-style: none;
   }
 
-  .chalk__rules li {
+  .chalkboard__rules li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-xs);
     font-family: var(--font-hand);
-    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    font-size: clamp(2rem, 3.6vw, 3.2rem);
     line-height: 1;
     color: var(--chalk-100);
   }
 
-  .chalk__rules span {
-    margin-right: var(--space-2xs);
+  .chalkboard__rules span {
     font-family: var(--font-mono);
     font-size: 0.6rem;
     color: var(--brass-300);
-    vertical-align: 0.55em;
   }
 
-  .chalk__note {
-    margin: 0;
+  .chalkboard__note {
+    margin: auto 0 0;
+    padding-top: var(--space-l);
     font-family: var(--font-hand);
     font-size: 1.25rem;
+    line-height: 1.2;
     color: var(--chalk-300);
     transform: rotate(-0.8deg);
     transform-origin: left center;
   }
 
-  .chalk__foot {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-2xs) var(--space-m);
-    padding: var(--space-s) 0 var(--space-m);
-    border-top: 1px solid color-mix(in srgb, var(--chalk-100) 16%, transparent);
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--chalk-300);
-  }
-
-  .chalk__foot p {
-    margin: 0;
-  }
-
-  .chalk__foot a {
-    color: var(--chalk-100);
-    text-decoration: none;
-    border-bottom: 1px solid color-mix(in srgb, var(--chalk-100) 35%, transparent);
-  }
-
-  .chalk__foot a:hover {
-    color: var(--brass-300);
-    border-bottom-color: var(--brass-300);
-  }
-
-  @media (max-width: 620px) {
-    .chalk {
-      padding: var(--space-3xs);
+  @media (max-width: 900px) {
+    .chalkboard {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+      min-height: 0;
     }
 
-    .chalk__frame {
-      min-height: calc(100vh - 2 * var(--space-3xs));
-      padding: 0 var(--space-s);
-      border-width: 6px;
+    .chalkboard__side {
+      padding-top: 0;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .lifting {
+      padding: var(--space-l) var(--space-s) var(--space-xl);
     }
 
-    .chalk__object {
-      display: none;
-    }
-
-    .chalk__rail,
-    .chalk__foot {
-      justify-content: space-between;
+    .chalkboard {
+      padding: var(--space-m);
+      border-width: 7px;
     }
   }
 </style>

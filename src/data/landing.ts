@@ -22,7 +22,7 @@ export const landing = {
   },
 
   hero: {
-    kicker: "For everything school didn't bother to keep in",
+    kicker: "For everything school didn't bother to cover.",
     titleLead: "The Missing",
     titleTail: "Semester",
     tagline: "what we should have been taught in school but weren’t.",
@@ -47,8 +47,8 @@ export const landing = {
       {
         n: "01",
         name: "Reading",
-        line: "Mastering what others have already figured out.",
-        place: "The shelf",
+        line: "Learning what others already figured out.",
+        place: "The Library",
         detail: "{total} books",
         href: "/reading/",
         tone: "oak",
@@ -62,7 +62,7 @@ export const landing = {
         detail: "Notes & essays",
         href: "https://letters.missingsemester.in/",
         tone: "paper",
-        external: true,
+        external: false,
       },
       {
         n: "03",
@@ -70,9 +70,9 @@ export const landing = {
         line: "Make the thing before you feel ready.",
         place: "The terminal",
         detail: "Projects",
-        href: "https://github.com/vmviam/",
+        href: "/building/",
         tone: "glass",
-        external: true,
+        external: false,
       },
       {
         n: "04",
@@ -122,6 +122,6 @@ export const landing = {
   footer: {
     left: "The Missing Semester",
     middle: "Built by hand. Deployed by push.",
-    links: [{ label: "Top ↑", href: "#title" }],
+    links: [{ label: "Top ↑", href: "#top" }],
   },
 };

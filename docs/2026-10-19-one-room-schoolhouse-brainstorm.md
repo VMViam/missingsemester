@@ -59,9 +59,9 @@ Four subjects, four objects, four materials, four voices:
   surface that looks *said* rather than *made*. The plate tree is the index:
   each plate is a post, the title cast in the centre where the weight normally
   goes, the year on the rim, colour/size coding the sub-topic.
-- **Navigation is the room.** No nav bar. A timetable strip along the bottom
-  (Period 01 Reading · 02 Writing · 03 Building · 04 Lifting), keys 1–4, Esc
-  backs out. Every subject still has a real, linkable route.
+- **Navigation is the room, with a sign above it.** A thin, persistent top nav
+  carries the four subjects on every page. The timetable strip and the room
+  itself remain the front door; every subject still has a real, linkable route.
 
 ## Open questions
 
