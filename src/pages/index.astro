@@ -1,223 +1,886 @@
 ---
 import Base from "../layouts/Base.astro";
 import { getCollection } from "astro:content";
+import { landing as copy } from "../data/landing";
 
-const books = (await getCollection("books")).map((e) => e.data);
-const reading = books.filter((b) => b.status === "reading");
-const toRead = books.filter((b) => b.status === "to-read");
-const read = books.filter((b) => b.status === "read");
+const books = (await getCollection("books")).map((entry) => entry.data);
+const total = books.length;
+const outOnLoan = books.filter((b) => b.status === "reading").length;
 
-/**
- * The room, before it is a room.
- * Temporary blueprint: the four subjects, the materials, the arrangement.
- */
-const subjects = [
-  {
-    key: "reading",
-    period: "01",
-    name: "Reading",
-    object: "The shelf",
-    surface: "A book, pulled out",
-    material: "oak · cloth · gold foil",
-    count: read.length + reading.length + toRead.length,
-    href: "/reading/",
-    tone: "oak",
-  },
-  {
-    key: "writing",
-    period: "02",
-    name: "Writing",
-    object: "The desk",
-    surface: "A typed sheet of paper",
-    material: "cream stock · ink",
-    count: null,
-    href: "https://blog.missingsemester.in/",
-    tone: "paper",
-  },
-  {
-    key: "building",
-    period: "03",
-    name: "Building",
-    object: "The terminal",
-    surface: "A prompt, mid-build",
-    material: "dark glass · phosphor",
-    count: null,
-    href: "https://github.com/vineetverma321/",
-    tone: "glass",
-  },
-  {
-    key: "lifting",
-    period: "04",
-    name: "Lifting",
-    object: "The plate tree",
-    surface: "The chalkboard",
-    material: "iron · slate · chalk",
-    count: null,
-    href: "/lifting/",
-    tone: "slate",
-  },
-];
+/** Fill the live library numbers into the copy deck. */
+const fill = (text: string) =>
+  text
+    .replaceAll("{total}", String(total))
+    .replaceAll("{outOnLoan}", String(outOnLoan));
+
+const periods = copy.timetable.periods.map((period) => ({
+  ...period,
+  detail: fill(period.detail),
+}));
 ---
 
-<Base>
-  <main class="blueprint">
-    <header class="blueprint__head">
-      <p class="blueprint__eyebrow">One-room schoolhouse</p>
-      <h1>The Missing Semester of Life's Education</h1>
-      <p class="blueprint__sub">what we should have been taught in school but didn't</p>
-    </header>
+<Base title={copy.meta.title} description={copy.meta.description}>
+  <a class="skip" href="#main">Skip to the room</a>
 
-    <p class="blueprint__note">
-      Blueprint view — the room is still being built. Four subjects, four
-      materials, four voices.
-    </p>
+  <header class="rail">
+    <p class="rail__mark">{copy.rail.mark}</p>
+    <p class="rail__line">{copy.rail.line}</p>
+    <p class="rail__year">{copy.rail.year}</p>
+  </header>
 
-    <ol class="subjects">
-      {
-        subjects.map((s) => (
-          <li class={`subject subject--${s.tone}`}>
-            <a href={s.href}>
-              <p class="subject__period">Period {s.period}</p>
-              <h2 class="subject__name">{s.name}</h2>
-              <dl class="subject__spec">
-                <div>
-                  <dt>Object</dt>
-                  <dd>{s.object}</dd>
-                </div>
-                <div>
-                  <dt>Read on</dt>
-                  <dd>{s.surface}</dd>
-                </div>
-                <div>
-                  <dt>Material</dt>
-                  <dd>{s.material}</dd>
-                </div>
-              </dl>
-              {s.count !== null && <p class="subject__count">{s.count} books</p>}
+  <main id="main">
+    <section class="hero" aria-labelledby="title">
+      <div class="hero__inner">
+        <div class="hero__copy">
+          <p class="kicker">
+            <span class="kicker__rule" aria-hidden="true"></span>
+            {copy.hero.kicker}
+          </p>
+
+          <h1 id="title">
+            {copy.hero.titleLead}<br /><span>{copy.hero.titleTail}</span>
+          </h1>
+
+          <p class="tagline">
+            {copy.hero.tagline}
+            <svg
+              class="tagline__line"
+              viewBox="0 0 420 18"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <path d="M3 12c64-5 128 4 198-2 63-5 126 2 216-3" />
+            </svg>
+          </p>
+
+          <p class="lede">{copy.hero.lede}</p>
+
+          <div class="actions">
+            <a class="button" href={copy.hero.primaryCta.href}>
+              {copy.hero.primaryCta.label}
+              <span aria-hidden="true">&rarr;</span>
             </a>
-          </li>
-        ))
-      }
-    </ol>
+            <a
+              class="button button--quiet"
+              href={copy.hero.secondaryCta.href}
+            >
+              {copy.hero.secondaryCta.label}
+            </a>
+          </div>
+
+          <p class="hero__small">{fill(copy.hero.smallPrint)}</p>
+        </div>
+
+        <aside class="timetable" aria-labelledby="timetable-title">
+          <span class="timetable__tape" aria-hidden="true"></span>
+
+          <div class="timetable__head">
+            <h2 id="timetable-title">{copy.timetable.title}</h2>
+            <p>
+              {copy.timetable.noteLines[0]}<br />
+              {copy.timetable.noteLines[1]}
+            </p>
+          </div>
+
+          <ol class="periods">
+            {
+              periods.map((period) => (
+                <li class={`period period--${period.tone}`}>
+                  <a
+                    href={period.href}
+                    target={period.external ? "_blank" : undefined}
+                    rel={period.external ? "noreferrer" : undefined}
+                  >
+                    <span class="period__n" aria-hidden="true">{period.n}</span>
+                    <span class="period__body">
+                      <span class="period__name">{period.name}</span>
+                      <span class="period__line">{period.line}</span>
+                    </span>
+                    <span class="period__place">
+                      {period.place}
+                      <span class="period__detail">{period.detail}</span>
+                    </span>
+                    <span class="period__arrow" aria-hidden="true">
+                      &nearr;
+                    </span>
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+
+          <p class="timetable__note">{copy.timetable.footer}</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="board" aria-labelledby="premise">
+      <div class="board__frame">
+        <div class="board__inner">
+          <p class="board__kicker">{copy.board.kicker}</p>
+
+          <h2 id="premise">
+            <span class="board__line">{copy.board.headlineLead}</span>
+            <span class="board__line board__line--muted">
+              {copy.board.headlineTail}
+            </span>
+          </h2>
+
+          <div class="board__rules">
+            {
+              copy.board.rules.map((rule) => (
+                <div class="rule">
+                  <p class="rule__n" aria-hidden="true">{rule.n}</p>
+                  <h3>{rule.title}</h3>
+                  <p>{rule.body}</p>
+                </div>
+              ))
+            }
+          </div>
+
+          <p class="board__foot">{copy.board.footer}</p>
+
+          <p class="board__sig">&mdash; {copy.board.signature.name}</p>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer class="foot">
+    <div class="foot__inner">
+      <p>{copy.footer.left}</p>
+      <p>{copy.footer.middle}</p>
+      <p class="foot__links">
+        {
+          copy.footer.links.map((link) => (
+            <a href={link.href}>{link.label}</a>
+          ))
+        }
+      </p>
+    </div>
+  </footer>
 </Base>
 
 <style>
-  .blueprint {
-    max-width: 64rem;
-    margin: 0 auto;
-    padding: var(--space-xl) var(--space-m) var(--space-2xl);
+  /* ------------------------------------------------------------------ */
+  /*  The page                                                          */
+  /* ------------------------------------------------------------------ */
+
+  .skip {
+    position: absolute;
+    left: var(--space-s);
+    top: -4rem;
+    z-index: 20;
+    padding: var(--space-2xs) var(--space-s);
+    background: var(--ink-900);
+    color: var(--paper-100);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    text-decoration: none;
+    transition: top var(--dur-fast) var(--ease-out);
   }
 
-  .blueprint__eyebrow {
-    font-family: var(--font-sign);
+  .skip:focus {
+    top: var(--space-s);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Masthead rail                                                     */
+  /* ------------------------------------------------------------------ */
+
+  .rail {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-m);
+    max-width: var(--room-max);
+    margin: 0 auto;
+    padding: var(--space-s) var(--space-m);
+    border-bottom: 1px solid var(--paper-400);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    font-size: var(--step--1);
+    color: var(--ink-300);
+  }
+
+  .rail p {
+    margin: 0;
+  }
+
+  .rail__mark {
+    color: var(--ink-700);
+  }
+
+  .rail__line {
     color: var(--green-600);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Hero                                                              */
+  /* ------------------------------------------------------------------ */
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--paper-400);
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--oak-700) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--oak-700) 7%, transparent) 1px, transparent 1px);
+    background-size: 2.5rem 2.5rem;
+    -webkit-mask-image: radial-gradient(ellipse at 30% 20%, #000 0%, transparent 75%);
+    mask-image: radial-gradient(ellipse at 30% 20%, #000 0%, transparent 75%);
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(21rem, 0.72fr);
+    align-items: center;
+    gap: clamp(2.5rem, 6vw, 6rem);
+    max-width: var(--room-max);
+    margin: 0 auto;
+    padding: clamp(3.5rem, 7vw, 7rem) var(--space-m) clamp(4rem, 8vw, 8rem);
+  }
+
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin: 0 0 var(--space-m);
+    font-family: var(--font-sign);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--green-600);
+  }
+
+  .kicker__rule {
+    display: block;
+    width: 2.75rem;
+    height: 1px;
+    background: currentColor;
   }
 
   h1 {
-    font-size: var(--step-4);
-    max-width: 18ch;
-    letter-spacing: -0.035em;
-    margin-top: var(--space-2xs);
+    margin: 0;
+    font-family: var(--font-print);
+    font-size: clamp(3.4rem, 8.2vw, 6.8rem);
+    font-weight: 650;
+    font-stretch: 92%;
+    line-height: 0.88;
+    letter-spacing: -0.055em;
+    color: var(--ink-900);
   }
 
-  .blueprint__sub {
+  h1 span {
+    color: var(--oak-700);
+  }
+
+  .tagline {
+    position: relative;
+    max-width: 22ch;
+    margin: var(--space-m) 0 var(--space-l);
     font-family: var(--font-hand);
-    font-size: var(--step-2);
-    color: var(--fg-muted);
-    margin-bottom: var(--space-l);
+    font-size: clamp(1.7rem, 3.3vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.12;
+    color: var(--ink-700);
+    transform: rotate(-0.8deg);
+    transform-origin: left center;
   }
 
-  .blueprint__note {
+  .tagline__line {
+    display: block;
+    width: 100%;
+    height: 0.55rem;
+    margin-top: var(--space-3xs);
+    overflow: visible;
+    color: var(--brass-500);
+    opacity: 0.75;
+  }
+
+  .tagline__line path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .lede {
+    max-width: 48ch;
+    margin: 0 0 var(--space-m);
+    font-size: var(--step-0);
+    line-height: 1.7;
+    color: var(--ink-500);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s) var(--space-m);
+    margin-bottom: var(--space-m);
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: 0.85rem 1.35rem;
+    background: var(--ink-900);
+    color: var(--paper-100);
+    border-bottom: 2px solid var(--brass-500);
     font-family: var(--font-sign);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
     font-size: var(--step--1);
-    color: var(--ink-300);
-    border-top: 1px solid var(--paper-400);
-    padding-top: var(--space-s);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
   }
 
-  .subjects {
-    list-style: none;
-    margin: var(--space-l) 0 0;
+  .button:hover {
+    background: var(--green-600);
+    transform: translateY(-2px);
+  }
+
+  .button--quiet {
     padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: var(--space-m);
+    background: none;
+    color: var(--ink-700);
+    border-bottom: 1px solid var(--ink-300);
   }
 
-  .subject {
-    background: var(--bg-paper);
-    border: 1px solid var(--paper-300);
-    border-top: 6px solid var(--tone, var(--oak-500));
-    border-radius: 3px;
-    transition: transform var(--dur-fast) var(--ease-out),
+  .button--quiet:hover {
+    background: none;
+    color: var(--oak-700);
+    border-bottom-color: var(--oak-700);
+    transform: translateX(2px);
+  }
+
+  .hero__small {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-300);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  The timetable card                                                */
+  /* ------------------------------------------------------------------ */
+
+  .timetable {
+    position: relative;
+    justify-self: end;
+    width: 100%;
+    max-width: 27rem;
+    padding: var(--space-m) var(--space-s) var(--space-s);
+    background-color: var(--bg-paper);
+    background-image:
+      linear-gradient(to bottom, transparent 27px, color-mix(in srgb, var(--oak-700) 10%, transparent) 28px);
+    background-size: 100% 2rem;
+    border: 1px solid var(--paper-400);
+    box-shadow:
+      0 26px 50px -34px color-mix(in srgb, var(--ink-900) 60%, transparent),
+      inset 0 1px 0 var(--paper-100);
+    transform: rotate(0.7deg);
+  }
+
+  .timetable__tape {
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    width: 7rem;
+    height: 1.7rem;
+    background: color-mix(in srgb, var(--brass-300) 45%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--brass-500) 20%, transparent);
+    border-right: 1px solid color-mix(in srgb, var(--brass-500) 20%, transparent);
+    transform: translateX(-50%) rotate(-2.5deg);
+    pointer-events: none;
+  }
+
+  .timetable__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-s);
+    padding: 0 var(--space-2xs) var(--space-xs);
+    border-bottom: 3px double var(--paper-400);
+  }
+
+  .timetable__head h2 {
+    margin: 0;
+    font-family: var(--font-sign);
+    font-size: var(--step-0);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .timetable__head p {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    text-align: right;
+    text-transform: uppercase;
+    color: var(--ink-300);
+  }
+
+  .periods {
+    margin: var(--space-2xs) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .period {
+    border-bottom: 1px solid var(--paper-300);
+  }
+
+  .period:last-child {
+    border-bottom: 0;
+  }
+
+  .period a {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr) auto 0.9rem;
+    align-items: start;
+    gap: var(--space-2xs);
+    padding: var(--space-xs) var(--space-2xs);
+    text-decoration: none;
+    transition:
+      background var(--dur-fast) var(--ease-out),
       box-shadow var(--dur-fast) var(--ease-out);
   }
 
-  .subject:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 24px -18px rgba(34, 31, 26, 0.6);
+  .period a:hover,
+  .period a:focus-visible {
+    background: color-mix(in srgb, var(--tone) 9%, transparent);
+    box-shadow: inset 3px 0 0 var(--tone);
   }
 
-  .subject a {
-    display: block;
-    padding: var(--space-m);
-    text-decoration: none;
-  }
+  .period--oak { --tone: var(--oak-600); }
+  .period--paper { --tone: var(--ink-700); }
+  .period--glass { --tone: var(--slate-700); }
+  .period--slate { --tone: var(--gym-red-500); }
 
-  .subject--oak { --tone: var(--oak-500); }
-  .subject--paper { --tone: var(--paper-400); }
-  .subject--glass { --tone: var(--slate-700); }
-  .subject--slate { --tone: var(--green-600); }
-
-  .subject__period {
-    font-family: var(--font-sign);
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    font-size: var(--step--1);
-    color: var(--fg-muted);
-    margin: 0;
-  }
-
-  .subject__name {
-    font-size: var(--step-2);
-    margin: var(--space-3xs) 0 var(--space-s);
-  }
-
-  .subject__spec {
-    margin: 0;
-    display: grid;
-    gap: var(--space-2xs);
-  }
-
-  .subject__spec div {
-    display: grid;
-    grid-template-columns: 5.5rem 1fr;
-    gap: var(--space-2xs);
-  }
-
-  .subject__spec dt {
-    font-family: var(--font-sign);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: var(--step--1);
+  .period__n {
+    padding-top: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
     color: var(--ink-300);
   }
 
-  .subject__spec dd {
-    margin: 0;
-    font-size: var(--step--1);
+  .period__body {
+    display: block;
+    min-width: 0;
   }
 
-  .subject__count {
-    margin: var(--space-s) 0 0;
+  .period__name {
+    display: block;
+    font-family: var(--font-print);
+    font-size: var(--step-1);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .period__line {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.78rem;
+    line-height: 1.35;
+    color: var(--ink-500);
+  }
+
+  .period__place {
+    padding-top: 0.15rem;
     font-family: var(--font-mono);
-    font-size: var(--step--1);
+    font-size: 0.56rem;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    text-align: right;
+    text-transform: uppercase;
+    color: var(--ink-300);
+  }
+
+  .period__detail {
+    display: block;
+    color: var(--tone);
+  }
+
+  .period__arrow {
+    padding-top: 0.15rem;
+    font-size: 0.85rem;
+    color: var(--tone);
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  .period a:hover .period__arrow {
+    transform: translate(2px, -2px);
+  }
+
+  .timetable__note {
+    margin: var(--space-xs) 0 0;
+    font-family: var(--font-hand);
+    font-size: 1.15rem;
+    line-height: 1;
+    text-align: right;
     color: var(--green-600);
+    transform: rotate(-1.5deg);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  The blackboard                                                    */
+  /* ------------------------------------------------------------------ */
+
+  .board {
+    padding: var(--space-l) var(--space-m);
+    background: var(--bg-page);
+  }
+
+  .board__frame {
+    max-width: var(--room-max);
+    margin: 0 auto;
+    padding: 0.75rem;
+    background:
+      linear-gradient(135deg, var(--oak-600), var(--oak-700) 55%, var(--oak-600));
+    box-shadow:
+      0 30px 60px -44px color-mix(in srgb, var(--ink-900) 80%, transparent),
+      inset 0 0 0 1px color-mix(in srgb, var(--brass-500) 35%, transparent);
+  }
+
+  .board__inner {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(2.5rem, 6vw, 5.5rem) clamp(1.5rem, 5vw, 4.5rem);
+    background:
+      radial-gradient(ellipse at 18% 10%, color-mix(in srgb, var(--chalk-100) 7%, transparent), transparent 55%),
+      radial-gradient(ellipse at 85% 90%, color-mix(in srgb, var(--chalk-100) 5%, transparent), transparent 50%),
+      var(--slate-900);
+    color: var(--chalk-100);
+  }
+
+  .board__inner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      103deg,
+      transparent 0 22px,
+      color-mix(in srgb, var(--chalk-100) 2.5%, transparent) 22px 23px
+    );
+    opacity: 0.5;
+  }
+
+  .board__inner > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .board__kicker {
+    margin: 0 0 var(--space-s);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--chalk-300);
+  }
+
+  .board h2 {
+    max-width: none;
+    margin: 0 0 var(--space-xl);
+    font-family: var(--font-hand);
+    font-size: clamp(2.1rem, 4.6vw, 3.9rem);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: var(--chalk-100);
+    text-shadow: 0 0 18px color-mix(in srgb, var(--chalk-100) 12%, transparent);
+  }
+
+  .board__line {
+    display: block;
+  }
+
+  .board__line--muted {
+    color: var(--chalk-300);
+  }
+
+  @media (min-width: 760px) {
+    .board__line:first-child {
+      white-space: nowrap;
+    }
+  }
+
+  .board__rules {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1rem, 3vw, 2.5rem);
+    padding-top: var(--space-m);
+    border-top: 1px solid color-mix(in srgb, var(--chalk-100) 16%, transparent);
+  }
+
+  .rule {
+    padding-left: var(--space-s);
+    border-left: 1px dashed color-mix(in srgb, var(--chalk-100) 18%, transparent);
+  }
+
+  .rule:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .rule__n {
+    margin: 0 0 var(--space-2xs);
+    font-family: var(--font-hand);
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--chalk-300);
+  }
+
+  .rule h3 {
+    margin: 0 0 var(--space-2xs);
+    font-family: var(--font-sign);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--chalk-100);
+  }
+
+  .rule p {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: var(--chalk-300);
+  }
+
+  .board__foot {
+    margin: var(--space-l) 0 0;
+    font-family: var(--font-hand);
+    font-size: 1.2rem;
+    text-align: right;
+    color: var(--chalk-300);
+    transform: rotate(-0.6deg);
+  }
+
+  .board__sig {
+    margin: var(--space-2xs) 0 0;
+    font-family: var(--font-hand);
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    line-height: 1;
+    text-align: right;
+    color: var(--chalk-100);
+    transform: rotate(-1.5deg);
+    transform-origin: right center;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Footer                                                            */
+  /* ------------------------------------------------------------------ */
+
+  .foot {
+    border-top: 1px solid var(--paper-400);
+    background: var(--paper-200);
+  }
+
+  .foot__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-xs) var(--space-m);
+    max-width: var(--room-max);
+    margin: 0 auto;
+    padding: var(--space-m) var(--space-m) var(--space-xl);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-300);
+  }
+
+  .foot__inner p {
+    margin: 0;
+  }
+
+  .foot__links {
+    display: flex;
+    gap: var(--space-s);
+  }
+
+  .foot__links a {
+    text-decoration: none;
+    color: var(--ink-500);
+  }
+
+  .foot__links a:hover {
+    color: var(--ink-900);
+    text-decoration: underline;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Motion                                                            */
+  /* ------------------------------------------------------------------ */
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__copy > *,
+    .timetable {
+      animation: rise 620ms var(--ease-out) both;
+    }
+
+    .hero__copy > :nth-child(2) { animation-delay: 40ms; }
+    .hero__copy > :nth-child(3) { animation-delay: 110ms; }
+    .hero__copy > :nth-child(4) { animation-delay: 180ms; }
+    .hero__copy > :nth-child(5) { animation-delay: 240ms; }
+    .hero__copy > :nth-child(6) { animation-delay: 300ms; }
+    .timetable { animation-delay: 160ms; }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .timetable {
+      animation-name: settle;
+    }
+
+    @keyframes settle {
+      from {
+        opacity: 0;
+        transform: translateY(18px) rotate(0.7deg);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) rotate(0.7deg);
+      }
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Narrow screens                                                    */
+  /* ------------------------------------------------------------------ */
+
+  @media (max-width: 960px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+
+    .timetable {
+      justify-self: stretch;
+      max-width: 32rem;
+      transform: rotate(0.4deg);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .rail__line {
+      display: none;
+    }
+
+    .hero::before {
+      -webkit-mask-image: radial-gradient(ellipse at 50% 10%, #000 0%, transparent 70%);
+      mask-image: radial-gradient(ellipse at 50% 10%, #000 0%, transparent 70%);
+    }
+
+    .board {
+      padding: var(--space-s) var(--space-2xs);
+    }
+
+    .board__frame {
+      padding: 0.45rem;
+    }
+
+    .board__rules {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .rule:nth-child(3) {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .rule:nth-child(n + 3) {
+      padding-top: var(--space-s);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .rail {
+      padding: var(--space-2xs) var(--space-s);
+    }
+
+    .hero__inner {
+      padding: var(--space-xl) var(--space-s) var(--space-xl);
+    }
+
+    .timetable {
+      padding: var(--space-m) var(--space-2xs) var(--space-s);
+      transform: none;
+    }
+
+    .period a {
+      grid-template-columns: 1.5rem minmax(0, 1fr) 0.8rem;
+      grid-template-areas:
+        "n name arrow"
+        "n line arrow"
+        "n place arrow";
+      row-gap: 0.2rem;
+    }
+
+    .period__n { grid-area: n; }
+    .period__body { grid-area: name; }
+    .period__line { grid-area: line; }
+    .period__place { grid-area: place; padding-top: 0; text-align: left; }
+    .period__arrow { grid-area: arrow; }
+
+    .period__place,
+    .period__detail {
+      display: inline;
+    }
+
+    .board__rules {
+      grid-template-columns: 1fr;
+    }
+
+    .rule,
+    .rule:nth-child(3) {
+      padding: var(--space-s) 0 0;
+      border-left: 0;
+      border-top: 1px dashed color-mix(in srgb, var(--chalk-100) 18%, transparent);
+    }
+
+    .rule:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .foot__inner {
+      padding: var(--space-m) var(--space-s) var(--space-l);
+    }
   }
 </style>

@@ -19,6 +19,11 @@ onHold.sort(byAuthor);
   description="Books read, being read, and waiting to be read."
 >
   <main class="library">
+    <nav class="library__rail" aria-label="Breadcrumb">
+      <a href="/">&larr; The room</a>
+      <span>Period 01 &middot; Reading</span>
+    </nav>
+
     <header class="library__head">
       <p class="library__eyebrow">Subject 01</p>
       <h1>The Library</h1>
@@ -84,6 +89,10 @@ onHold.sort(byAuthor);
         </section>
       )
     }
+
+    <p class="library__back">
+      <a href="/">&larr; The room</a>
+    </p>
   </main>
 </Base>
 
@@ -92,6 +101,42 @@ onHold.sort(byAuthor);
     max-width: 68rem;
     margin: 0 auto;
     padding: var(--space-xl) var(--space-m) var(--space-2xl);
+  }
+
+  .library__rail {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-s);
+    margin-bottom: var(--space-l);
+    padding-bottom: var(--space-s);
+    border-bottom: 1px solid var(--paper-400);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-300);
+  }
+
+  .library__rail a,
+  .library__back a {
+    color: var(--ink-700);
+    text-decoration: none;
+  }
+
+  .library__rail a:hover,
+  .library__back a:hover {
+    color: var(--oak-700);
+  }
+
+  .library__back {
+    margin: var(--space-xl) 0 0;
+    padding-top: var(--space-s);
+    border-top: 1px solid var(--paper-400);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   .library__eyebrow {

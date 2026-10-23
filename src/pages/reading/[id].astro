@@ -31,11 +31,14 @@ const stateNote =
 <Base title={`${book.title} — The Library`} description={`${book.title} by ${book.author}`}>
   <main class="book-page">
     <p class="book-page__crumb">
-      <a href="/reading/">The Library</a> <span aria-hidden="true">/</span>
+      <a href="/">&larr; The room</a>
+      <span aria-hidden="true">/</span>
+      <a href="/reading/">The Library</a>
+      <span aria-hidden="true">/</span>
       <span class="book-page__state">{state}</span>
     </p>
 
-    <article class="card">
+    <article class:list={["card", { "card--no-cover": !book.coverUrl }]}>
       {
         book.coverUrl && (
           <div class="card__cover">
@@ -83,6 +86,11 @@ const stateNote =
         {book.notes && <p class="card__notes">{book.notes}</p>}
       </div>
     </article>
+
+    <p class="book-page__back">
+      <a href="/reading/">&larr; Back to the library</a>
+      <a href="/">The room</a>
+    </p>
   </main>
 </Base>
 
@@ -94,6 +102,10 @@ const stateNote =
   }
 
   .book-page__crumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5em;
     font-family: var(--font-sign);
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -109,11 +121,38 @@ const stateNote =
     color: var(--ink-300);
   }
 
+  .book-page__back {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-s);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-s);
+    border-top: 1px solid var(--paper-400);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .book-page__back a {
+    color: var(--ink-700);
+    text-decoration: none;
+  }
+
+  .book-page__back a:hover {
+    color: var(--oak-700);
+  }
+
   .card {
     display: grid;
     grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
     gap: var(--space-l);
     align-items: start;
+  }
+
+  .card--no-cover {
+    grid-template-columns: 1fr;
   }
 
   @media (max-width: 40rem) {
