@@ -33,7 +33,7 @@ export const landing = {
     },
     secondaryCta: {
       label: "Read the writing",
-      href: "https://blog.missingsemester.in/",
+      href: "https://letters.missingsemester.in/",
     },
     smallPrint:
       "{total} books in the library · {outOnLoan} out on loan · school is never out",
@@ -60,7 +60,7 @@ export const landing = {
         line: "Thinking, with the door left open.",
         place: "The desk",
         detail: "Notes & essays",
-        href: "https://blog.missingsemester.in/",
+        href: "https://letters.missingsemester.in/",
         tone: "paper",
         external: true,
       },

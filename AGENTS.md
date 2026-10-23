@@ -6,7 +6,7 @@ Guidance for AI agents working in this repository.
 
 **missingsemester.in** — the "one-room schoolhouse". A studio apartment that is
 also a schoolroom, holding four subjects: reading, writing, building, lifting.
-The writing lives in a second site, `blog.missingsemester.in` (separate repo).
+The writing lives in a second site, `letters.missingsemester.in` (separate repo).
 
 Design decisions, rationale and open questions: `docs/2026-10-19-one-room-schoolhouse-brainstorm.md`.
 Read it before making design changes.

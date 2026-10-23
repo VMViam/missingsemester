@@ -12,7 +12,7 @@ Two sites that together are one room.
 - **missingsemester.in** — the room. The landing page where the whole thing is
   designed. A studio apartment that is also a one-room schoolhouse: four
   subjects, each with an object that carries its content.
-- **blog.missingsemester.in** — the writing. Posts read as typed sheets of paper.
+- **letters.missingsemester.in** — the writing. Posts read as typed sheets of paper.
 
 Four subjects, four objects, four materials, four voices:
 

@@ -45,7 +45,7 @@ const books = defineCollection({
   }),
 });
 
-/** Writing. Lives in the other building: blog.missingsemester.in */
+/** Writing. Lives in the other building: letters.missingsemester.in */
 const posts = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/posts" }),
   schema: z.object({

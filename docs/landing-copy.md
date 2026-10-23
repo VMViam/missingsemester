@@ -44,7 +44,7 @@ Four subjects, one room, no graduation. A public record of the education that ne
 
 **Primary button:** Enter the library → *(goes to /reading/)*
 
-**Secondary button:** Read the writing *(goes to blog.missingsemester.in)*
+**Secondary button:** Read the writing *(goes to letters.missingsemester.in)*
 
 **Small print:** {total} books in the library · {outOnLoan} out on loan · school is never out
 
@@ -76,7 +76,7 @@ Four subjects, one room, no graduation. A public record of the education that ne
 - **One line:** Thinking, with the door left open.
 - **Place:** The desk
 - **Detail:** Notes & essays
-- **Goes to:** https://blog.missingsemester.in/
+- **Goes to:** https://letters.missingsemester.in/
 
 ### Period 03
 
