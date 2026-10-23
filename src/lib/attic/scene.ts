@@ -330,9 +330,9 @@ function buildCase({ width, height, rows, books, atlases, indexOf, pickables }: 
   const usable = width - 0.24;
   const first = 0.55;
   const gap = (height - first - 0.45) / (rows - 1);
-  const perRow = Math.ceil(books.length / rows);
   const geoByAtlas: THREE.BufferGeometry[][] = atlases.map(() => []);
   const seen = new Set<string>();
+  let cursor = 0;
 
   for (let row = 0; row < rows; row++) {
     const y = first + row * gap;
@@ -342,12 +342,17 @@ function buildCase({ width, height, rows, books, atlases, indexOf, pickables }: 
 
     let x = -usable / 2 + 0.01;
     let prev: string | null = null;
-    const rowBooks = books.slice(row * perRow, (row + 1) * perRow);
 
-    for (const book of rowBooks) {
+    while (cursor < books.length) {
+      const book = books[cursor];
       const ai = indexOf.get(book.id) ?? 0;
       const atlas = atlases[ai];
-      if (!atlas) continue;
+      if (!atlas) {
+        cursor++;
+        continue;
+      }
+      const planned = dimsFor(book);
+      if (x + planned.w > usable / 2 - 0.01) break;
 
       const genre = book.genre ?? "misc";
       if (genre !== prev) {
@@ -365,6 +370,7 @@ function buildCase({ width, height, rows, books, atlases, indexOf, pickables }: 
       geo.translate(x, y + 0.018 + dims.h / 2, depth * 0.52);
       geoByAtlas[ai].push(geo);
       x += dims.w / 2 + 0.003;
+      cursor++;
 
       const hit = new THREE.Mesh(
         new THREE.BoxGeometry(dims.w * 1.7, dims.h, dims.d),
@@ -820,8 +826,8 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     maxDolly: 1,
   };
 
-  const base = new THREE.Vector3(1.85, 1.68, 2.55);
-  const look = new THREE.Vector3(-0.95, 1.9, -3.3);
+  const base = new THREE.Vector3(-1.85, 1.68, 2.55);
+  const look = new THREE.Vector3(0.95, 1.9, -3.3);
 
   function pose(yaw = rig.yaw, dolly = rig.dolly) {
     const pos = new THREE.Vector3(base.x + Math.sin(yaw) * 0.45, base.y, base.z - dolly * 1.8);
