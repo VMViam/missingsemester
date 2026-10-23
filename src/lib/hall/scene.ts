@@ -12,6 +12,8 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import type { Book } from "../books";
 import { hash } from "../books";
 import { createSpineAtlases, colourFor, type SpineAtlas } from "./atlas";
@@ -52,8 +54,91 @@ function dimsFor(book: Book): Dims {
   return { w, h, d };
 }
 
+/** A small seeded PRNG, so the grain is identical on every load. */
+function rng(seed: number) {
+  let s = seed >>> 0;
+  return () => {
+    s = (s * 1664525 + 1013904223) >>> 0;
+    return s / 4294967296;
+  };
+}
+
+let grain: THREE.Texture | null = null;
+
+/** One tileable grain, tinted by each material's colour. */
+function grainTexture(): THREE.Texture {
+  if (grain) return grain;
+  const size = 512;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d")!;
+  const rand = rng(7);
+
+  ctx.fillStyle = "#cdbfae";
+  ctx.fillRect(0, 0, size, size);
+
+  // Long wavy grain.
+  for (let i = 0; i < 280; i++) {
+    const x0 = rand() * size;
+    const alpha = 0.03 + rand() * 0.1;
+    ctx.strokeStyle = `rgba(58, 33, 16, ${alpha})`;
+    ctx.lineWidth = 0.6 + rand() * 1.6;
+    ctx.beginPath();
+    const wobble = 2 + rand() * 4;
+    const phase = rand() * Math.PI * 2;
+    for (let y = 0; y <= size; y += 8) {
+      const x = x0 + Math.sin((y / size) * Math.PI * 3 + phase) * wobble;
+      if (y === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  // A couple of knots.
+  for (let k = 0; k < 3; k++) {
+    const cx = rand() * size;
+    const cy = rand() * size;
+    for (let r = 2; r < 26; r += 3) {
+      ctx.strokeStyle = `rgba(48, 26, 12, ${0.1 - r * 0.002})`;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, r, r * 0.45, rand() * Math.PI, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+
+  // Fine pores.
+  const img = ctx.getImageData(0, 0, size, size);
+  for (let i = 0; i < img.data.length; i += 4) {
+    const n = (rand() - 0.5) * 10;
+    img.data[i] = Math.max(0, Math.min(255, img.data[i] + n));
+    img.data[i + 1] = Math.max(0, Math.min(255, img.data[i + 1] + n));
+    img.data[i + 2] = Math.max(0, Math.min(255, img.data[i + 2] + n));
+  }
+  ctx.putImageData(img, 0, 0);
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(1.8, 1.8);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 8;
+  grain = tex;
+  return tex;
+}
+
 function wood(color: string, roughness = 0.82): THREE.MeshStandardMaterial {
-  return new THREE.MeshStandardMaterial({ color, roughness, metalness: 0.02 });
+  return new THREE.MeshStandardMaterial({
+    color,
+    map: grainTexture(),
+    roughness,
+    metalness: 0.02,
+  });
+}
+
+/** A box with eased edges — the difference between "cube" and "furniture". */
+function rounded(w: number, h: number, d: number, r = 0.008): THREE.BufferGeometry {
+  return new RoundedBoxGeometry(w, h, d, 2, Math.min(r, Math.min(w, h, d) / 3));
 }
 
 function canvasTexture(w: number, h: number, draw: (ctx: CanvasRenderingContext2D) => void) {
@@ -292,7 +377,7 @@ function buildCabinet({ width, books, atlases, indexOf, pickables, minRows = 3 }
   const perRow = Math.ceil(books.length / rows);
 
   const backPanel = new THREE.Mesh(
-    new THREE.BoxGeometry(width, height, 0.04),
+    rounded(width, height, 0.04, 0.006),
     wood("#4a2e1c", 0.88),
   );
   backPanel.position.set(0, height / 2, 0);
@@ -300,16 +385,16 @@ function buildCabinet({ width, books, atlases, indexOf, pickables, minRows = 3 }
 
   const sideMat = wood("#5a3922", 0.8);
   for (const sx of [-1, 1]) {
-    const side = new THREE.Mesh(new THREE.BoxGeometry(0.09, height, depth), sideMat);
+    const side = new THREE.Mesh(rounded(0.09, height, depth, 0.01), sideMat);
     side.position.set((sx * (width - 0.09)) / 2, height / 2, depth / 2);
     group.add(side);
   }
 
-  const plinth = new THREE.Mesh(new THREE.BoxGeometry(width, 0.3, depth + 0.04), sideMat);
+  const plinth = new THREE.Mesh(rounded(width, 0.3, depth + 0.04, 0.012), sideMat);
   plinth.position.set(0, 0.15, depth / 2);
   group.add(plinth);
 
-  const cornice = new THREE.Mesh(new THREE.BoxGeometry(width + 0.1, 0.18, depth + 0.08), sideMat);
+  const cornice = new THREE.Mesh(rounded(width + 0.1, 0.18, depth + 0.08, 0.016), sideMat);
   cornice.position.set(0, height - 0.09, depth / 2);
   group.add(cornice);
 
@@ -318,7 +403,7 @@ function buildCabinet({ width, books, atlases, indexOf, pickables, minRows = 3 }
 
   for (let row = 0; row < rows; row++) {
     const y = SHELF_FIRST + row * SHELF_GAP;
-    const shelf = new THREE.Mesh(new THREE.BoxGeometry(width - 0.16, 0.04, depth - 0.06), shelfMat);
+    const shelf = new THREE.Mesh(rounded(width - 0.16, 0.04, depth - 0.06, 0.01), shelfMat);
     shelf.position.set(0, y, depth / 2 - 0.02);
     group.add(shelf);
 
@@ -359,7 +444,7 @@ function buildCabinet({ width, books, atlases, indexOf, pickables, minRows = 3 }
     // A brass bookend where the books stop, so a gap reads as intentional.
     if (x < usable / 2 - 0.08) {
       const end = new THREE.Mesh(
-        new THREE.BoxGeometry(0.012, 0.19, 0.15),
+        rounded(0.012, 0.19, 0.15, 0.004),
         new THREE.MeshStandardMaterial({ color: "#8a7a5a", metalness: 0.65, roughness: 0.42 }),
       );
       end.position.set(x + 0.03, y + 0.115, depth * 0.52);
@@ -388,7 +473,7 @@ function buildCabinet({ width, books, atlases, indexOf, pickables, minRows = 3 }
 /* ------------------------------------------------------------------- room */
 
 function addWall(scene: THREE.Scene, w: number, h: number, pos: [number, number, number], rotY = 0) {
-  const wall = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.12), wood("#5c3a25", 0.9));
+  const wall = new THREE.Mesh(rounded(w, h, 0.12, 0.01), wood("#5c3a25", 0.9));
   wall.position.set(...pos);
   wall.rotation.y = rotY;
   scene.add(wall);
@@ -514,7 +599,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
     [ROOM.d, -ROOM.w / 2, 0, Math.PI / 2],
     [ROOM.d, ROOM.w / 2, 0, Math.PI / 2],
   ] as const) {
-    const bb = new THREE.Mesh(new THREE.BoxGeometry(w, 0.18, 0.05), wood("#2a1a10", 0.9));
+    const bb = new THREE.Mesh(rounded(w, 0.18, 0.05, 0.008), wood("#2a1a10", 0.9));
     bb.position.set(x, 0.09, z);
     bb.rotation.y = ry;
     scene.add(bb);
@@ -524,7 +609,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   const frameMat = wood("#3d2414", 0.7);
   const frameDepth = 0.16;
   const addFrameBar = (w: number, h: number, x: number, y: number) => {
-    const bar = new THREE.Mesh(new THREE.BoxGeometry(w, h, frameDepth), frameMat);
+    const bar = new THREE.Mesh(rounded(w, h, frameDepth, 0.012), frameMat);
     bar.position.set(x, y, backZ + 0.02);
     scene.add(bar);
   };
@@ -549,6 +634,44 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   );
   dome.position.y = ROOM.h;
   scene.add(dome);
+
+  // Bronze ribs over the glass, and a lit oculus at the crown.
+  const ribMat = new THREE.MeshStandardMaterial({
+    color: "#7a5a1c",
+    roughness: 0.45,
+    metalness: 0.7,
+  });
+  const ribGeos: THREE.BufferGeometry[] = [];
+  for (let i = 0; i < 20; i++) {
+    const pts: THREE.Vector3[] = [];
+    for (let k = 0; k <= 18; k++) {
+      const a = (k / 18) * (Math.PI / 2);
+      pts.push(new THREE.Vector3(Math.cos(a) * DOME_R, Math.sin(a) * DOME_R, 0));
+    }
+    const curve = new THREE.CatmullRomCurve3(pts);
+    const g = new THREE.TubeGeometry(curve, 28, 0.028, 6, false);
+    g.rotateY((i / 20) * Math.PI * 2);
+    ribGeos.push(g);
+  }
+  for (const t of [0.35, 0.62, 0.85]) {
+    const a = t * (Math.PI / 2);
+    const ringGeo = new THREE.TorusGeometry(Math.cos(a) * DOME_R, 0.02, 5, 72);
+    ringGeo.rotateX(Math.PI / 2);
+    ringGeo.translate(0, Math.sin(a) * DOME_R, 0);
+    ribGeos.push(ringGeo);
+  }
+  const ribs = new THREE.Mesh(mergeGeometries(ribGeos, false)!, ribMat);
+  ribs.position.y = ROOM.h;
+  scene.add(ribs);
+  ribGeos.forEach((g) => g.dispose());
+
+  const oculus = new THREE.Mesh(
+    new THREE.CircleGeometry(0.46, 32),
+    new THREE.MeshBasicMaterial({ color: "#ffe9b0", toneMapped: false }),
+  );
+  oculus.rotation.x = Math.PI / 2;
+  oculus.position.y = ROOM.h + DOME_R - 0.08;
+  scene.add(oculus);
 
   // Bronze rim where the dome meets the walls.
   const rim = new THREE.Mesh(
@@ -582,6 +705,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
       atlases: group.atlases,
       indexOf: group.indexOf,
       pickables,
+      minRows: 2,
     });
     const halfSide = sideW / 2;
     cabinet.position.set(sx * (winW / 2 + halfSide), 0, backZ + 0.17);
@@ -622,11 +746,11 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
 
   const tableMat = wood("#5a361f", 0.72);
   const table = new THREE.Group();
-  const top = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.06, 0.85), tableMat);
+  const top = new THREE.Mesh(rounded(1.55, 0.06, 0.85, 0.014), tableMat);
   top.position.y = 0.76;
   table.add(top);
   for (const [lx, lz] of [[-0.74, -0.38], [0.74, -0.38], [-0.74, 0.38], [0.74, 0.38]] as const) {
-    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.73, 0.07), tableMat);
+    const leg = new THREE.Mesh(rounded(0.07, 0.73, 0.07, 0.012), tableMat);
     leg.position.set(lx, 0.365, lz);
     table.add(leg);
   }
@@ -648,13 +772,13 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
       metalness: 0.1,
       side: THREE.DoubleSide,
       emissive: new THREE.Color("#5a7f45"),
-      emissiveIntensity: 0.15,
+      emissiveIntensity: 0.07,
     }),
   );
   shade.position.y = 0.46;
   lamp.add(shade);
   const bulb = new THREE.Mesh(
-    new THREE.SphereGeometry(0.045, 16, 12),
+    new THREE.SphereGeometry(0.034, 16, 12),
     new THREE.MeshBasicMaterial({ color: "#ffd9a0", toneMapped: false }),
   );
   bulb.position.y = 0.42;
@@ -669,14 +793,14 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   // Chair, in silhouette.
   const chairMat = wood("#2e1c12", 0.85);
   const chair = new THREE.Group();
-  const seat = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.06, 0.44), chairMat);
+  const seat = new THREE.Mesh(rounded(0.46, 0.06, 0.44, 0.012), chairMat);
   seat.position.y = 0.46;
   chair.add(seat);
-  const back = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.52, 0.05), chairMat);
+  const back = new THREE.Mesh(rounded(0.46, 0.52, 0.05, 0.012), chairMat);
   back.position.set(0, 0.73, 0.2);
   chair.add(back);
   for (const [cx, cz] of [[-0.2, -0.18], [0.2, -0.18], [-0.2, 0.18], [0.2, 0.18]] as const) {
-    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.45, 0.045), chairMat);
+    const leg = new THREE.Mesh(rounded(0.045, 0.45, 0.045, 0.008), chairMat);
     leg.position.set(cx, 0.225, cz);
     chair.add(leg);
   }
@@ -713,16 +837,123 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   mug.position.set(0.66, 0.86, 0.35);
   scene.add(mug);
 
+  /* --- props: the room has to look lived in ---------------------------- */
+
+  // A ladder leaning on the left shelves.
+  const ladder = new THREE.Group();
+  const railMat = wood("#6b4a2e", 0.8);
+  for (const side of [-1, 1]) {
+    const rail = new THREE.Mesh(rounded(0.045, 2.3, 0.045, 0.01), railMat);
+    rail.position.set(side * 0.2, 1.15, 0);
+    ladder.add(rail);
+  }
+  for (let i = 0; i < 6; i++) {
+    const rung = new THREE.Mesh(rounded(0.4, 0.028, 0.032, 0.008), railMat);
+    rung.position.set(0, 0.28 + i * 0.36, 0);
+    ladder.add(rung);
+  }
+  ladder.position.set(-4.32, 0, -2.1);
+  ladder.rotation.y = Math.PI / 2;
+  ladder.rotation.z = 0.17;
+  scene.add(ladder);
+
+  // A plant by the window.
+  const plant = new THREE.Group();
+  const pot = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.17, 0.13, 0.28, 20),
+    new THREE.MeshStandardMaterial({ color: "#8a4b32", roughness: 0.85 }),
+  );
+  pot.position.y = 0.14;
+  plant.add(pot);
+  const leafMat = new THREE.MeshStandardMaterial({ color: "#3f5a34", roughness: 0.75, side: THREE.DoubleSide });
+  const leafRand = rng(31);
+  for (let i = 0; i < 9; i++) {
+    const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.16, 10, 8), leafMat);
+    const a = leafRand() * Math.PI * 2;
+    const r = 0.08 + leafRand() * 0.14;
+    leaf.scale.set(0.5, 1.5, 0.12);
+    leaf.position.set(Math.cos(a) * r, 0.36 + leafRand() * 0.4, Math.sin(a) * r);
+    leaf.rotation.set(leafRand() * 0.7 - 0.2, a, leafRand() * 0.6 - 0.3);
+    plant.add(leaf);
+  }
+  plant.position.set(1.95, 0, -3.65);
+  scene.add(plant);
+
+  // Books waiting to be shelved, stacked on the floor.
+  const stackRand = rng(53);
+  for (let i = 0; i < 5; i++) {
+    const b = new THREE.Mesh(
+      rounded(0.24, 0.035, 0.17, 0.006),
+      wood(["#7a2e2e", "#2f4858", "#3f4d3f", "#5a3b52", "#7a5c2e"][i], 0.85),
+    );
+    b.position.set(3.55 + stackRand() * 0.05, 0.02 + i * 0.038, -1.6 + stackRand() * 0.04);
+    b.rotation.y = (stackRand() - 0.5) * 0.3;
+    scene.add(b);
+  }
+
+  // Loose papers on the table.
+  const paperMat = new THREE.MeshStandardMaterial({ color: "#e9e2d2", roughness: 0.95 });
+  for (let i = 0; i < 3; i++) {
+    const paper = new THREE.Mesh(new THREE.PlaneGeometry(0.21, 0.29), paperMat);
+    paper.rotation.x = -Math.PI / 2;
+    paper.rotation.z = (i - 1) * 0.22;
+    paper.position.set(1.02 + i * 0.012, 0.795 + i * 0.002, 0.18 + i * 0.01);
+    scene.add(paper);
+  }
+
+  // Brass picture lights over the two front cabinets.
+  for (const sx of [-1, 1]) {
+    const bar = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.022, 0.022, 0.5, 12),
+      brass,
+    );
+    bar.rotation.z = Math.PI / 2;
+    bar.position.set(sx * 3.05, 2.62, backZ + 0.34);
+    scene.add(bar);
+    const glow = new THREE.PointLight("#ffc07a", 1.6, 2.6, 2);
+    glow.position.set(sx * 3.05, 2.5, backZ + 0.4);
+    scene.add(glow);
+  }
+
+  // Two small sconces on the front wall.
+  for (const sx of [-1, 1]) {
+    const sconce = new THREE.Group();
+    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.22, 8), brass);
+    arm.rotation.x = Math.PI / 2;
+    arm.position.z = 0.11;
+    sconce.add(arm);
+    const cup = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.055, 0.075, 0.09, 16, 1, true),
+      new THREE.MeshStandardMaterial({
+        color: "#c9a227",
+        metalness: 0.6,
+        roughness: 0.4,
+        side: THREE.DoubleSide,
+        emissive: new THREE.Color("#ffb35c"),
+        emissiveIntensity: 0.35,
+      }),
+    );
+    cup.position.set(0, 0.05, 0.22);
+    sconce.add(cup);
+    sconce.position.set(sx * 2.05, 2.55, backZ + 0.06);
+    scene.add(sconce);
+    const light = new THREE.PointLight("#ffb877", 0.9, 3.2, 2);
+    light.position.set(sx * 2.05, 2.6, backZ + 0.3);
+    scene.add(light);
+  }
+
   /* --- lighting --------------------------------------------------------- */
 
-  scene.add(new THREE.HemisphereLight("#7a5f45", "#2a1a0e", 1.05));
+  // Low ambient. The room is lit by its window and its lamps, not by fog.
+  scene.add(new THREE.HemisphereLight("#7a5f45", "#1a0f08", 0.55));
+  scene.add(new THREE.AmbientLight("#3a2414", 0.26));
 
-  // Golden hour through the window.
-  const sun = new THREE.DirectionalLight("#ffb26b", 2.7);
-  sun.position.set(-1.5, 3.6, -8);
-  sun.target.position.set(0, 1.2, 0);
+  // Golden hour through the window — the key.
+  const sun = new THREE.DirectionalLight("#ffb067", 3.1);
+  sun.position.set(-1.2, 3.4, -8);
+  sun.target.position.set(0.5, 1.0, 0.8);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.mapSize.set(2048, 2048);
   sun.shadow.camera.left = -6;
   sun.shadow.camera.right = 6;
   sun.shadow.camera.top = 6;
@@ -730,41 +961,96 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   sun.shadow.camera.near = 0.5;
   sun.shadow.camera.far = 20;
   sun.shadow.bias = -0.0008;
+  sun.shadow.normalBias = 0.02;
   scene.add(sun, sun.target);
 
-  const windowGlow = new THREE.RectAreaLight("#ffb877", 4, WINDOW.w, WINDOW.h);
+  const windowGlow = new THREE.RectAreaLight("#ffb877", 3, WINDOW.w, WINDOW.h);
   windowGlow.position.set(0, WINDOW.sill + WINDOW.h / 2, backZ - 0.5);
   windowGlow.lookAt(0, 1.6, 0);
   scene.add(windowGlow);
 
-  const fill = new THREE.PointLight("#6f86c9", 0.55, 9, 2);
-  fill.position.set(3.4, 3.2, 1.5);
-  scene.add(fill);
+  // The table lamp is a practical: small, warm, and it casts.
+  lampLight.castShadow = true;
+  lampLight.shadow.mapSize.set(512, 512);
+  lampLight.shadow.bias = -0.0015;
+  lampLight.shadow.camera.near = 0.1;
+  lampLight.shadow.camera.far = 4.5;
 
-  // Wall washers: the shelves need their own light or the books vanish.
-  const washerL = new THREE.PointLight("#ffc27a", 5.5, 7, 1.9);
-  washerL.position.set(-3.1, 3.15, -2.9);
-  scene.add(washerL);
-  const washerR = new THREE.PointLight("#ffc27a", 5.5, 7, 1.9);
-  washerR.position.set(3.1, 3.15, -2.9);
-  scene.add(washerR);
-  const centre = new THREE.PointLight("#ffb877", 3.2, 8, 2);
-  centre.position.set(0, 3.0, 1.2);
-  scene.add(centre);
+  // Spot washers on the two front cabinets, so the spines read.
+  const washerFor = (x: number, tx: number) => {
+    const spot = new THREE.SpotLight("#ffc98a", 30, 9, 0.72, 0.9, 1.3);
+    spot.position.set(x, 3.75, 1.5);
+    spot.target.position.set(tx, 1.7, -4.15);
+    scene.add(spot, spot.target);
+  };
+  washerFor(-1.5, -2.5);
+  washerFor(1.5, 2.5);
 
-  // The dome itself warms the room from above.
-  const domeLight = new THREE.PointLight("#ff9a55", 4.5, 9, 2);
+  // A cool rim from the far side, barely there.
+  const coolRim = new THREE.DirectionalLight("#7d92c9", 0.45);
+  coolRim.position.set(5, 2.8, 3.5);
+  scene.add(coolRim);
+
+  // The dome warms everything from above.
+  const domeLight = new THREE.PointLight("#ff9a55", 2.6, 8, 2);
   domeLight.position.set(0, 3.9, 0);
   scene.add(domeLight);
 
-  scene.add(new THREE.AmbientLight("#4a2f1c", 0.45));
+  // Dust in the light. Tiny, slow, barely visible until you sit still.
+  const dustCount = 170;
+  const dustPos = new Float32Array(dustCount * 3);
+  const dustRand = rng(19);
+  for (let i = 0; i < dustCount; i++) {
+    dustPos[i * 3] = (dustRand() - 0.5) * 8.4;
+    dustPos[i * 3 + 1] = 0.3 + dustRand() * 3.6;
+    dustPos[i * 3 + 2] = -4 + dustRand() * 7;
+  }
+  const dustGeo = new THREE.BufferGeometry();
+  dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
+  const dust = new THREE.Points(
+    dustGeo,
+    new THREE.PointsMaterial({
+      color: "#ffd9a0",
+      size: 0.009,
+      transparent: true,
+      opacity: 0.14,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    }),
+  );
+  scene.add(dust);
 
   /* --- postprocessing --------------------------------------------------- */
 
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.38, 0.7, 0.9);
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.34, 0.72, 0.86);
   composer.addPass(bloom);
+
+  // Vignette and a little grain: the photograph, not the render.
+  const grade = new ShaderPass({
+    uniforms: {
+      tDiffuse: { value: null },
+      uVignette: { value: 0.6 },
+      uGrain: { value: 0.014 },
+      uTime: { value: 0 },
+    },
+    vertexShader: `varying vec2 vUv;
+      void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+    fragmentShader: `uniform sampler2D tDiffuse; uniform float uVignette; uniform float uGrain; uniform float uTime;
+      varying vec2 vUv;
+      float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+      void main(){
+        vec4 c = texture2D(tDiffuse, vUv);
+        vec2 p = vUv - 0.5;
+        float v = 1.0 - dot(p, p) * uVignette * 1.45;
+        c.rgb *= clamp(v, 0.0, 1.0);
+        float g = hash(vUv * 1024.0 + uTime) - 0.5;
+        c.rgb += g * uGrain;
+        gl_FragColor = c;
+      }`,
+  });
+  composer.addPass(grade);
   composer.addPass(new OutputPass());
 
   /* --- interaction ------------------------------------------------------ */
@@ -943,8 +1229,11 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
       camera.lookAt(lookAt);
     }
 
-    // Lamps breathe very slightly.
+    // Lamps breathe very slightly; dust drifts.
     lampLight.intensity = 3.4 + Math.sin(now * 0.0017) * 0.14;
+    dust.rotation.y = now * 0.000012;
+    dust.position.y = Math.sin(now * 0.00008) * 0.05;
+    grade.uniforms.uTime.value = (now * 0.001) % 100;
     composer.render();
   }
 
