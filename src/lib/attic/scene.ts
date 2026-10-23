@@ -496,6 +496,21 @@ function buildCase({ width, height, rows, books, atlases, indexOf, pickables }: 
       pickables.push({ mesh: hit, book });
     }
 
+    // A small stack lying flat, the way shelves really end.
+    if (row % 2 === 1 && x < usable / 2 - 0.38) {
+      const stackColors = ["#6f2d2a", "#2f3f55", "#6b472b"];
+      for (let k = 0; k < 3; k++) {
+        const flat = new THREE.Mesh(
+          new THREE.BoxGeometry(0.22 - k * 0.012, 0.035, 0.16 - k * 0.01),
+          wood(stackColors[(row + k) % 3], 0.85),
+        );
+        flat.position.set(x + 0.13, y + 0.02 + k * 0.037, depth * 0.5);
+        flat.rotation.y = 0.05 * (k - 1);
+        group.add(flat);
+      }
+      x += 0.29;
+    }
+
     if (x < usable / 2 - 0.08) {
       const end = new THREE.Mesh(
         new THREE.BoxGeometry(0.012, 0.18, 0.15),
@@ -899,8 +914,8 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   chairBase.castShadow = true;
   chair.add(chairBase);
 
-  const seatCushion = new THREE.Mesh(rounded(0.86, 0.16, 0.72, 0.06), leather);
-  seatCushion.position.set(0, 0.56, 0.03);
+  const seatCushion = new THREE.Mesh(rounded(0.86, 0.2, 0.72, 0.08), leather);
+  seatCushion.position.set(0, 0.58, 0.03);
   seatCushion.castShadow = true;
   chair.add(seatCushion);
 
@@ -912,11 +927,17 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   seam.position.set(0, 0.5, 0.4);
   chair.add(seam);
 
-  const back = new THREE.Mesh(rounded(0.94, 0.92, 0.24, 0.06), leather);
-  back.position.set(0, 0.99, -0.31);
-  back.rotation.x = -0.09;
+  const back = new THREE.Mesh(rounded(0.94, 0.82, 0.24, 0.1), leather);
+  back.position.set(0, 0.94, -0.31);
+  back.rotation.x = -0.1;
   back.castShadow = true;
   chair.add(back);
+
+  const backRoll = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.9, 20), leather);
+  backRoll.rotation.z = Math.PI / 2;
+  backRoll.position.set(0, 1.36, -0.36);
+  backRoll.castShadow = true;
+  chair.add(backRoll);
 
   const backCushion = new THREE.Mesh(rounded(0.8, 0.6, 0.13, 0.05), leather);
   backCushion.position.set(0, 0.96, -0.17);
@@ -926,12 +947,12 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   for (const sx of [-1, 1]) {
     const roll = new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.095, 0.8, 18), leather);
     roll.rotation.x = Math.PI / 2;
-    roll.position.set(sx * 0.48, 0.72, 0.01);
+    roll.position.set(sx * 0.48, 0.68, 0.01);
     roll.castShadow = true;
     chair.add(roll);
 
     const armPanel = new THREE.Mesh(rounded(0.13, 0.32, 0.78, 0.04), leather);
-    armPanel.position.set(sx * 0.47, 0.52, 0.01);
+    armPanel.position.set(sx * 0.47, 0.48, 0.01);
     armPanel.castShadow = true;
     chair.add(armPanel);
   }
@@ -945,8 +966,8 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     chair.add(leg);
   }
 
-  chair.position.set(2.45, 0, -0.95);
-  chair.rotation.y = -2.2;
+  chair.position.set(2.45, 0, 0.6);
+  chair.rotation.y = -1.05;
   scene.add(chair);
 
   /* --- the round table -------------------------------------------------- */
@@ -1012,7 +1033,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     table.add(book);
   }
 
-  table.position.set(2.3, 0, 0.35);
+  table.position.set(3.0, 0, 1.15);
   scene.add(table);
 
   /* --- contact shadows -------------------------------------------------- */
@@ -1130,23 +1151,26 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   /* --- camera rig ------------------------------------------------------- */
 
   const rig = {
-    yaw: 0,
-    goalYaw: 0,
+    yaw: 0.18,
+    goalYaw: 0.18,
     dolly: 0,
     goalDolly: 0,
-    minYaw: -0.45,
-    maxYaw: 0.5,
-    // 0 = standing back, 1 = at the window seat
+    minYaw: -0.85,
+    maxYaw: 0.85,
     minDolly: 0,
-    maxDolly: 1,
+    maxDolly: 0.92,
   };
 
-  const base = new THREE.Vector3(-1.35, 1.68, 2.85);
-  const look = new THREE.Vector3(1.7, 1.9, -3.3);
+  const base = new THREE.Vector3(-1.35, 1.68, 2.9);
+  const look = new THREE.Vector3(0.9, 1.9, -3.3);
 
   function pose(yaw = rig.yaw, dolly = rig.dolly) {
-    const pos = new THREE.Vector3(base.x + Math.sin(yaw) * 0.45, base.y, base.z - dolly * 1.8);
-    const target = new THREE.Vector3(look.x + Math.sin(yaw) * 3.1, 1.9 + dolly * 0.12, look.z);
+    // Pan around the room; zoom travels along the view ray, so it works on
+    // the left case, the window and the right case alike.
+    const target = new THREE.Vector3(look.x + Math.sin(yaw) * 4.6, 1.9, look.z);
+    const dir = target.clone().sub(base).normalize();
+    const pos = base.clone().addScaledVector(dir, dolly * 6.0);
+    pos.y = base.y + dolly * 0.12;
     return { pos, target };
   }
 
