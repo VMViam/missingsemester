@@ -361,7 +361,7 @@ interface CabinetOptions {
   minRows?: number;
 }
 
-function buildCabinet({ width, books, atlases, indexOf, pickables, minRows = 3 }: CabinetOptions): THREE.Group {
+function buildCabinet({ width, books, atlases, indexOf, pickables, minRows = 4 }: CabinetOptions): THREE.Group {
   const group = new THREE.Group();
   const depth = 0.34;
 
@@ -371,9 +371,8 @@ function buildCabinet({ width, books, atlases, indexOf, pickables, minRows = 3 }
   const maxShelves = Math.floor((CABINET_H - SHELF_FIRST - 0.5) / SHELF_GAP) + 1;
   const rows = Math.max(Math.min(minRows, maxShelves), Math.min(maxShelves, Math.ceil(totalWidth / usable)));
 
-  // A cabinet is only as tall as the shelves it needs, so a small collection
-  // reads as a low bookcase rather than a tall empty one.
-  const height = Math.min(CABINET_H, SHELF_FIRST + (rows - 1) * SHELF_GAP + 0.62);
+  // Every cabinet is the same height: one continuous wall of shelving.
+  const height = CABINET_H;
   const perRow = Math.ceil(books.length / rows);
 
   const backPanel = new THREE.Mesh(
@@ -705,7 +704,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
       atlases: group.atlases,
       indexOf: group.indexOf,
       pickables,
-      minRows: 2,
+      minRows: 4,
     });
     const halfSide = sideW / 2;
     cabinet.position.set(sx * (winW / 2 + halfSide), 0, backZ + 0.17);
@@ -717,8 +716,8 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   placeBack(reading, -1, readingAtlas);
   placeBack(read, 1, readAtlas);
 
-  // Both side walls: everything waiting to be read.
-  const sideCabinetW = 3.4;
+  // Both side walls: everything waiting to be read, two cabinets per wall.
+  const sideCabinetW = 1.62;
   const placeSide = (
     booksList: Book[],
     sx: 1 | -1,
@@ -738,9 +737,12 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
     scene.add(cabinet);
   };
 
-  const halfToRead = Math.ceil(toRead.length / 2);
-  placeSide(toRead.slice(0, halfToRead), -1, toReadAtlas, -1.2);
-  placeSide(toRead.slice(halfToRead), 1, toReadAtlas, -1.2);
+  const quarter = Math.ceil(toRead.length / 4);
+  const chunks = [0, 1, 2, 3].map((i) => toRead.slice(i * quarter, (i + 1) * quarter));
+  placeSide(chunks[0], -1, toReadAtlas, -2.25);
+  placeSide(chunks[1], -1, toReadAtlas, -0.35);
+  placeSide(chunks[2], 1, toReadAtlas, -2.25);
+  placeSide(chunks[3], 1, toReadAtlas, -0.35);
 
   /* --- table, lamp, chair ---------------------------------------------- */
 
@@ -783,11 +785,15 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   );
   bulb.position.y = 0.42;
   lamp.add(bulb);
-  lamp.position.set(-0.44, 0.79, 0.3);
+  lamp.position.set(0.1, 0.79, 0.28);
   scene.add(lamp);
 
+  const bulbMat = bulb.material as THREE.MeshBasicMaterial;
+  const shadeMat = shade.material as THREE.MeshStandardMaterial;
+  let lampOn = true;
+
   const lampLight = new THREE.PointLight("#ffb35c", 3.4, 5, 1.9);
-  lampLight.position.set(-0.44, 1.2, 0.3);
+  lampLight.position.set(0.1, 1.2, 0.28);
   scene.add(lampLight);
 
   // Chair, in silhouette.
@@ -815,7 +821,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
       new THREE.BoxGeometry(0.24, 0.028, 0.17),
       wood(propColors[i], 0.8),
     );
-    b.position.set(0.42, 0.8 + i * 0.03, 0.5);
+    b.position.set(0.86, 0.806 + i * 0.032, 0.42);
     b.rotation.y = (i - 1) * 0.08;
     scene.add(b);
   }
@@ -824,7 +830,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
       new THREE.BoxGeometry(0.17, 0.012, 0.24),
       new THREE.MeshStandardMaterial({ color: "#eae4d6", roughness: 0.9 }),
     );
-    page.position.set(-0.02 + side * 0.085, 0.8, 0.95);
+    page.position.set(0.5 + side * 0.085, 0.8, 0.42);
     page.rotation.y = side * 0.22;
     page.rotation.z = side * 0.04;
     scene.add(page);
@@ -834,7 +840,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
     new THREE.CylinderGeometry(0.045, 0.04, 0.09, 20),
     new THREE.MeshStandardMaterial({ color: "#e8e0d0", roughness: 0.55 }),
   );
-  mug.position.set(0.66, 0.86, 0.35);
+  mug.position.set(1.02, 0.835, 0.22);
   scene.add(mug);
 
   /* --- props: the room has to look lived in ---------------------------- */
@@ -897,7 +903,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
     const paper = new THREE.Mesh(new THREE.PlaneGeometry(0.21, 0.29), paperMat);
     paper.rotation.x = -Math.PI / 2;
     paper.rotation.z = (i - 1) * 0.22;
-    paper.position.set(1.02 + i * 0.012, 0.795 + i * 0.002, 0.18 + i * 0.01);
+    paper.position.set(1.16 + i * 0.012, 0.793 + i * 0.002, 0.52 + i * 0.01);
     scene.add(paper);
   }
 
@@ -1145,7 +1151,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
         Math.min(rig.maxTheta, rig.goalTheta + e.deltaX * 0.004),
       );
     } else {
-      rig.goalD = Math.max(rig.minD, Math.min(rig.maxD, rig.goalD + e.deltaY * 0.0045));
+      rig.goalD = Math.max(rig.minD, Math.min(rig.maxD, rig.goalD + e.deltaY * 0.013));
     }
   }
 
@@ -1220,17 +1226,17 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
         if (focused) rig.goalTheta = rig.theta;
       }
     } else if (!focused) {
-      const k = Math.min(1, dt * 6);
+      const k = Math.min(1, dt * 11);
       rig.theta += (rig.goalTheta - rig.theta) * k;
       rig.d += (rig.goalD - rig.d) * k;
       const p = rigPose();
-      camera.position.lerp(p.pos, Math.min(1, dt * 8));
-      lookAt.lerp(p.look, Math.min(1, dt * 8));
+      camera.position.lerp(p.pos, Math.min(1, dt * 13));
+      lookAt.lerp(p.look, Math.min(1, dt * 13));
       camera.lookAt(lookAt);
     }
 
     // Lamps breathe very slightly; dust drifts.
-    lampLight.intensity = 3.4 + Math.sin(now * 0.0017) * 0.14;
+    lampLight.intensity = lampOn ? 3.4 + Math.sin(now * 0.0017) * 0.14 : 0;
     dust.rotation.y = now * 0.000012;
     dust.position.y = Math.sin(now * 0.00008) * 0.05;
     grade.uniforms.uTime.value = (now * 0.001) % 100;
@@ -1242,6 +1248,13 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   frame();
 
   return {
+    toggleLamp() {
+      lampOn = !lampOn;
+      lampLight.intensity = lampOn ? 3.4 : 0;
+      bulbMat.color.set(lampOn ? "#ffd9a0" : "#3a2a18");
+      shadeMat.emissiveIntensity = lampOn ? 0.07 : 0;
+      return lampOn;
+    },
     dispose() {
       disposed = true;
       cancelAnimationFrame(raf);
