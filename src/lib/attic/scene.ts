@@ -568,9 +568,11 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   windowFrame.position.set(0, 0, -ROOM.d / 2 + 0.1);
   scene.add(windowFrame);
 
+  const viewTexture = new THREE.TextureLoader().load("/window.jpg");
+  viewTexture.colorSpace = THREE.SRGBColorSpace;
   const view = new THREE.Mesh(
     new THREE.PlaneGeometry(WIN.w + 0.3, WIN.arch + WIN.spring - WIN.sill + 0.3),
-    new THREE.MeshBasicMaterial({ map: windowView(), color: "#d9d2c3" }),
+    new THREE.MeshBasicMaterial({ map: viewTexture, color: "#f2ece0" }),
   );
   view.position.set(0, WIN.sill + (WIN.arch + WIN.spring - WIN.sill) / 2, -ROOM.d / 2 - 0.07);
   scene.add(view);
