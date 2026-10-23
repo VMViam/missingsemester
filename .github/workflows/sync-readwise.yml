@@ -1,0 +1,54 @@
+name: Sync the library from Readwise
+
+on:
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-readwise
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync books from Readwise
+        env:
+          READER_API_TOKEN: ${{ secrets.READER_API_TOKEN }}
+        run: node scripts/sync-readwise.mjs
+
+      - name: Clean titles and authors
+        run: node scripts/sanitize-books.mjs
+
+      - name: Sample spine colours from the covers
+        run: node scripts/spine-colours.mjs
+
+      - name: Commit
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add src/data/books.json data/spine-cache.json
+          git diff --quiet && git diff --staged --quiet || \
+            git commit -m "Sync the library from Readwise [$(date +%Y-%m-%d)]"
+
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
