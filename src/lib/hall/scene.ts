@@ -553,6 +553,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   const readAtlas = createSpineAtlases(read);
 
   const pickables: Array<{ mesh: THREE.Mesh; book: Book }> = [];
+  const hitExtras: THREE.Mesh[] = [];
 
   /* --- architecture ---------------------------------------------------- */
 
@@ -795,6 +796,23 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   const lampLight = new THREE.PointLight("#ffb35c", 3.4, 5, 1.9);
   lampLight.position.set(0.1, 1.2, 0.28);
   scene.add(lampLight);
+
+  // A switch on the base, and an invisible target so the lamp is clickable.
+  const knob = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.02, 0.02, 0.018, 12),
+    new THREE.MeshStandardMaterial({ color: "#241610", roughness: 0.45, metalness: 0.5 }),
+  );
+  knob.position.set(0.085, 0.016, 0.05);
+  lamp.add(knob);
+
+  const lampHit = new THREE.Mesh(
+    new THREE.SphereGeometry(0.33, 12, 8),
+    new THREE.MeshBasicMaterial({ visible: false }),
+  );
+  lampHit.position.set(lamp.position.x, lamp.position.y + 0.3, lamp.position.z);
+  lampHit.userData.lamp = true;
+  scene.add(lampHit);
+  hitExtras.push(lampHit);
 
   // Chair, in silhouette.
   const chairMat = wood("#2e1c12", 0.85);
@@ -1059,11 +1077,20 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   composer.addPass(grade);
   composer.addPass(new OutputPass());
 
+  function toggleLamp() {
+    lampOn = !lampOn;
+    lampLight.intensity = lampOn ? 3.4 : 0;
+    bulbMat.color.set(lampOn ? "#ffd9a0" : "#3a2a18");
+    shadeMat.emissiveIntensity = lampOn ? 0.07 : 0;
+    return lampOn;
+  }
+
   /* --- interaction ------------------------------------------------------ */
 
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2(0, 0);
   const pickMeshes = pickables.map((p) => p.mesh);
+  const raycastTargets = [...pickMeshes, ...hitExtras];
   let hovered: Book | null = null;
   let focused: Book | null = null;
 
@@ -1131,7 +1158,15 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
     }
 
     raycaster.setFromCamera(pointer, camera);
-    const hit = raycaster.intersectObjects(pickMeshes, false)[0];
+    const hit = raycaster.intersectObjects(raycastTargets, false)[0];
+
+    if (hit?.object.userData.lamp) {
+      hovered = null;
+      canvas.style.cursor = "pointer";
+      options.onHover?.(null, e.clientX, e.clientY);
+      return;
+    }
+
     const book = (hit?.object.userData.book as Book) ?? null;
     if (book?.id !== hovered?.id) {
       hovered = book;
@@ -1157,6 +1192,18 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
 
   function onClick(e: MouseEvent) {
     if (dragDistance > 5) return;
+
+    // The lamp is a switch.
+    {
+      const rect = canvas.getBoundingClientRect();
+      pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      if (raycaster.intersectObjects(hitExtras, false)[0]?.object.userData.lamp) {
+        toggleLamp();
+        return;
+      }
+    }
 
     if (focused) {
       focused = null;
@@ -1248,13 +1295,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   frame();
 
   return {
-    toggleLamp() {
-      lampOn = !lampOn;
-      lampLight.intensity = lampOn ? 3.4 : 0;
-      bulbMat.color.set(lampOn ? "#ffd9a0" : "#3a2a18");
-      shadeMat.emissiveIntensity = lampOn ? 0.07 : 0;
-      return lampOn;
-    },
+    toggleLamp,
     dispose() {
       disposed = true;
       cancelAnimationFrame(raf);

@@ -16,7 +16,6 @@ import Base from "../../layouts/Base.astro";
       <p class="hud__note">prototype · one room</p>
     </header>
 
-    <button class="hud__lamp" id="lamp" type="button" aria-pressed="true">☼ lamp on</button>
     <button class="hud__sound" type="button" disabled title="Sound comes later">♪ sound off</button>
 
     <aside class="panel" id="panel" hidden aria-live="polite">
@@ -35,7 +34,7 @@ import Base from "../../layouts/Base.astro";
       <span class="tip__author" id="tip-author"></span>
     </div>
 
-    <p class="hint">Drag to look around · scroll to zoom · click a spine · L lamp · <span id="count">—</span> books</p>
+    <p class="hint">Drag to look around · scroll to zoom · click a spine · L lamp</p>
     <div class="loading" id="loading"><span>Opening the hall…</span></div>
   </main>
 </Base>
@@ -48,9 +47,7 @@ import Base from "../../layouts/Base.astro";
   const canvas = document.getElementById("hall-canvas") as HTMLCanvasElement;
   const panel = document.getElementById("panel") as HTMLElement;
   const loading = document.getElementById("loading") as HTMLElement;
-  const count = document.getElementById("count") as HTMLElement;
   const tip = document.getElementById("tip") as HTMLElement;
-  const lampBtn = document.getElementById("lamp") as HTMLButtonElement;
   const tipTitle = document.getElementById("tip-title") as HTMLElement;
   const tipAuthor = document.getElementById("tip-author") as HTMLElement;
   const cover = document.getElementById("panel-cover") as HTMLElement;
@@ -60,8 +57,6 @@ import Base from "../../layouts/Base.astro";
   const notes = document.getElementById("panel-notes") as HTMLElement;
   const state = document.getElementById("panel-state") as HTMLElement;
   const link = document.getElementById("panel-link") as HTMLAnchorElement;
-
-  count.textContent = String((books as Book[]).length);
 
   const hall = createHall(canvas, {
     onFocus(book: Book) {
@@ -105,15 +100,8 @@ import Base from "../../layouts/Base.astro";
     },
   });
 
-  function toggleLamp() {
-    const on = hall.toggleLamp();
-    lampBtn.textContent = on ? "☼ lamp on" : "◌ lamp off";
-    lampBtn.setAttribute("aria-pressed", String(on));
-  }
-
-  lampBtn.addEventListener("click", toggleLamp);
   window.addEventListener("keydown", (e) => {
-    if (e.key.toLowerCase() === "l" && !e.metaKey && !e.ctrlKey) toggleLamp();
+    if (e.key.toLowerCase() === "l" && !e.metaKey && !e.ctrlKey) hall.toggleLamp();
   });
 
   document.getElementById("panel-close")?.addEventListener("click", () => {
@@ -189,29 +177,6 @@ import Base from "../../layouts/Base.astro";
     opacity: 0.55;
   }
 
-  .hud__lamp {
-    position: absolute;
-    right: var(--space-m);
-    bottom: calc(var(--space-m) + 2.5rem);
-    padding: 0.45rem 0.8rem;
-    border: 1px solid rgba(201, 162, 39, 0.35);
-    border-radius: 999px;
-    background: rgba(21, 13, 9, 0.6);
-    color: var(--brass-300);
-    font: inherit;
-    font-family: var(--font-sign);
-    font-size: var(--step--1);
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  .hud__lamp:hover {
-    border-color: var(--brass-400);
-    color: var(--chalk-100);
-  }
-
   .hud__sound {
     position: absolute;
     right: var(--space-m);
@@ -228,6 +193,10 @@ import Base from "../../layouts/Base.astro";
     letter-spacing: 0.14em;
     opacity: 0.6;
     cursor: not-allowed;
+  }
+
+  .tip[hidden] {
+    display: none;
   }
 
   .tip {

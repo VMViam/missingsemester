@@ -22,6 +22,7 @@ export interface Book {
   pages?: number;
   coverUrl?: string;
   spineColor?: string;
+  foilColor?: string;
   spineWidth?: number;
   notes?: string;
   quote?: string;

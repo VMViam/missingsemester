@@ -37,6 +37,10 @@ const CLOTH = [
 ];
 
 export function colourFor(book: Book): { cloth: string; foil: string } {
+  // A colour sampled from the real cover beats a hash.
+  if (book.spineColor) {
+    return { cloth: book.spineColor, foil: book.foilColor ?? "#d9bd72" };
+  }
   const seed = hash(book.id);
   const pair = CLOTH[seed % CLOTH.length];
   return { cloth: pair[0], foil: pair[1] };
