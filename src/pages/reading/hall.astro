@@ -29,7 +29,12 @@ import Base from "../../layouts/Base.astro";
       <a class="panel__link" id="panel-link" href="#">Open the book →</a>
     </aside>
 
-    <p class="hint">Click a spine to pull it out · the shelves hold <span id="count">—</span> books</p>
+    <div class="tip" id="tip" hidden>
+      <span class="tip__title" id="tip-title"></span>
+      <span class="tip__author" id="tip-author"></span>
+    </div>
+
+    <p class="hint">Drag to look around · scroll to zoom · click a spine · <span id="count">—</span> books</p>
     <div class="loading" id="loading"><span>Opening the hall…</span></div>
   </main>
 </Base>
@@ -43,6 +48,9 @@ import Base from "../../layouts/Base.astro";
   const panel = document.getElementById("panel") as HTMLElement;
   const loading = document.getElementById("loading") as HTMLElement;
   const count = document.getElementById("count") as HTMLElement;
+  const tip = document.getElementById("tip") as HTMLElement;
+  const tipTitle = document.getElementById("tip-title") as HTMLElement;
+  const tipAuthor = document.getElementById("tip-author") as HTMLElement;
   const cover = document.getElementById("panel-cover") as HTMLElement;
   const title = document.getElementById("panel-title") as HTMLElement;
   const author = document.getElementById("panel-author") as HTMLElement;
@@ -82,6 +90,16 @@ import Base from "../../layouts/Base.astro";
     onClose() {
       panel.classList.remove("is-open");
       window.setTimeout(() => (panel.hidden = true), 260);
+    },
+    onHover(book: Book | null, x: number, y: number) {
+      if (!book) {
+        tip.hidden = true;
+        return;
+      }
+      tipTitle.textContent = book.title;
+      tipAuthor.textContent = book.author;
+      tip.style.transform = `translate(${x + 14}px, ${y + 16}px)`;
+      tip.hidden = false;
     },
   });
 
@@ -174,6 +192,36 @@ import Base from "../../layouts/Base.astro";
     letter-spacing: 0.14em;
     opacity: 0.6;
     cursor: not-allowed;
+  }
+
+  .tip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    display: grid;
+    gap: 1px;
+    max-width: 19rem;
+    padding: 0.4rem 0.55rem;
+    background: rgba(20, 13, 9, 0.94);
+    border: 1px solid rgba(201, 162, 39, 0.28);
+    border-radius: 2px;
+    pointer-events: none;
+    box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.9);
+  }
+
+  .tip__title {
+    font-family: var(--font-print);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--chalk-100);
+  }
+
+  .tip__author {
+    font-family: var(--font-print);
+    font-size: 0.72rem;
+    font-style: italic;
+    color: var(--chalk-300);
   }
 
   .hint {

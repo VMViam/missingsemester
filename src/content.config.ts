@@ -20,6 +20,8 @@ const books = defineCollection({
     status: z.enum(["read", "reading", "to-read"]),
     /** Shelf / section within the library, e.g. "psychology", "history". */
     category: z.string().default("misc"),
+    /** Shelf genre, assigned by scripts/classify-genres.mjs. */
+    genre: z.string().optional(),
 
     rating: z.number().min(0).max(5).optional(),
     dateAdded: z.string().optional(),

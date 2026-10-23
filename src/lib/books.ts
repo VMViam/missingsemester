@@ -12,6 +12,7 @@ export interface Book {
   author: string;
   status: "read" | "reading" | "to-read";
   category: string;
+  genre?: string;
   rating?: number;
   dateAdded?: string;
   dateRead?: string;

@@ -23,6 +23,7 @@ import booksJson from "../../data/books.json";
 export interface HallOptions {
   onFocus?(book: Book): void;
   onClose?(): void;
+  onHover?(book: Book | null, clientX: number, clientY: number): void;
 }
 
 interface Dims {
@@ -44,7 +45,8 @@ const SHELF_FIRST = 0.62;
 
 function dimsFor(book: Book): Dims {
   const seed = hash(book.id);
-  const w = Math.max(0.02, Math.min(0.055, 0.02 + (book.pages ?? 240) / 14000));
+  const pages = book.pages ?? 180 + (seed % 320);
+  const w = Math.max(0.026, Math.min(0.058, 0.026 + pages / 9000));
   const h = 0.19 + ((seed >>> 3) % 70) / 1000;
   const d = h * (0.5 + ((seed >>> 7) % 12) / 100);
   return { w, h, d };
@@ -220,18 +222,74 @@ function bookGeometry(book: Book, atlas: SpineAtlas): { geo: THREE.BufferGeometr
 
 /* --------------------------------------------------------------- shelving */
 
+const GENRE_ORDER = [
+  "mind", "self", "spirit", "business", "science",
+  "history", "philosophy", "technology", "health", "memoir", "fiction", "misc",
+];
+
+const GENRE_LABEL: Record<string, string> = {
+  mind: "Mind",
+  self: "Self",
+  spirit: "Spirit",
+  business: "Business",
+  science: "Science",
+  history: "History",
+  philosophy: "Philosophy",
+  technology: "Technology",
+  health: "Health",
+  memoir: "Memoir",
+  fiction: "Fiction",
+  misc: "Miscellany",
+};
+
+const labelMaterials = new Map<string, THREE.MeshBasicMaterial>();
+
+function genreLabelMaterial(genre: string): THREE.MeshBasicMaterial {
+  const cached = labelMaterials.get(genre);
+  if (cached) return cached;
+
+  const tex = canvasTexture(512, 96, (ctx) => {
+    ctx.fillStyle = "#241a0e";
+    ctx.fillRect(0, 0, 512, 96);
+    ctx.strokeStyle = "#b58c26";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(4, 4, 504, 88);
+    ctx.fillStyle = "#e8dcc0";
+    ctx.font = "600 40px Archivo Narrow, Helvetica, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText((GENRE_LABEL[genre] ?? genre).toUpperCase(), 256, 52);
+  });
+
+  const material = new THREE.MeshBasicMaterial({ map: tex, toneMapped: false });
+  labelMaterials.set(genre, material);
+  return material;
+}
+
 interface CabinetOptions {
   width: number;
   books: Book[];
   atlases: SpineAtlas[];
   indexOf: Map<string, number>;
   pickables: Array<{ mesh: THREE.Mesh; book: Book }>;
+  /** Keep the furniture looking right even when the shelf is half empty. */
+  minRows?: number;
 }
 
-function buildCabinet({ width, books, atlases, indexOf, pickables }: CabinetOptions): THREE.Group {
+function buildCabinet({ width, books, atlases, indexOf, pickables, minRows = 3 }: CabinetOptions): THREE.Group {
   const group = new THREE.Group();
-  const height = CABINET_H;
   const depth = 0.34;
+
+  const usable = width - 0.24;
+  const bookWidth = (b: Book) => dimsFor(b).w + 0.004;
+  const totalWidth = books.reduce((s, b) => s + bookWidth(b), 0);
+  const maxShelves = Math.floor((CABINET_H - SHELF_FIRST - 0.5) / SHELF_GAP) + 1;
+  const rows = Math.max(Math.min(minRows, maxShelves), Math.min(maxShelves, Math.ceil(totalWidth / usable)));
+
+  // A cabinet is only as tall as the shelves it needs, so a small collection
+  // reads as a low bookcase rather than a tall empty one.
+  const height = Math.min(CABINET_H, SHELF_FIRST + (rows - 1) * SHELF_GAP + 0.62);
+  const perRow = Math.ceil(books.length / rows);
 
   const backPanel = new THREE.Mesh(
     new THREE.BoxGeometry(width, height, 0.04),
@@ -255,13 +313,6 @@ function buildCabinet({ width, books, atlases, indexOf, pickables }: CabinetOpti
   cornice.position.set(0, height - 0.09, depth / 2);
   group.add(cornice);
 
-  const usable = width - 0.24;
-  const bookWidth = (b: Book) => dimsFor(b).w + 0.004;
-  const totalWidth = books.reduce((s, b) => s + bookWidth(b), 0);
-  const maxShelves = Math.floor((height - SHELF_FIRST - 0.5) / SHELF_GAP) + 1;
-  const rows = Math.max(1, Math.min(maxShelves, Math.ceil(totalWidth / usable)));
-  const perRow = Math.ceil(books.length / rows);
-
   const shelfMat = wood("#67452b", 0.78);
   const geoByAtlas: THREE.BufferGeometry[][] = atlases.map(() => []);
 
@@ -272,11 +323,22 @@ function buildCabinet({ width, books, atlases, indexOf, pickables }: CabinetOpti
     group.add(shelf);
 
     let x = -usable / 2 + 0.01;
+    let prevGenre: string | null = null;
     const rowBooks = books.slice(row * perRow, (row + 1) * perRow);
     for (const book of rowBooks) {
       const ai = indexOf.get(book.id) ?? 0;
       const atlas = atlases[ai];
       if (!atlas) continue;
+
+      const genre = book.genre ?? "misc";
+      if (genre !== prevGenre) {
+        // A little brass label on the shelf lip, where a library would put one.
+        const plate = new THREE.Mesh(new THREE.PlaneGeometry(0.22, 0.042), genreLabelMaterial(genre));
+        plate.position.set(x + 0.11, y + 0.04, depth - 0.052);
+        group.add(plate);
+        prevGenre = genre;
+      }
+
       const { geo, dims } = bookGeometry(book, atlas);
       x += dims.w / 2;
       geo.translate(x, y + 0.02 + dims.h / 2, depth * 0.52);
@@ -292,6 +354,16 @@ function buildCabinet({ width, books, atlases, indexOf, pickables }: CabinetOpti
       hit.userData.book = book;
       group.add(hit);
       pickables.push({ mesh: hit, book });
+    }
+
+    // A brass bookend where the books stop, so a gap reads as intentional.
+    if (x < usable / 2 - 0.08) {
+      const end = new THREE.Mesh(
+        new THREE.BoxGeometry(0.012, 0.19, 0.15),
+        new THREE.MeshStandardMaterial({ color: "#8a7a5a", metalness: 0.65, roughness: 0.42 }),
+      );
+      end.position.set(x + 0.03, y + 0.115, depth * 0.52);
+      group.add(end);
     }
   }
 
@@ -337,11 +409,40 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   scene.background = new THREE.Color("#150d09");
   scene.fog = new THREE.FogExp2(0x160d08, 0.018);
 
-  const basePos = new THREE.Vector3(0, 1.72, 3.5);
-  const baseTarget = new THREE.Vector3(0, 2.45, -4.2);
-  const camera = new THREE.PerspectiveCamera(66, 1, 0.05, 120);
-  camera.position.copy(basePos);
-  camera.lookAt(baseTarget);
+  /*
+   * Camera rig: a fixed-height camera orbiting the U of three walls.
+   * `theta` pans around the room; `d` is the distance to the wall you face,
+   * so zooming walks the camera in toward the spines.
+   */
+  const rig = {
+    centre: new THREE.Vector3(0, 0, 0.1),
+    wallR: 4.3,
+    theta: -0.34,
+    goalTheta: -0.34,
+    d: 7.2,
+    goalD: 7.2,
+    minTheta: -1.38,
+    maxTheta: 1.38,
+    minD: 1.35,
+    maxD: 7.4,
+  };
+
+  const camera = new THREE.PerspectiveCamera(64, 1, 0.05, 120);
+
+  function rigPose(theta = rig.theta, d = rig.d) {
+    const dir = new THREE.Vector3(Math.sin(theta), 0, -Math.cos(theta));
+    const look = rig.centre.clone().addScaledVector(dir, rig.wallR);
+    look.y = 2.08;
+    const pos = rig.centre.clone().addScaledVector(dir, rig.wallR - d);
+    pos.y = 1.72;
+    return { look, pos };
+  }
+
+  {
+    const p = rigPose();
+    camera.position.copy(p.pos);
+    camera.lookAt(p.look);
+  }
 
   /* --- books ---------------------------------------------------------- */
 
@@ -352,6 +453,16 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   const toRead = books.filter((b) => b.status === "to-read");
   const reading = books.filter((b) => b.status === "reading");
   const read = books.filter((b) => b.status === "read");
+
+  const genreRank = (b: Book) => {
+    const i = GENRE_ORDER.indexOf(b.genre ?? "misc");
+    return i === -1 ? GENRE_ORDER.length : i;
+  };
+  const sortBooks = (a: Book, b: Book) =>
+    genreRank(a) - genreRank(b) || a.author.localeCompare(b.author);
+  toRead.sort(sortBooks);
+  reading.sort(sortBooks);
+  read.sort(sortBooks);
 
   const toReadAtlas = createSpineAtlases(toRead);
   const readingAtlas = createSpineAtlases(reading);
@@ -460,48 +571,52 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   /* --- cabinets -------------------------------------------------------- */
 
   const backCabinetW = (sideW - 0.24) / 2;
-  const placeBack = (booksList: Book[], sx: 1 | -1) => {
+  const placeBack = (
+    booksList: Book[],
+    sx: 1 | -1,
+    group: { atlases: SpineAtlas[]; indexOf: Map<string, number> },
+  ) => {
     const cabinet = buildCabinet({
       width: backCabinetW,
       books: booksList,
-      atlases: toReadAtlas.atlases,
-      indexOf: toReadAtlas.indexOf,
+      atlases: group.atlases,
+      indexOf: group.indexOf,
       pickables,
     });
     const halfSide = sideW / 2;
     cabinet.position.set(sx * (winW / 2 + halfSide), 0, backZ + 0.17);
     scene.add(cabinet);
   };
-  const halfToRead = Math.ceil(toRead.length / 2);
-  placeBack(toRead.slice(0, halfToRead), -1);
-  placeBack(toRead.slice(halfToRead), 1);
 
-  const sideCabinetW = 2.35;
+  // Front wall, left of the window: what I'm reading now.
+  // Front wall, right of the window: what I've finished.
+  placeBack(reading, -1, readingAtlas);
+  placeBack(read, 1, readAtlas);
+
+  // Both side walls: everything waiting to be read.
+  const sideCabinetW = 3.4;
   const placeSide = (
     booksList: Book[],
     sx: 1 | -1,
     group: { atlases: SpineAtlas[]; indexOf: Map<string, number> },
-    zPositions: number[],
+    z: number,
   ) => {
-    const per = Math.ceil(booksList.length / zPositions.length);
-    zPositions.forEach((z, i) => {
-      const list = booksList.slice(i * per, (i + 1) * per);
-      const cabinet = buildCabinet({
-        width: sideCabinetW,
-        books: list,
-        atlases: group.atlases,
-        indexOf: group.indexOf,
-        pickables,
-      });
-      cabinet.position.set(sx * (ROOM.w / 2 - 0.17), 0, z);
-      cabinet.rotation.y = sx > 0 ? -Math.PI / 2 : Math.PI / 2;
-      scene.add(cabinet);
+    const cabinet = buildCabinet({
+      width: sideCabinetW,
+      books: booksList,
+      atlases: group.atlases,
+      indexOf: group.indexOf,
+      pickables,
+      minRows: 4,
     });
+    cabinet.position.set(sx * (ROOM.w / 2 - 0.17), 0, z);
+    cabinet.rotation.y = sx > 0 ? -Math.PI / 2 : Math.PI / 2;
+    scene.add(cabinet);
   };
 
-  // Reading now: left wall. Already read: right wall.
-  placeSide(reading, -1, readingAtlas, [-2.35, 0.35]);
-  placeSide(read, 1, readAtlas, [-2.35, 0.35]);
+  const halfToRead = Math.ceil(toRead.length / 2);
+  placeSide(toRead.slice(0, halfToRead), -1, toReadAtlas, -1.2);
+  placeSide(toRead.slice(halfToRead), 1, toReadAtlas, -1.2);
 
   /* --- table, lamp, chair ---------------------------------------------- */
 
@@ -515,7 +630,7 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
     leg.position.set(lx, 0.365, lz);
     table.add(leg);
   }
-  table.position.set(0, 0, 0.35);
+  table.position.set(0.55, 0, 0.35);
   scene.add(table);
 
   const lamp = new THREE.Group();
@@ -565,8 +680,8 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
     leg.position.set(cx, 0.225, cz);
     chair.add(leg);
   }
-  chair.position.set(-1.42, 0, 1.05);
-  chair.rotation.y = -Math.PI / 2 - 0.35;
+  chair.position.set(1.75, 0, 1.5);
+  chair.rotation.y = Math.PI - 0.5;
   scene.add(chair);
 
   // A short stack of books and a mug on the table.
@@ -656,10 +771,9 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
 
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2(0, 0);
-  const parallax = new THREE.Vector2(0, 0);
   const pickMeshes = pickables.map((p) => p.mesh);
   let hovered: Book | null = null;
-  let focused: { book: Book; normal: THREE.Vector3 } | null = null;
+  let focused: Book | null = null;
 
   type Flight = {
     fromPos: THREE.Vector3;
@@ -668,72 +782,130 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
     toTarget: THREE.Vector3;
     t: number;
     dur: number;
+    back?: boolean;
   };
   let flight: Flight | null = null;
+  let lookAt = rigPose().look.clone();
 
-  const target = baseTarget.clone();
-
-  function flyTo(pos: THREE.Vector3, look: THREE.Vector3, dur = 0.85) {
+  function flyTo(pos: THREE.Vector3, look: THREE.Vector3, dur = 0.9, back = false) {
     flight = {
       fromPos: camera.position.clone(),
       toPos: pos.clone(),
-      fromTarget: target.clone(),
+      fromTarget: lookAt.clone(),
       toTarget: look.clone(),
       t: 0,
       dur,
+      back,
     };
+  }
+
+  function returnToRig() {
+    const p = rigPose(rig.goalTheta, rig.goalD);
+    flyTo(p.pos, p.look, 0.95, true);
+  }
+
+  // --- drag to pan -------------------------------------------------------
+  let dragging = false;
+  let dragStartX = 0;
+  let dragStartTheta = 0;
+  let dragDistance = 0;
+
+  function onPointerDown(e: PointerEvent) {
+    dragging = true;
+    dragDistance = 0;
+    dragStartX = e.clientX;
+    dragStartTheta = rig.goalTheta;
+    canvas.setPointerCapture(e.pointerId);
+  }
+
+  function onPointerUp(e: PointerEvent) {
+    dragging = false;
+    canvas.releasePointerCapture?.(e.pointerId);
   }
 
   function onPointerMove(e: PointerEvent) {
     const rect = canvas.getBoundingClientRect();
     pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-    parallax.set(pointer.x, pointer.y);
+
+    if (dragging) {
+      const dx = e.clientX - dragStartX;
+      dragDistance += Math.abs(dx);
+      rig.goalTheta = Math.max(
+        rig.minTheta,
+        Math.min(rig.maxTheta, dragStartTheta - dx * 0.0042),
+      );
+      return;
+    }
 
     raycaster.setFromCamera(pointer, camera);
     const hit = raycaster.intersectObjects(pickMeshes, false)[0];
     const book = (hit?.object.userData.book as Book) ?? null;
     if (book?.id !== hovered?.id) {
       hovered = book;
-      canvas.style.cursor = book ? "pointer" : "default";
+      canvas.style.cursor = book ? "pointer" : "grab";
+      options.onHover?.(book, e.clientX, e.clientY);
+    } else if (book) {
+      options.onHover?.(book, e.clientX, e.clientY);
     }
   }
 
-  function onClick() {
+  // --- wheel to zoom -----------------------------------------------------
+  function onWheel(e: WheelEvent) {
+    e.preventDefault();
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      rig.goalTheta = Math.max(
+        rig.minTheta,
+        Math.min(rig.maxTheta, rig.goalTheta + e.deltaX * 0.004),
+      );
+    } else {
+      rig.goalD = Math.max(rig.minD, Math.min(rig.maxD, rig.goalD + e.deltaY * 0.0045));
+    }
+  }
+
+  function onClick(e: MouseEvent) {
+    if (dragDistance > 5) return;
+
     if (focused) {
       focused = null;
       options.onClose?.();
-      flyTo(basePos, baseTarget, 0.9);
+      returnToRig();
       return;
     }
     if (!hovered) return;
+
     const entry = pickables.find((p) => p.book.id === hovered!.id);
     if (!entry) return;
 
-    // Find the cabinet's facing direction from its parent's rotation.
     const world = new THREE.Vector3();
     entry.mesh.getWorldPosition(world);
+
+    // Which way does this cabinet face?
     let parent: THREE.Object3D | null = entry.mesh.parent;
     while (parent && parent.rotation.y === 0 && parent.parent) parent = parent.parent;
     const normal = new THREE.Vector3(0, 0, 1).applyQuaternion(
       (parent ?? scene).getWorldQuaternion(new THREE.Quaternion()),
     );
 
-    const pos = world.clone().add(normal.clone().multiplyScalar(1.25));
-    pos.y = Math.max(1.5, Math.min(2.6, world.y + 0.2));
-    focused = { book: hovered, normal };
+    const pos = world.clone().add(normal.clone().multiplyScalar(1.05));
+    pos.y = Math.max(1.45, Math.min(2.45, world.y + 0.12));
+    focused = hovered;
     options.onFocus?.(hovered);
     flyTo(pos, world, 0.95);
   }
 
+  canvas.addEventListener("pointerdown", onPointerDown);
+  canvas.addEventListener("pointerup", onPointerUp);
   canvas.addEventListener("pointermove", onPointerMove);
+  canvas.addEventListener("pointerleave", () => options.onHover?.(null, 0, 0));
+  canvas.addEventListener("wheel", onWheel, { passive: false });
   canvas.addEventListener("click", onClick);
 
   /* --- loop ------------------------------------------------------------- */
 
-  const clock = new THREE.Clock();
   let raf = 0;
   let disposed = false;
+  let last = performance.now();
 
   function resize() {
     const w = canvas.clientWidth || window.innerWidth;
@@ -744,28 +916,35 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
     camera.updateProjectionMatrix();
   }
 
-  function frame() {
+  function frame(now = performance.now()) {
     if (disposed) return;
     raf = requestAnimationFrame(frame);
-    const dt = Math.min(clock.getDelta(), 0.05);
+    const dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
 
     if (flight) {
       flight.t += dt;
       const k = Math.min(1, flight.t / flight.dur);
       const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
       camera.position.lerpVectors(flight.fromPos, flight.toPos, e);
-      target.lerpVectors(flight.fromTarget, flight.toTarget, e);
-      camera.lookAt(target);
-      if (k >= 1) flight = null;
-    } else {
-      const amp = focused ? 0.03 : 0.1;
-      camera.position.x += (basePos.x + (focused ? 0 : parallax.x * amp) - camera.position.x) * Math.min(1, dt * 2.4);
-      camera.position.y += (basePos.y + (focused ? 0 : parallax.y * amp * 0.6) - camera.position.y) * Math.min(1, dt * 2.4);
-      camera.lookAt(target);
+      lookAt.lerpVectors(flight.fromTarget, flight.toTarget, e);
+      camera.lookAt(lookAt);
+      if (k >= 1) {
+        flight = null;
+        if (focused) rig.goalTheta = rig.theta;
+      }
+    } else if (!focused) {
+      const k = Math.min(1, dt * 6);
+      rig.theta += (rig.goalTheta - rig.theta) * k;
+      rig.d += (rig.goalD - rig.d) * k;
+      const p = rigPose();
+      camera.position.lerp(p.pos, Math.min(1, dt * 8));
+      lookAt.lerp(p.look, Math.min(1, dt * 8));
+      camera.lookAt(lookAt);
     }
 
     // Lamps breathe very slightly.
-    lampLight.intensity = 7 + Math.sin(clock.elapsedTime * 1.7) * 0.18;
+    lampLight.intensity = 3.4 + Math.sin(now * 0.0017) * 0.14;
     composer.render();
   }
 
@@ -778,7 +957,10 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
       disposed = true;
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      canvas.removeEventListener("pointerdown", onPointerDown);
+      canvas.removeEventListener("pointerup", onPointerUp);
       canvas.removeEventListener("pointermove", onPointerMove);
+      canvas.removeEventListener("wheel", onWheel);
       canvas.removeEventListener("click", onClick);
       composer.dispose();
       renderer.dispose();
