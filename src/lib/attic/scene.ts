@@ -38,7 +38,7 @@ interface Dims {
 
 const ROOM = { w: 8, d: 7.5, wallH: 2.6, ridgeH: 4.9 };
 const WIN = { w: 2.4, sill: 0.85, spring: 2.0, arch: 1.2 };
-const SHELF = { w: 2.05, h: 2.95, d: 0.34, rows: 6 };
+const SHELF = { w: 2.05, h: 2.95, d: 0.34, rows: 5 };
 
 function rng(seed: number) {
   let s = seed >>> 0;
@@ -396,11 +396,25 @@ function buildCase({ width, height, rows, books, atlases, indexOf, pickables }: 
   plinth.position.set(0, 0.13, depth / 2);
   group.add(plinth);
 
-  const crown = new THREE.Mesh(rounded(width + 0.08, 0.14, depth + 0.06, 0.014), dark);
-  crown.position.set(0, height - 0.07, depth / 2);
-  group.add(crown);
+  // Face frame: stiles and a top rail, so the case reads as built-in.
+  for (const sx of [-1, 1]) {
+    const stile = new THREE.Mesh(rounded(0.07, height, 0.05, 0.008), light);
+    stile.position.set(sx * (width / 2 - 0.035), height / 2, depth + 0.01);
+    group.add(stile);
+  }
+  const topRail = new THREE.Mesh(rounded(width, 0.1, 0.05, 0.008), light);
+  topRail.position.set(0, height - 0.06, depth + 0.01);
+  group.add(topRail);
 
-  const usable = width - 0.24;
+  // Two-step cornice.
+  const crown = new THREE.Mesh(rounded(width + 0.06, 0.1, depth + 0.05, 0.012), dark);
+  crown.position.set(0, height - 0.05, depth / 2);
+  group.add(crown);
+  const crown2 = new THREE.Mesh(rounded(width + 0.16, 0.08, depth + 0.1, 0.012), dark);
+  crown2.position.set(0, height + 0.03, depth / 2);
+  group.add(crown2);
+
+  const usable = width - 0.3;
   const first = 0.55;
   const gap = (height - first - 0.45) / (rows - 1);
   const geoByAtlas: THREE.BufferGeometry[][] = atlases.map(() => []);
@@ -707,30 +721,32 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
 
   // Bookcases flanking the window
   const caseW = SHELF.w;
-  const half = Math.ceil(toRead.length / 2);
-  const left = buildCase({
-    width: caseW,
-    height: SHELF.h,
-    rows: SHELF.rows,
-    books: toRead.slice(0, half),
-    atlases: toReadAtlas.atlases,
-    indexOf: toReadAtlas.indexOf,
-    pickables,
-  });
+  const third = Math.ceil(toRead.length / 3);
+
+  const makeCase = (books: Book[], width = caseW, rows = SHELF.rows) =>
+    buildCase({
+      width,
+      height: SHELF.h,
+      rows,
+      books,
+      atlases: toReadAtlas.atlases,
+      indexOf: toReadAtlas.indexOf,
+      pickables,
+    });
+
+  const left = makeCase(toRead.slice(0, third));
   left.position.set(-(WIN.w / 2 + caseW / 2 + 0.06), 0, -ROOM.d / 2 + SHELF.d / 2 + 0.02);
   scene.add(left);
 
-  const right = buildCase({
-    width: caseW,
-    height: SHELF.h,
-    rows: SHELF.rows,
-    books: toRead.slice(half),
-    atlases: toReadAtlas.atlases,
-    indexOf: toReadAtlas.indexOf,
-    pickables,
-  });
+  const right = makeCase(toRead.slice(third, third * 2));
   right.position.set(WIN.w / 2 + caseW / 2 + 0.06, 0, -ROOM.d / 2 + SHELF.d / 2 + 0.02);
   scene.add(right);
+
+  // The third case, on the right wall behind the chair.
+  const backCase = makeCase(toRead.slice(third * 2), 2.5);
+  backCase.position.set(ROOM.w / 2 - 0.2, 0, -1.0);
+  backCase.rotation.y = -Math.PI / 2;
+  scene.add(backCase);
 
   // A plant and a stack of books where the right-hand case would be.
   const plant = new THREE.Group();
@@ -753,7 +769,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     leaf.rotation.set(leafRand() * 0.8 - 0.3, a, leafRand() * 0.7 - 0.35);
     plant.add(leaf);
   }
-  plant.position.set(3.45, 0, -1.9);
+  plant.position.set(3.35, 0, 1.55);
   scene.add(plant);
 
   const floorStack = new THREE.Group();
@@ -766,7 +782,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     book.rotation.y = (leafRand() - 0.5) * 0.2;
     floorStack.add(book);
   }
-  floorStack.position.set(3.15, 0, -1.3);
+  floorStack.position.set(3.05, 0, 1.05);
   scene.add(floorStack);
 
   /* --- the leather club chair  /* --- the leather club chair ------------------------------------------ */
@@ -814,8 +830,8 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   const leather = new THREE.MeshStandardMaterial({
     map: leatherMap,
     roughnessMap: leatherRough,
-    roughness: 0.72,
-    metalness: 0.04,
+    roughness: 0.9,
+    metalness: 0,
     color: "#b98a63",
   });
 
@@ -871,62 +887,74 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     chair.add(leg);
   }
 
-  chair.position.set(1.72, 0, 0.05);
-  chair.rotation.y = -Math.PI / 2 - 0.32;
+  chair.position.set(1.55, 0, -0.05);
+  chair.rotation.y = -1.15;
   scene.add(chair);
 
   /* --- the round table -------------------------------------------------- */
 
-  const tableWood = wood("#4a2c18", 0.58);
+  const tableWood = wood("#4a2c18", 0.55);
   const table = new THREE.Group();
 
-  const top = new THREE.Mesh(new THREE.CylinderGeometry(0.57, 0.57, 0.055, 48), tableWood);
-  top.position.y = 0.69;
+  const top = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.04, 48), tableWood);
+  top.position.y = 0.7;
   top.castShadow = true;
   top.receiveShadow = true;
   table.add(top);
 
   const rim = new THREE.Mesh(
-    new THREE.TorusGeometry(0.556, 0.012, 6, 48),
-    new THREE.MeshStandardMaterial({ color: "#2e1a0e", roughness: 0.5 }),
+    new THREE.TorusGeometry(0.535, 0.014, 6, 48),
+    new THREE.MeshStandardMaterial({ color: "#2e1a0e", roughness: 0.45 }),
   );
   rim.rotation.x = Math.PI / 2;
-  rim.position.y = 0.665;
+  rim.position.y = 0.678;
   table.add(rim);
 
-  // A turned pedestal, not a straight pipe.
+  const apron = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.46, 0.07, 32), tableWood);
+  apron.position.y = 0.655;
+  table.add(apron);
+
+  // Slender turned column.
   const profile = [
-    new THREE.Vector2(0.16, 0),
-    new THREE.Vector2(0.15, 0.03),
-    new THREE.Vector2(0.09, 0.06),
-    new THREE.Vector2(0.07, 0.16),
-    new THREE.Vector2(0.1, 0.24),
-    new THREE.Vector2(0.075, 0.34),
-    new THREE.Vector2(0.06, 0.44),
-    new THREE.Vector2(0.085, 0.52),
-    new THREE.Vector2(0.07, 0.62),
-    new THREE.Vector2(0.1, 0.66),
+    new THREE.Vector2(0.055, 0),
+    new THREE.Vector2(0.05, 0.04),
+    new THREE.Vector2(0.036, 0.1),
+    new THREE.Vector2(0.034, 0.28),
+    new THREE.Vector2(0.045, 0.4),
+    new THREE.Vector2(0.033, 0.5),
+    new THREE.Vector2(0.04, 0.6),
+    new THREE.Vector2(0.055, 0.64),
   ];
   const stem = new THREE.Mesh(new THREE.LatheGeometry(profile, 24), tableWood);
   stem.castShadow = true;
   table.add(stem);
 
-  const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.32, 0.05, 32), tableWood);
-  foot.position.y = 0.025;
-  table.add(foot);
+  // Three splayed legs.
+  for (let i = 0; i < 3; i++) {
+    const curve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0, 0.36, 0),
+      new THREE.Vector3(0.13, 0.24, 0),
+      new THREE.Vector3(0.3, 0.07, 0),
+      new THREE.Vector3(0.4, 0.015, 0),
+    ]);
+    const leg = new THREE.Mesh(new THREE.TubeGeometry(curve, 16, 0.028, 8, false), tableWood);
+    leg.rotation.y = (i / 3) * Math.PI * 2;
+    leg.castShadow = true;
+    table.add(leg);
+  }
 
   for (let i = 0; i < 3; i++) {
     const book = new THREE.Mesh(
-      rounded(0.32, 0.045, 0.24, 0.006),
+      rounded(0.32, 0.04, 0.23, 0.005),
       wood(["#6f2d2a", "#2f3f55", "#6b472b"][i], 0.8),
     );
-    book.position.set(-0.08 + i * 0.035, 0.745 + i * 0.05, 0.02);
-    book.rotation.y = (i - 1) * 0.18;
+    book.position.set(-0.06 + i * 0.035, 0.72 + i * 0.045, 0.02);
+    book.rotation.y = (i - 1) * 0.16;
     book.castShadow = true;
     table.add(book);
   }
 
-  table.position.set(2.62, 0, 0.55);
+  table.position.set(2.42, 0, 0.72);
   scene.add(table);
 
   /* --- contact shadows -------------------------------------------------- */
