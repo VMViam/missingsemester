@@ -1,0 +1,347 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const books = (await getCollection("books")).map((entry) => entry.data);
+const byAuthor = (a: { author: string }, b: { author: string }) => a.author.localeCompare(b.author);
+
+const GENRES = [
+  "self", "mind", "spirit", "business", "science",
+  "history", "philosophy", "technology", "health", "memoir", "fiction", "misc",
+] as const;
+
+const GENRE_LABEL: Record<string, string> = {
+  self: "Self & Practice",
+  mind: "Mind",
+  spirit: "Spirit",
+  business: "Business",
+  science: "Science",
+  history: "History",
+  philosophy: "Philosophy",
+  technology: "Technology",
+  health: "Health",
+  memoir: "Memoir",
+  fiction: "Fiction",
+  misc: "Miscellany",
+};
+
+const grouped = GENRES.map((genre) => ({
+  id: genre,
+  label: GENRE_LABEL[genre],
+  books: books.filter((b) => (b.genre ?? "misc") === genre).sort(byAuthor),
+})).filter((g) => g.books.length > 0);
+
+const counts = {
+  total: books.length,
+  toRead: books.filter((b) => b.status === "to-read").length,
+  reading: books.filter((b) => b.status === "reading").length,
+  read: books.filter((b) => b.status === "read").length,
+};
+---
+
+<Base
+  title="The Catalogue — The Attic Library"
+  description="Every book in the attic: read, reading, and waiting."
+  bodyClass="catalogue-page"
+>
+  <main class="catalogue">
+    <p class="catalogue__back"><a href="/reading/">← The attic</a></p>
+
+    <header class="catalogue__head">
+      <h1>The catalogue</h1>
+      <p class="catalogue__counts">
+        {counts.total} books · {counts.toRead} to read · {counts.reading} reading · {counts.read} read
+      </p>
+    </header>
+
+    <div class="catalogue__tools">
+      <label class="search">
+        <span>Search</span>
+        <input type="search" id="search" placeholder="Title, author, subject…" autocomplete="off" />
+      </label>
+      <div class="filters" role="group" aria-label="Filter by status">
+        <button type="button" data-filter="all" class="is-on">All</button>
+        <button type="button" data-filter="to-read">To read</button>
+        <button type="button" data-filter="reading">Reading</button>
+        <button type="button" data-filter="read">Read</button>
+      </div>
+    </div>
+
+    <div class="genres">
+      {
+        grouped.map((group) => (
+          <details class="genre" open>
+            <summary>
+              <span class="genre__name">{group.label}</span>
+              <span class="genre__count">{group.books.length}</span>
+            </summary>
+            <ul class="books">
+              {group.books.map((book) => (
+                <li class="book" data-status={book.status}>
+                  <a href={`/reading/${book.id}/`}>
+                    <span class="book__title">{book.title}</span>
+                    <span class="book__author">{book.author}</span>
+                    <span class="book__mark" aria-label={book.status}>
+                      {book.status === "reading" ? "◐" : book.status === "read" ? "●" : "○"}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))
+      }
+    </div>
+    <p class="catalogue__empty" id="empty" hidden>No books match that search.</p>
+  </main>
+</Base>
+
+<script>
+  const search = document.getElementById("search") as HTMLInputElement | null;
+  const empty = document.getElementById("empty") as HTMLElement | null;
+  const books = Array.from(document.querySelectorAll<HTMLElement>(".book"));
+  const groups = Array.from(document.querySelectorAll<HTMLDetailsElement>(".genre"));
+  const filters = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-filter]"));
+  let status = "all";
+
+  function apply() {
+    const term = (search?.value ?? "").trim().toLowerCase();
+    let visible = 0;
+
+    for (const book of books) {
+      const matchStatus = status === "all" || book.dataset.status === status;
+      const matchText = !term || (book.textContent ?? "").toLowerCase().includes(term);
+      const show = matchStatus && matchText;
+      book.hidden = !show;
+      if (show) visible++;
+    }
+
+    for (const group of groups) {
+      const any = Array.from(group.querySelectorAll<HTMLElement>(".book")).some((b) => !b.hidden);
+      group.hidden = !any;
+      if (any && term) group.open = true;
+    }
+
+    if (empty) empty.hidden = visible > 0;
+  }
+
+  function setStatus(next: string) {
+    status = next;
+    for (const button of filters) {
+      button.classList.toggle("is-on", button.dataset.filter === next);
+    }
+    apply();
+  }
+
+  search?.addEventListener("input", apply);
+  for (const button of filters) {
+    button.addEventListener("click", () => setStatus(button.dataset.filter ?? "all"));
+  }
+
+  const wanted = new URLSearchParams(location.search).get("shelf");
+  if (wanted) setStatus(wanted);
+</script>
+
+<style>
+  .catalogue-page {
+    background: var(--paper-200);
+  }
+
+  .catalogue {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: clamp(1.4rem, 4vw, 3rem) clamp(1.1rem, 4vw, 3rem) 6rem;
+    color: var(--ink-900);
+  }
+
+  .catalogue__back {
+    margin: 0 0 1.4rem;
+    font-family: var(--font-sign);
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .catalogue__back a {
+    color: var(--oak-700);
+    text-decoration: none;
+  }
+
+  .catalogue__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--paper-400);
+  }
+
+  h1 {
+    margin: 0;
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: var(--step-4);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+  }
+
+  .catalogue__counts {
+    margin: 0;
+    font-family: var(--font-sign);
+    font-size: var(--step--1);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-500);
+  }
+
+  .catalogue__tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 1.4rem 0 2rem;
+  }
+
+  .search {
+    display: grid;
+    gap: 0.25rem;
+    min-width: min(22rem, 100%);
+  }
+
+  .search span {
+    font-family: var(--font-sign);
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-300);
+  }
+
+  .search input {
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--paper-400);
+    border-radius: 2px;
+    background: var(--paper-100);
+    font: inherit;
+    color: var(--ink-900);
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .filters button {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--paper-400);
+    border-radius: 999px;
+    background: transparent;
+    font-family: var(--font-sign);
+    font-size: var(--step--1);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-500);
+    cursor: pointer;
+  }
+
+  .filters button.is-on {
+    background: var(--ink-900);
+    border-color: var(--ink-900);
+    color: var(--paper-100);
+  }
+
+  .genre {
+    border-bottom: 1px solid var(--paper-300);
+    padding: 0.6rem 0;
+  }
+
+  .genre summary {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    cursor: pointer;
+    padding: 0.35rem 0;
+    list-style: none;
+  }
+
+  .genre summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .genre summary::before {
+    content: "＋";
+    font-size: 0.75rem;
+    color: var(--brass-600);
+  }
+
+  .genre[open] summary::before {
+    content: "−";
+  }
+
+  .genre__name {
+    font-family: var(--font-sign);
+    font-size: var(--step-1);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .genre__count {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--ink-300);
+  }
+
+  .books {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0.4rem 1.4rem;
+    columns: 2;
+    column-gap: 2.5rem;
+  }
+
+  .book {
+    break-inside: avoid;
+    padding: 0.22rem 0;
+  }
+
+  .book a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: var(--ink-700);
+  }
+
+  .book a:hover .book__title {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .book__title {
+    font-size: var(--step-0);
+  }
+
+  .book__author {
+    font-size: var(--step--1);
+    font-style: italic;
+    color: var(--ink-300);
+  }
+
+  .book__mark {
+    margin-left: auto;
+    font-size: 0.6rem;
+    color: var(--brass-600);
+  }
+
+  .catalogue__empty {
+    padding: 1.5rem 0;
+    color: var(--ink-300);
+  }
+
+  @media (max-width: 46rem) {
+    .books {
+      columns: 1;
+    }
+  }
+</style>

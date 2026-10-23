@@ -1,421 +1,137 @@
 ---
 import Base from "../../layouts/Base.astro";
-import { getCollection } from "astro:content";
-
-const books = (await getCollection("books")).map((entry) => entry.data);
-
-const byAuthor = (a: { author: string }, b: { author: string }) =>
-  a.author.localeCompare(b.author);
-
-const toRead = books.filter((b) => b.status === "to-read").sort(byAuthor);
-const reading = books.filter((b) => b.status === "reading").sort(byAuthor);
-const read = books.filter((b) => b.status === "read").sort(byAuthor);
-
-const GENRES = [
-  "self", "mind", "spirit", "business", "science",
-  "history", "philosophy", "technology", "health", "memoir", "fiction", "misc",
-] as const;
-
-const GENRE_LABEL: Record<string, string> = {
-  self: "Self & Practice",
-  mind: "Mind",
-  spirit: "Spirit",
-  business: "Business",
-  science: "Science",
-  history: "History",
-  philosophy: "Philosophy",
-  technology: "Technology",
-  health: "Health",
-  memoir: "Memoir",
-  fiction: "Fiction",
-  misc: "Miscellany",
-};
-
-// Two hundred waiting books on the two cases, split down the alphabet.
-const leftBooks = toRead.slice(0, 100);
-const rightBooks = toRead.slice(100, 200);
-
-const grouped = GENRES.map((genre) => ({
-  id: genre,
-  label: GENRE_LABEL[genre],
-  books: books.filter((b) => (b.genre ?? "misc") === genre).sort(byAuthor),
-})).filter((g) => g.books.length > 0);
-
-const counts = {
-  total: books.length,
-  toRead: toRead.length,
-  reading: reading.length,
-  read: read.length,
-};
-
-function spineWidth(book: (typeof books)[number]) {
-  const pages = book.pages ?? 200;
-  return Math.max(7, Math.min(17, Math.round(7 + pages / 40)));
-}
 ---
 
 <Base
   title="The Attic Library — The Missing Semester"
-  description="A reading room under the roof: books read, reading, and waiting."
+  description="A reading room under the roof. Step in."
   bodyClass="attic-page"
 >
   <main class="attic">
-    <header class="room-head">
-      <p class="room__eyebrow">Subject 01 · The Library</p>
-      <h1>The Attic Library</h1>
-      <p class="room__intro">
-        Under the roof, a window seat, a chair that knows my shape, and every
-        book that made it this far.
-      </p>
+    <canvas
+      id="attic-canvas"
+      aria-label="A three-dimensional attic library with bookcases either side of an arched window."
+    ></canvas>
+
+    <header class="hud">
+      <a class="hud__back" href="/">← The house</a>
+      <div class="hud__title">
+        <p class="hud__eyebrow">Subject 01 · The Library</p>
+        <p class="hud__name">The Attic Library</p>
+      </div>
+      <a class="hud__catalogue" href="/reading/catalogue/">The catalogue</a>
     </header>
 
-    <section class="room" aria-label="The attic reading room">
-      <!-- The room shell: plaster, timber, window, seat, floor, chair, table -->
-      <svg class="room__shell" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <defs>
-          <linearGradient id="plaster" x1="0" y1="0" x2="0.3" y2="1">
-            <stop offset="0" stop-color="#f7f2e8" />
-            <stop offset="0.6" stop-color="#efe6d6" />
-            <stop offset="1" stop-color="#e2d5c0" />
-          </linearGradient>
-          <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#7a5233" />
-            <stop offset="0.55" stop-color="#5a3a22" />
-            <stop offset="1" stop-color="#3d2617" />
-          </linearGradient>
-          <linearGradient id="woodLight" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#96683f" />
-            <stop offset="1" stop-color="#6b472b" />
-          </linearGradient>
-          <radialGradient id="sun" cx="0.5" cy="0.45" r="0.6">
-            <stop offset="0" stop-color="#fff8e6" stop-opacity="0.95" />
-            <stop offset="0.45" stop-color="#fff3d6" stop-opacity="0.35" />
-            <stop offset="1" stop-color="#fff0c8" stop-opacity="0" />
-          </radialGradient>
-          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#f4f6ee" />
-            <stop offset="0.5" stop-color="#e7eee2" />
-            <stop offset="1" stop-color="#cfdcc6" />
-          </linearGradient>
-          <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#c08a52" />
-            <stop offset="1" stop-color="#9a6435" />
-          </linearGradient>
-          <linearGradient id="leather" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#8a5533" />
-            <stop offset="0.5" stop-color="#6d3f24" />
-            <stop offset="1" stop-color="#4d2a16" />
-          </linearGradient>
-          <pattern id="parquet" width="64" height="64" patternUnits="userSpaceOnUse" patternTransform="rotate(0)">
-            <rect width="64" height="64" fill="#b17a45" />
-            <path d="M0 0 L32 32 M64 0 L32 32 M0 64 L32 32 M64 64 L32 32" stroke="#8f5c31" stroke-width="2" />
-            <path d="M0 16 L16 32 L0 48 M64 16 L48 32 L64 48" stroke="#c69258" stroke-width="1.4" opacity="0.7" />
-          </pattern>
-          <pattern id="rug" width="120" height="120" patternUnits="userSpaceOnUse">
-            <rect width="120" height="120" fill="#6f2d2a" />
-            <path d="M60 12 L108 60 L60 108 L12 60 Z" fill="none" stroke="#d9c39a" stroke-width="2" />
-            <path d="M60 28 L92 60 L60 92 L28 60 Z" fill="#2f3f55" opacity="0.55" />
-            <path d="M60 44 L76 60 L60 76 L44 60 Z" fill="#d9c39a" opacity="0.7" />
-            <circle cx="60" cy="60" r="4" fill="#6f2d2a" />
-            <path d="M0 0 L24 0 L0 24 Z M120 120 L96 120 L120 96 Z" fill="#2f3f55" opacity="0.35" />
-          </pattern>
-          <clipPath id="windowClip">
-            <path d="M556 566 L556 300 A164 164 0 0 1 884 300 L884 566 Z" />
-          </clipPath>
-        </defs>
+    <div class="tip" id="tip" hidden>
+      <span class="tip__title" id="tip-title"></span>
+      <span class="tip__author" id="tip-author"></span>
+    </div>
 
-        <!-- walls -->
-        <rect width="1440" height="900" fill="url(#plaster)" />
-        <rect x="0" y="0" width="1440" height="240" fill="#f9f5ec" opacity="0.55" />
+    <p class="hint">Drag to look around · scroll to move closer · click a spine</p>
 
-        <!-- timber: rafters, collar, king post, purlins -->
-        <g fill="url(#wood)">
-          <polygon points="0,300 720,44 720,80 0,344" />
-          <polygon points="1440,300 720,44 720,80 1440,344" />
-          <rect x="250" y="96" width="940" height="26" rx="3" />
-          <rect x="704" y="70" width="32" height="52" rx="2" />
-          <polygon points="0,170 720,30 720,44 0,184" opacity="0.8" />
-          <polygon points="1440,170 720,30 720,44 1440,184" opacity="0.8" />
-          <rect x="120" y="250" width="26" height="120" rx="2" opacity="0.85" />
-          <rect x="1294" y="250" width="26" height="120" rx="2" opacity="0.85" />
-        </g>
+    <aside class="panel" id="panel" hidden aria-live="polite">
+      <button class="panel__close" id="panel-close" type="button" aria-label="Close">×</button>
+      <div class="panel__cover" id="panel-cover"></div>
+      <p class="panel__state" id="panel-state"></p>
+      <h2 class="panel__title" id="panel-title"></h2>
+      <p class="panel__author" id="panel-author"></p>
+      <p class="panel__meta" id="panel-meta"></p>
+      <p class="panel__notes" id="panel-notes"></p>
+      <a class="panel__link" id="panel-link" href="#">Open the book →</a>
+    </aside>
 
-        <!-- soft shadow under the collar -->
-        <rect x="250" y="122" width="940" height="16" fill="#3d2617" opacity="0.08" />
-
-        <!-- window: view, glass, frame, mullions -->
-        <g clip-path="url(#windowClip)">
-          <rect x="540" y="120" width="360" height="460" fill="url(#sky)" />
-          <circle cx="650" cy="280" r="70" fill="#fff6d8" opacity="0.75" />
-          <path d="M540 520 C 600 470 660 500 720 480 C 790 458 840 500 900 470 L900 580 L540 580 Z" fill="#b9c9a9" opacity="0.55" />
-          <path d="M540 545 C 620 520 680 548 740 530 C 810 510 860 540 900 528 L900 580 L540 580 Z" fill="#93ac86" opacity="0.6" />
-          <rect x="540" y="120" width="360" height="460" fill="url(#sun)" />
-          <g stroke="#f6f2e8" stroke-width="7" opacity="0.95">
-            <path d="M556 300 L884 300" />
-            <path d="M720 140 L720 566" />
-            <path d="M556 430 L884 430" />
-            <path d="M556 510 L884 510" />
-          </g>
-        </g>
-        <path d="M556 566 L556 300 A164 164 0 0 1 884 300 L884 566 Z" fill="none" stroke="#e9e2d4" stroke-width="16" />
-        <path d="M548 566 L892 566" stroke="#d8cdb9" stroke-width="8" />
-
-        <!-- window seat -->
-        <rect x="512" y="566" width="416" height="26" rx="4" fill="#efe7d8" />
-        <rect x="512" y="592" width="416" height="22" rx="3" fill="url(#woodLight)" />
-        <rect x="522" y="614" width="396" height="56" rx="3" fill="url(#wood)" />
-        <g stroke="#3d2617" stroke-width="2" opacity="0.35">
-          <path d="M560 614 L560 670 M700 614 L700 670 M840 614 L840 670" />
-        </g>
-        <!-- cushions -->
-        <rect x="540" y="536" width="132" height="42" rx="18" fill="#efe9dc" opacity="0.95" />
-        <rect x="676" y="532" width="120" height="46" rx="20" fill="#c9b79c" opacity="0.95" />
-        <rect x="798" y="536" width="112" height="42" rx="18" fill="#f2ede3" opacity="0.95" />
-
-        <!-- floor -->
-        <rect x="0" y="670" width="1440" height="230" fill="url(#floor)" />
-        <rect x="0" y="670" width="1440" height="230" fill="url(#parquet)" opacity="0.85" />
-        <path d="M0 670 L1440 670" stroke="#6b472b" stroke-width="10" opacity="0.5" />
-
-        <!-- rug -->
-        <g opacity="0.95">
-          <polygon points="80,748 790,748 850,900 20,900" fill="url(#rug)" opacity="0.9" />
-          <polygon points="80,748 790,748 850,900 20,900" fill="none" stroke="#3f2a1a" stroke-width="7" opacity="0.45" />
-          <polygon points="110,764 762,764 812,886 42,886" fill="none" stroke="#d9c39a" stroke-width="3" opacity="0.6" />
-        </g>
-
-        <!-- armchair -->
-        <g>
-          <ellipse cx="1132" cy="742" rx="118" ry="22" fill="#3d2617" opacity="0.22" />
-          <rect x="1038" y="540" width="188" height="170" rx="28" fill="url(#leather)" />
-          <rect x="1054" y="560" width="156" height="110" rx="22" fill="#8a5533" opacity="0.55" />
-          <rect x="1024" y="650" width="216" height="66" rx="22" fill="url(#leather)" />
-          <rect x="1036" y="700" width="40" height="50" rx="8" fill="#4d2a16" />
-          <rect x="1188" y="700" width="40" height="50" rx="8" fill="#4d2a16" />
-          <rect x="1024" y="620" width="30" height="96" rx="12" fill="#5b351d" />
-          <rect x="1210" y="620" width="30" height="96" rx="12" fill="#5b351d" />
-        </g>
-
-        <!-- round side table with books -->
-        <g>
-          <ellipse cx="1320" cy="760" rx="108" ry="18" fill="#3d2617" opacity="0.2" />
-          <rect x="1312" y="660" width="16" height="100" fill="#4d2a16" />
-          <ellipse cx="1320" cy="660" rx="104" ry="26" fill="#7a5233" />
-          <ellipse cx="1320" cy="654" rx="104" ry="26" fill="#96683f" />
-          <rect x="1268" y="628" width="66" height="12" rx="2" fill="#6f2d2a" />
-          <rect x="1272" y="618" width="58" height="12" rx="2" fill="#2f3f55" />
-          <rect x="1276" y="608" width="50" height="12" rx="2" fill="#6b472b" />
-        </g>
-
-        <!-- light through the window -->
-        <polygon points="556,568 884,568 1120,900 260,900" fill="#fff3cf" opacity="0.16" />
-        <polygon points="600,568 700,568 620,900 380,900" fill="#fff8e2" opacity="0.14" />
-      </svg>
-
-      <!-- The two built-in bookcases; the books are live HTML -->
-      <div class="bay bay--left">
-        <div class="bay__crown"></div>
-        <span class="bay__plaque">To be read · A–M</span>
-        {
-          Array.from({ length: 5 }, (_, row) => (
-            <div class="bay__shelf">
-              {leftBooks.slice(row * 20, (row + 1) * 20).map((book) => (
-                <a
-                  class="spine"
-                  href={`/reading/${book.id}/`}
-                  style={`--c:${book.spineColor ?? "#4a4a52"};--f:${book.foilColor ?? "#d9bd72"};--bw:${spineWidth(book)}px;--bh:${70 + (spineWidth(book) % 7) * 4}%`}
-                  title={`${book.title} — ${book.author}`}
-                >
-                  <span class="spine__tip">{book.title}</span>
-                </a>
-              ))}
-            </div>
-          ))
-        }
-        <div class="bay__base"></div>
-      </div>
-
-      <div class="bay bay--right">
-        <div class="bay__crown"></div>
-        <span class="bay__plaque">To be read · N–Z</span>
-        {
-          Array.from({ length: 5 }, (_, row) => (
-            <div class="bay__shelf">
-              {rightBooks.slice(row * 20, (row + 1) * 20).map((book) => (
-                <a
-                  class="spine"
-                  href={`/reading/${book.id}/`}
-                  style={`--c:${book.spineColor ?? "#4a4a52"};--f:${book.foilColor ?? "#d9bd72"};--bw:${spineWidth(book)}px;--bh:${72 + (spineWidth(book) % 6) * 4}%`}
-                  title={`${book.title} — ${book.author}`}
-                >
-                  <span class="spine__tip">{book.title}</span>
-                </a>
-              ))}
-            </div>
-          ))
-        }
-        <div class="bay__base"></div>
-      </div>
-
-      <!-- Books on the window seat: the ones being read now -->
-      <div class="seat-covers">
-        {
-          reading.slice(0, 3).map((book) => (
-            <a class="seat-cover" href={`/reading/${book.id}/`} title={`${book.title} — ${book.author}`}>
-              <span style={`--c:${book.spineColor ?? "#4a4a52"}`}>{book.title}</span>
-              {book.coverUrl && (
-                <img
-                  src={book.coverUrl}
-                  alt={`${book.title} by ${book.author}`}
-                  loading="lazy"
-                  onerror="this.remove()"
-                />
-              )}
-            </a>
-          ))
-        }
-        <p class="seat-note">reading now</p>
-      </div>
-
-      <!-- foreground furniture, in front of the shelves -->
-      <svg class="room__foreground" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <g>
-          <ellipse cx="962" cy="792" rx="100" ry="18" fill="#3d2617" opacity="0.2" />
-          <rect x="884" y="600" width="168" height="150" rx="26" fill="url(#leather)" />
-          <rect x="900" y="618" width="136" height="96" rx="20" fill="#8a5533" opacity="0.5" />
-          <rect x="872" y="694" width="192" height="62" rx="22" fill="url(#leather)" />
-          <rect x="884" y="744" width="36" height="46" rx="8" fill="#4d2a16" />
-          <rect x="1020" y="744" width="36" height="46" rx="8" fill="#4d2a16" />
-          <rect x="872" y="664" width="28" height="88" rx="11" fill="#5b351d" />
-          <rect x="1036" y="664" width="28" height="88" rx="11" fill="#5b351d" />
-        </g>
-        <g>
-          <ellipse cx="1150" cy="828" rx="100" ry="16" fill="#3d2617" opacity="0.22" />
-          <rect x="1142" y="726" width="16" height="100" fill="#4d2a16" />
-          <ellipse cx="1150" cy="726" rx="96" ry="24" fill="#7a5233" />
-          <ellipse cx="1150" cy="720" rx="96" ry="24" fill="#96683f" />
-          <rect x="1102" y="696" width="62" height="11" rx="2" fill="#6f2d2a" />
-          <rect x="1106" y="687" width="54" height="11" rx="2" fill="#2f3f55" />
-          <rect x="1110" y="678" width="46" height="11" rx="2" fill="#6b472b" />
-        </g>
-        <polygon points="556,568 884,568 1180,900 200,900" fill="#fff3cf" opacity="0.12" />
-      </svg>
-
-      <p class="room__hint">Hover a spine for its name · click to open it</p>
-    </section>
-
-    <section class="catalogue" aria-labelledby="catalogue-title">
-      <header class="catalogue__head">
-        <h2 id="catalogue-title">The catalogue</h2>
-        <p class="catalogue__counts">
-          {counts.total} books · {counts.toRead} to read · {counts.reading} reading · {counts.read} read
-        </p>
-      </header>
-
-      <div class="catalogue__tools">
-        <label class="search">
-          <span>Search</span>
-          <input type="search" id="search" placeholder="Title, author, subject…" autocomplete="off" />
-        </label>
-        <div class="filters" role="group" aria-label="Filter by status">
-          <button type="button" data-filter="all" class="is-on">All</button>
-          <button type="button" data-filter="to-read">To read</button>
-          <button type="button" data-filter="reading">Reading</button>
-          <button type="button" data-filter="read">Read</button>
-        </div>
-      </div>
-
-      <div class="genres">
-        {
-          grouped.map((group) => (
-            <details class="genre" open>
-              <summary>
-                <span class="genre__name">{group.label}</span>
-                <span class="genre__count">{group.books.length}</span>
-              </summary>
-              <ul class="books">
-                {group.books.map((book) => (
-                  <li class="book" data-status={book.status}>
-                    <a href={`/reading/${book.id}/`}>
-                      <span class="book__title">{book.title}</span>
-                      <span class="book__author">{book.author}</span>
-                      <span class="book__mark" aria-label={book.status}>
-                        {book.status === "reading" ? "◐" : book.status === "read" ? "●" : "○"}
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </details>
-          ))
-        }
-      </div>
-      <p class="catalogue__empty" id="empty" hidden>No books match that search.</p>
-    </section>
+    <div class="loading" id="loading"><span>Opening the attic…</span></div>
   </main>
 </Base>
 
 <script>
-  const search = document.getElementById("search") as HTMLInputElement | null;
-  const empty = document.getElementById("empty") as HTMLElement | null;
-  const books = Array.from(document.querySelectorAll<HTMLElement>(".book"));
-  const groups = Array.from(document.querySelectorAll<HTMLDetailsElement>(".genre"));
-  const filters = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-filter]"));
-  let status = "all";
+  import { createAttic } from "../../lib/attic/scene";
+  import type { Book } from "../../lib/books";
 
-  function apply() {
-    const term = (search?.value ?? "").trim().toLowerCase();
-    let visible = 0;
+  const canvas = document.getElementById("attic-canvas") as HTMLCanvasElement;
+  const panel = document.getElementById("panel") as HTMLElement;
+  const loading = document.getElementById("loading") as HTMLElement;
+  const cover = document.getElementById("panel-cover") as HTMLElement;
+  const title = document.getElementById("panel-title") as HTMLElement;
+  const author = document.getElementById("panel-author") as HTMLElement;
+  const meta = document.getElementById("panel-meta") as HTMLElement;
+  const notes = document.getElementById("panel-notes") as HTMLElement;
+  const state = document.getElementById("panel-state") as HTMLElement;
+  const link = document.getElementById("panel-link") as HTMLAnchorElement;
+  const tip = document.getElementById("tip") as HTMLElement;
+  const tipTitle = document.getElementById("tip-title") as HTMLElement;
+  const tipAuthor = document.getElementById("tip-author") as HTMLElement;
 
-    for (const book of books) {
-      const matchStatus = status === "all" || book.dataset.status === status;
-      const matchText = !term || (book.textContent ?? "").toLowerCase().includes(term);
-      const show = matchStatus && matchText;
-      book.hidden = !show;
-      if (show) visible++;
-    }
+  const attic = createAttic(canvas, {
+    onFocus(book: Book) {
+      title.textContent = book.title;
+      author.textContent = book.author;
+      state.textContent =
+        book.status === "reading" ? "on the seat" : book.status === "read" ? "finished" : "waiting";
+      meta.textContent = [book.year, book.publisher, book.pages ? `${book.pages} pp` : null]
+        .filter(Boolean)
+        .join(" · ");
+      notes.textContent = book.notes ?? "";
+      notes.hidden = !book.notes;
+      link.href = `/reading/${book.id}/`;
 
-    for (const group of groups) {
-      const any = Array.from(group.querySelectorAll<HTMLElement>(".book")).some((b) => !b.hidden);
-      group.hidden = !any;
-      if (any && term) group.open = true;
-    }
+      cover.innerHTML = "";
+      cover.style.background = book.spineColor ?? "#2f4858";
+      if (book.coverUrl) {
+        const img = document.createElement("img");
+        img.src = book.coverUrl;
+        img.alt = "";
+        img.onerror = () => img.remove();
+        cover.append(img);
+      } else {
+        cover.textContent = book.title;
+      }
+      panel.hidden = false;
+      requestAnimationFrame(() => panel.classList.add("is-open"));
+    },
+    onClose() {
+      panel.classList.remove("is-open");
+      window.setTimeout(() => (panel.hidden = true), 260);
+    },
+    onHover(book: Book | null, x: number, y: number) {
+      if (!book) {
+        tip.hidden = true;
+        return;
+      }
+      tipTitle.textContent = book.title;
+      tipAuthor.textContent = book.author;
+      tip.style.transform = `translate(${x + 14}px, ${y + 16}px)`;
+      tip.hidden = false;
+    },
+  });
 
-    if (empty) empty.hidden = visible > 0;
-  }
+  document.getElementById("panel-close")?.addEventListener("click", () => {
+    canvas.click();
+  });
 
-  search?.addEventListener("input", apply);
-  for (const button of filters) {
-    button.addEventListener("click", () => {
-      status = button.dataset.filter ?? "all";
-      for (const other of filters) other.classList.toggle("is-on", other === button);
-      apply();
-    });
-  }
+  requestAnimationFrame(() => loading.classList.add("is-gone"));
+  window.addEventListener("pagehide", () => attic.dispose());
 </script>
 
-<style>
-  .attic-page {
-    background: #e9dfcd;
+<style is:global>
+  body.attic-page {
+    background: #1c120b;
+    overflow: hidden;
+  }
+
+  body.attic-page .site-nav,
+  body.attic-page .foot {
+    display: none;
   }
 
   .attic {
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  /* ------------------------------------------------------------------ room */
-
-  .room {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    min-height: 34rem;
+    position: fixed;
+    inset: 0;
     overflow: hidden;
-    background: #efe6d6;
+    color: var(--chalk-100);
   }
 
-  .room__shell {
+  #attic-canvas {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -423,39 +139,91 @@ function spineWidth(book: (typeof books)[number]) {
     display: block;
   }
 
-  .room-head {
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: clamp(1.6rem, 4vw, 3rem) clamp(1.1rem, 4vw, 3rem) 1.2rem;
-    background: var(--paper-200);
+  .hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-m);
+    padding: clamp(1rem, 2.2vw, 1.6rem);
+    pointer-events: none;
+    text-shadow: 0 1px 12px rgba(20, 12, 6, 0.6);
   }
 
-  .room__eyebrow {
-    margin: 0 0 0.35rem;
+  .hud a {
+    pointer-events: auto;
     font-family: var(--font-sign);
     font-size: var(--step--1);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #7a5233;
+    color: var(--chalk-200);
+    text-decoration: none;
   }
 
-  .room-head h1 {
-    margin: 0 0 0.5rem;
-    font-size: clamp(1.9rem, 3.6vw, 3.2rem);
-    line-height: 1;
-    letter-spacing: -0.03em;
-    color: #3d2617;
+  .hud a:hover {
+    color: var(--chalk-100);
   }
 
-  .room__intro {
+  .hud__title {
+    text-align: center;
+  }
+
+  .hud__eyebrow {
     margin: 0;
-    max-width: 34ch;
-    font-size: var(--step-0);
-    line-height: 1.5;
-    color: #5f4a35;
+    font-family: var(--font-sign);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--brass-300);
   }
 
-  .room__hint {
+  .hud__name {
+    margin: 0.15rem 0 0;
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: clamp(1.15rem, 2vw, 1.6rem);
+    letter-spacing: -0.01em;
+    color: #f7f0e2;
+  }
+
+  .tip[hidden] {
+    display: none;
+  }
+
+  .tip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    display: grid;
+    gap: 1px;
+    max-width: 19rem;
+    padding: 0.4rem 0.55rem;
+    background: rgba(24, 15, 9, 0.94);
+    border: 1px solid rgba(201, 162, 39, 0.28);
+    border-radius: 2px;
+    pointer-events: none;
+    box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.9);
+  }
+
+  .tip__title {
+    font-family: var(--font-print);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--chalk-100);
+  }
+
+  .tip__author {
+    font-family: var(--font-print);
+    font-size: 0.72rem;
+    font-style: italic;
+    color: var(--chalk-300);
+  }
+
+  .hint {
     position: absolute;
     left: 50%;
     bottom: 1.1rem;
@@ -463,465 +231,141 @@ function spineWidth(book: (typeof books)[number]) {
     z-index: 4;
     margin: 0;
     font-family: var(--font-sign);
-    font-size: var(--step--1);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #5f4a35;
-    opacity: 0.65;
-    white-space: nowrap;
-  }
-
-  /* ------------------------------------------------------------- bookcases */
-
-  .bay {
-    position: absolute;
-    top: 13%;
-    bottom: 16%;
-    width: 21%;
-    z-index: 3;
-    display: flex;
-    flex-direction: column;
-    padding: 0.5% 0.55% 0.8%;
-    background:
-      linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.28)),
-      linear-gradient(180deg, #5a3a22, #3d2617);
-    border: 1px solid #2e1b0f;
-    box-shadow:
-      inset 0 0 0 6px #4a2f1b,
-      inset 0 0 26px rgba(0, 0, 0, 0.6),
-      0 18px 40px -24px rgba(40, 22, 8, 0.8);
-  }
-
-  .bay--left {
-    left: 1.2%;
-  }
-
-  .bay--right {
-    right: 1.2%;
-  }
-
-  .bay__crown,
-  .bay__base {
-    height: 3.2%;
-    background: linear-gradient(180deg, #7a5233, #4a2f1b);
-    border-radius: 2px;
-  }
-
-  .bay__shelf {
-    position: relative;
-    flex: 1;
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    padding: 0 3px 0 4px;
-    border-bottom: 3px solid #2e1b0f;
-    box-shadow: inset 0 -6px 8px -6px rgba(0, 0, 0, 0.8);
-    overflow: visible;
-  }
-
-  .bay__plaque {
-    position: absolute;
-    left: 50%;
-    top: -1.15rem;
-    transform: translateX(-50%);
-    padding: 0.12rem 0.5rem;
-    background: #2a1d0e;
-    border: 1px solid #a9842a;
-    border-radius: 1px;
-    font-family: var(--font-sign);
-    font-size: 0.55rem;
+    font-size: 0.62rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #e8dcc0;
+    color: rgba(247, 240, 226, 0.6);
     white-space: nowrap;
     pointer-events: none;
   }
 
-  .spine {
-    position: relative;
-    flex: 0 0 auto;
-    display: block;
-    width: var(--bw);
-    height: var(--bh);
-    background-color: var(--c);
-    background-image:
-      linear-gradient(90deg, rgba(255, 255, 255, 0.18), transparent 30%, rgba(0, 0, 0, 0.25)),
-      linear-gradient(180deg, transparent 12%, rgba(0, 0, 0, 0.2) 12% 14%, transparent 14% 82%, rgba(0, 0, 0, 0.2) 82% 84%, transparent 84%);
-    border-radius: 1px;
-    box-shadow:
-      inset 1px 0 0 rgba(255, 255, 255, 0.14),
-      inset -1px 0 0 rgba(0, 0, 0, 0.35),
-      0 1px 2px rgba(0, 0, 0, 0.4);
-    transform-origin: bottom center;
-    transition: transform 180ms ease, filter 180ms ease;
-    text-decoration: none;
-    z-index: 1;
-  }
+  /* --- book panel ------------------------------------------------------- */
 
-  .spine::after {
-    content: "";
+  .panel {
     position: absolute;
-    left: 50%;
-    top: 18%;
-    bottom: 49%;
-    width: 1px;
-    background: var(--f);
-    opacity: 0.65;
-  }
-
-  .spine:hover,
-  .spine:focus-visible {
-    transform: translateY(-7px) rotate(-1.5deg);
-    filter: brightness(1.25);
-    z-index: 20;
-    outline: none;
-  }
-
-  .spine__tip {
-    position: absolute;
-    left: 50%;
-    bottom: calc(100% + 8px);
-    transform: translateX(-50%);
-    padding: 0.2rem 0.4rem;
-    background: #2a1d0e;
-    border: 1px solid rgba(201, 162, 39, 0.35);
-    border-radius: 2px;
-    color: #f3ecdd;
-    font-family: var(--font-print);
-    font-size: 0.6rem;
-    line-height: 1.2;
-    white-space: nowrap;
+    top: 50%;
+    right: clamp(1rem, 3vw, 2.4rem);
+    z-index: 8;
+    width: min(21rem, calc(100vw - 2rem));
+    transform: translate(1.2rem, -50%);
     opacity: 0;
-    pointer-events: none;
-    transition: opacity 120ms ease;
-    z-index: 30;
+    transition: transform 0.32s var(--ease-out), opacity 0.32s var(--ease-out);
+    padding: var(--space-m);
+    background: linear-gradient(180deg, rgba(33, 22, 14, 0.95), rgba(24, 16, 10, 0.97));
+    border: 1px solid rgba(201, 162, 39, 0.24);
+    border-radius: 3px;
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(6px);
   }
 
-  .spine:hover .spine__tip,
-  .spine:focus-visible .spine__tip {
+  .panel.is-open {
+    transform: translate(0, -50%);
     opacity: 1;
   }
 
-  /* --------------------------------------------------------- window seat */
-
-  .room__foreground {
+  .panel__close {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 5;
-    pointer-events: none;
+    top: 0.55rem;
+    right: 0.7rem;
+    border: 0;
+    background: transparent;
+    color: var(--chalk-300);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
   }
 
-  .seat-covers {
-    position: absolute;
-    left: 50%;
-    top: 60.8%;
-    transform: translateX(-50%);
-    z-index: 3;
-    display: flex;
-    align-items: flex-end;
-    gap: 0.5rem;
-    padding-left: 0.6rem;
-  }
-
-  .seat-cover {
-    position: relative;
-    display: block;
-    width: 2.7rem;
-    aspect-ratio: 2 / 3;
-    overflow: hidden;
-    border-radius: 1px;
-    box-shadow: 0 6px 14px -8px rgba(40, 22, 8, 0.9);
-    transform-origin: bottom center;
-    transition: transform 180ms ease;
-  }
-
-  .seat-cover:nth-child(1) {
-    transform: rotate(-4deg) translateY(0.15rem);
-  }
-
-  .seat-cover:nth-child(2) {
-    transform: rotate(1deg);
-  }
-
-  .seat-cover:nth-child(3) {
-    transform: rotate(4deg) translateY(0.1rem);
-  }
-
-  .seat-cover:hover {
-    transform: rotate(0) translateY(-4px) scale(1.04);
-  }
-
-  .seat-cover img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .seat-cover span {
-    position: absolute;
-    inset: 0;
+  .panel__cover {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 7.2rem;
+    aspect-ratio: 2 / 3;
+    margin-bottom: var(--space-s);
+    padding: 0.6rem;
+    overflow: hidden;
+    border-radius: 2px;
+    font-family: var(--font-print);
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+    color: var(--brass-300);
+    box-shadow: 0 12px 24px -16px rgba(0, 0, 0, 0.9);
+  }
+
+  .panel__cover img {
     width: 100%;
     height: 100%;
-    padding: 0.3rem;
-    background: var(--c);
-    color: #e8dcc0;
-    font-family: var(--font-print);
-    font-size: 0.45rem;
-    text-align: center;
+    object-fit: cover;
   }
 
-  .seat-note {
-    position: absolute;
-    left: 0.6rem;
-    bottom: -1.1rem;
-    margin: 0;
+  .panel__state {
+    margin: 0 0 0.2rem;
     font-family: var(--font-sign);
-    font-size: 0.55rem;
-    letter-spacing: 0.18em;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #5f4a35;
-    opacity: 0.7;
-    white-space: nowrap;
+    color: var(--brass-400);
   }
 
-  /* ------------------------------------------------------------- catalogue */
-
-  .catalogue {
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: clamp(2rem, 5vw, 4rem) clamp(1.1rem, 4vw, 3rem) 6rem;
-    background: var(--paper-200);
-    color: var(--ink-900);
+  .panel__title {
+    margin: 0 0 0.25rem;
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: var(--step-2);
+    font-weight: 400;
+    line-height: 1.15;
+    color: #f7f0e2;
   }
 
-  .catalogue__head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--paper-400);
+  .panel__author {
+    margin: 0 0 var(--space-2xs);
+    font-style: italic;
+    color: var(--chalk-300);
   }
 
-  .catalogue h2 {
-    margin: 0;
-    font-size: var(--step-3);
-    letter-spacing: -0.02em;
-  }
-
-  .catalogue__counts {
-    margin: 0;
-    font-family: var(--font-sign);
-    font-size: var(--step--1);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-500);
-  }
-
-  .catalogue__tools {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: end;
-    justify-content: space-between;
-    gap: 1rem;
-    margin: 1.4rem 0 2rem;
-  }
-
-  .search {
-    display: grid;
-    gap: 0.25rem;
-    min-width: min(22rem, 100%);
-  }
-
-  .search span {
-    font-family: var(--font-sign);
-    font-size: var(--step--1);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-300);
-  }
-
-  .search input {
-    padding: 0.55rem 0.7rem;
-    border: 1px solid var(--paper-400);
-    border-radius: 2px;
-    background: var(--paper-100);
-    font: inherit;
-    color: var(--ink-900);
-  }
-
-  .search input:focus-visible {
-    outline: 2px solid var(--brass-400);
-    outline-offset: 1px;
-  }
-
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-
-  .filters button {
-    padding: 0.4rem 0.75rem;
-    border: 1px solid var(--paper-400);
-    border-radius: 999px;
-    background: transparent;
-    font-family: var(--font-sign);
-    font-size: var(--step--1);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-500);
-    cursor: pointer;
-  }
-
-  .filters button.is-on {
-    background: var(--ink-900);
-    border-color: var(--ink-900);
-    color: var(--paper-100);
-  }
-
-  .genre {
-    border-bottom: 1px solid var(--paper-300);
-    padding: 0.6rem 0;
-  }
-
-  .genre summary {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    cursor: pointer;
-    padding: 0.35rem 0;
-    list-style: none;
-  }
-
-  .genre summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .genre summary::before {
-    content: "＋";
-    font-size: 0.75rem;
-    color: var(--brass-600);
-  }
-
-  .genre[open] summary::before {
-    content: "−";
-  }
-
-  .genre__name {
-    font-family: var(--font-sign);
-    font-size: var(--step-1);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .genre__count {
+  .panel__meta {
+    margin: 0 0 var(--space-xs);
     font-family: var(--font-mono);
     font-size: var(--step--1);
-    color: var(--ink-300);
+    color: var(--chalk-300);
+    opacity: 0.7;
   }
 
-  .books {
-    list-style: none;
-    margin: 0;
-    padding: 0 0 0.4rem 1.4rem;
-    columns: 2;
-    column-gap: 2.5rem;
-  }
-
-  @media (max-width: 46rem) {
-    .books {
-      columns: 1;
-    }
-  }
-
-  .book {
-    break-inside: avoid;
-    padding: 0.22rem 0;
-  }
-
-  .book a {
-    display: flex;
-    align-items: baseline;
-    gap: 0.4rem;
-    text-decoration: none;
-    color: var(--ink-700);
-  }
-
-  .book a:hover .book__title {
-    color: var(--ink-900);
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
-  }
-
-  .book__title {
-    font-size: var(--step-0);
-  }
-
-  .book__author {
+  .panel__notes {
+    margin: 0 0 var(--space-s);
     font-size: var(--step--1);
-    font-style: italic;
-    color: var(--ink-300);
+    color: var(--chalk-200);
+    opacity: 0.85;
   }
 
-  .book__mark {
-    margin-left: auto;
-    font-size: 0.6rem;
-    color: var(--brass-600);
+  .panel__link {
+    font-family: var(--font-sign);
+    font-size: var(--step--1);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brass-300);
   }
 
-  .catalogue__empty {
-    padding: 1.5rem 0;
-    color: var(--ink-300);
-  }
+  /* --- loading ---------------------------------------------------------- */
 
-  /* ------------------------------------------------------------- responsive */
-
-  @media (max-width: 60rem) {
-    .room {
-      aspect-ratio: 4 / 5;
-      min-height: 40rem;
-    }
-
-    .bay {
-      top: 46%;
-      bottom: 8%;
-      width: 44%;
-    }
-
-    .bay--left {
-      left: 2%;
-    }
-
-    .bay--right {
-      right: 2%;
-    }
-
-    .room__title {
-      max-width: 20rem;
-    }
-
-    .room__foreground {
+  .loading {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 5;
-    pointer-events: none;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    background: #1c120b;
+    color: var(--chalk-300);
+    font-family: var(--font-sign);
+    font-size: var(--step--1);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: opacity 1.1s var(--ease-out);
   }
 
-  .seat-covers {
-      top: 25%;
-      width: 12rem;
-    }
+  .loading.is-gone {
+    opacity: 0;
+    pointer-events: none;
   }
 </style>
