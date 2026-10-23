@@ -452,7 +452,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   // Floor
   const floorTex = herringbone();
   floorTex.wrapS = floorTex.wrapT = THREE.RepeatWrapping;
-  floorTex.repeat.set(3.1, 2.7);
+  floorTex.repeat.set(4.2, 3.6);
   const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(ROOM.w, ROOM.d),
     new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.72, metalness: 0.02 }),
@@ -516,7 +516,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   }
 
   // Timber: rafters, ridge, collars, purlins
-  const timber = wood("#5a3a22", 0.8);
+  const timber = wood("#6b472b", 0.76);
   for (const sx of [-1, 1]) {
     for (const z of [-2.6, -0.4, 1.9]) {
       const rafter = new THREE.Mesh(rounded(slopeLen, 0.18, 0.16, 0.02), timber);
@@ -687,8 +687,8 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     leg.position.set(sx * 0.32, 0.15, sz * 0.28);
     chair.add(leg);
   }
-  chair.position.set(2.15, 0, -0.35);
-  chair.rotation.y = -Math.PI / 2 - 0.22;
+  chair.position.set(1.72, 0, 0.05);
+  chair.rotation.y = -Math.PI / 2 - 0.32;
   chair.scale.setScalar(0.92);
   scene.add(chair);
 
@@ -713,13 +713,13 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     book.rotation.y = (i - 1) * 0.16;
     table.add(book);
   }
-  table.position.set(3.15, 0, 0.15);
+  table.position.set(2.62, 0, 0.55);
   scene.add(table);
 
   /* --- lighting -------------------------------------------------------- */
 
-  scene.add(new THREE.HemisphereLight("#eef2ee", "#40301f", 1.25));
-  scene.add(new THREE.AmbientLight("#7a6250", 0.45));
+  scene.add(new THREE.HemisphereLight("#f7f0e2", "#43301d", 1.35));
+  scene.add(new THREE.AmbientLight("#8a705a", 0.5));
 
   const sun = new THREE.DirectionalLight("#fff3d6", 2.6);
   sun.position.set(2.4, 4.6, -8);
@@ -746,8 +746,8 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   scene.add(bounce);
 
   // A soft interior fill so the beams and plaster keep their colour.
-  const fill = new THREE.PointLight("#ffe2b8", 1.1, 9, 2);
-  fill.position.set(-1.2, 2.6, 2.2);
+  const fill = new THREE.PointLight("#ffe2b8", 1.4, 9, 2);
+  fill.position.set(1.6, 2.7, 1.8);
   scene.add(fill);
 
   /* --- atmosphere ------------------------------------------------------ */
@@ -811,25 +811,24 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     goalYaw: 0,
     dolly: 0,
     goalDolly: 0,
-    minYaw: -0.52,
-    maxYaw: 0.52,
+    minYaw: -0.45,
+    maxYaw: 0.5,
     // 0 = standing back, 1 = at the window seat
     minDolly: 0,
     maxDolly: 1,
   };
 
-  const base = new THREE.Vector3(0, 1.66, 3.05);
-  const look = new THREE.Vector3(0, 1.86, -3.2);
+  const base = new THREE.Vector3(1.85, 1.68, 2.55);
+  const look = new THREE.Vector3(-0.95, 1.9, -3.3);
 
   function pose(yaw = rig.yaw, dolly = rig.dolly) {
-    const z = base.z - dolly * 2.1;
-    const pos = new THREE.Vector3(Math.sin(yaw) * 0.5, base.y, z);
-    const target = new THREE.Vector3(Math.sin(yaw) * 3.4, 1.86 + dolly * 0.1, -3.2);
+    const pos = new THREE.Vector3(base.x + Math.sin(yaw) * 0.45, base.y, base.z - dolly * 1.8);
+    const target = new THREE.Vector3(look.x + Math.sin(yaw) * 3.1, 1.9 + dolly * 0.12, look.z);
     return { pos, target };
   }
 
-  camera.position.copy(base);
-  camera.lookAt(look);
+  camera.position.copy(pose().pos);
+  camera.lookAt(pose().target);
 
   /* --- interaction ------------------------------------------------------ */
 
