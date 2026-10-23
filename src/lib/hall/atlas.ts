@@ -46,7 +46,13 @@ export function colourFor(book: Book): { cloth: string; foil: string } {
   return { cloth: pair[0], foil: pair[1] };
 }
 
-function drawSpine(ctx: CanvasRenderingContext2D, book: Book, x: number, y: number) {
+function drawSpine(ctx: CanvasRenderingContext2D, book: Book, x: number, y: number, scale = 1) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(scale, scale);
+  x = 0;
+  y = 0;
+
   const { cloth, foil } = colourFor(book);
   ctx.fillStyle = cloth;
   ctx.fillRect(x, y, STRIP_W, STRIP_H);
@@ -104,13 +110,17 @@ function drawSpine(ctx: CanvasRenderingContext2D, book: Book, x: number, y: numb
     ctx.fillText(String(book.year), 0, 0);
     ctx.restore();
   }
+
+  ctx.restore();
 }
 
-function buildAtlas(books: Book[]): SpineAtlas {
+function buildAtlas(books: Book[], scale = 1): SpineAtlas {
+  const stripW = STRIP_W * scale;
+  const stripH = STRIP_H * scale;
   const rows = Math.max(1, Math.ceil((books.length + 1) / COLS));
   const canvas = document.createElement("canvas");
-  canvas.width = COLS * STRIP_W;
-  canvas.height = rows * STRIP_H;
+  canvas.width = COLS * stripW;
+  canvas.height = rows * stripH;
   const ctx = canvas.getContext("2d")!;
   ctx.fillStyle = "#0d0906";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -118,17 +128,17 @@ function buildAtlas(books: Book[]): SpineAtlas {
   const placements = new Map<string, { x: number; y: number }>();
 
   books.forEach((book, i) => {
-    const x = (i % COLS) * STRIP_W;
-    const y = Math.floor(i / COLS) * STRIP_H;
+    const x = (i % COLS) * stripW;
+    const y = Math.floor(i / COLS) * stripH;
     placements.set(book.id, { x, y });
-    drawSpine(ctx, book, x, y);
+    drawSpine(ctx, book, x, y, scale);
   });
 
   const whiteIndex = books.length;
-  const wx = (whiteIndex % COLS) * STRIP_W;
-  const wy = Math.floor(whiteIndex / COLS) * STRIP_H;
+  const wx = (whiteIndex % COLS) * stripW;
+  const wy = Math.floor(whiteIndex / COLS) * stripH;
   ctx.fillStyle = "#ffffff";
-  ctx.fillRect(wx, wy, STRIP_W, STRIP_H);
+  ctx.fillRect(wx, wy, stripW, stripH);
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
@@ -146,10 +156,10 @@ function buildAtlas(books: Book[]): SpineAtlas {
     texture,
     uv(book) {
       const p = placements.get(book.id);
-      if (!p) return uvFor(wx, wy, STRIP_W, STRIP_H);
-      return uvFor(p.x, p.y, STRIP_W, STRIP_H);
+      if (!p) return uvFor(wx, wy, stripW, stripH);
+      return uvFor(p.x, p.y, stripW, stripH);
     },
-    white: uvFor(wx, wy, STRIP_W, STRIP_H),
+    white: uvFor(wx, wy, stripW, stripH),
   };
 }
 
@@ -157,14 +167,17 @@ function buildAtlas(books: Book[]): SpineAtlas {
  * Split a group into atlases and remember which atlas holds which book.
  * Books are chunked in order, so the first shelf loads the first atlas.
  */
-export function createSpineAtlases(books: Book[], perAtlas = PER_ATLAS) {
+export function createSpineAtlases(books: Book[], scale = 1) {
+  // A 2x atlas holds 96 spines at 128×640; the front shelves use it so they
+  // stay readable when you walk right up to them.
+  const perAtlas = scale >= 2 ? 96 : PER_ATLAS;
   const atlases: SpineAtlas[] = [];
   const indexOf = new Map<string, number>();
 
   for (let start = 0; start < books.length; start += perAtlas) {
     const chunk = books.slice(start, start + perAtlas);
     const atlasIndex = atlases.length;
-    atlases.push(buildAtlas(chunk));
+    atlases.push(buildAtlas(chunk, scale));
     chunk.forEach((b) => indexOf.set(b.id, atlasIndex));
   }
 

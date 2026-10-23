@@ -36,9 +36,9 @@ interface Dims {
 
 /* --------------------------------------------------------------- constants */
 
-const ROOM = { w: 9.6, d: 8.4, h: 4.4 };
+const ROOM = { w: 9.6, d: 8.4, h: 4.6 };
 const DOME_R = 5.1;
-const WINDOW = { w: 2.7, h: 3.6, sill: 0.95 };
+const WINDOW = { w: 2.7, h: 3.35, sill: 0.95 };
 const CABINET_H = 3.5;
 const SHELF_GAP = 0.42;
 const SHELF_FIRST = 0.62;
@@ -212,67 +212,76 @@ function windowTexture(): THREE.Texture {
 
 function domeTexture(): THREE.Texture {
   return canvasTexture(2048, 1024, (ctx) => {
-    ctx.fillStyle = "#2a1608";
+    ctx.fillStyle = "#1c0f06";
     ctx.fillRect(0, 0, 2048, 1024);
 
-    const cols = 64;
-    const rows = 18;
-    const cw = 2048 / cols;
-    const ch = 1024 / rows;
+    const spokes = 48;
+    const rings = 14;
+    const cw = 2048 / spokes;
+    const ch = 1024 / rings;
 
     const glass = [
       "#ffc45e", "#f0a63a", "#ffd98a", "#e08a34", "#ffb44f",
       "#d97b2f", "#ffe3a0", "#c96a2a", "#f6b95a", "#e89b3f",
     ];
 
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const seed = (r * 73 + c * 131) % 89;
-
-        // Each pane is a little stained-glass gradient, brighter toward the
-        // oculus so the dome seems lit from above.
-        const ringBoost = 1 - r / rows;
-        const g = ctx.createLinearGradient(0, r * ch, 0, (r + 1) * ch);
+    for (let r = 0; r < rings; r++) {
+      // The crown is the brightest; the glass darkens toward the rim.
+      const ringLight = 1 - r / rings;
+      for (let c = 0; c < spokes; c++) {
+        const seed = (r * 97 + c * 53) % 89;
         const base = glass[seed % glass.length];
+        const g = ctx.createLinearGradient(0, r * ch, 0, (r + 1) * ch);
         g.addColorStop(0, base);
-        g.addColorStop(1, `rgba(90, 40, 10, ${0.25 + (1 - ringBoost) * 0.35})`);
-        ctx.globalAlpha = 0.72 + ringBoost * 0.28;
+        g.addColorStop(1, `rgba(70, 28, 8, ${0.15 + (1 - ringLight) * 0.5})`);
+        ctx.globalAlpha = 0.7 + ringLight * 0.3;
         ctx.fillStyle = g;
-        ctx.fillRect(c * cw + 2, r * ch + 2, cw - 4, ch - 4);
+        ctx.fillRect(c * cw + 1.5, r * ch + 1.5, cw - 3, ch - 3);
         ctx.globalAlpha = 1;
       }
     }
 
     // Lead came.
-    ctx.strokeStyle = "#140a04";
-    ctx.lineWidth = 3;
-    for (let c = 0; c <= cols; c++) {
+    ctx.strokeStyle = "#120904";
+    ctx.lineWidth = 4;
+    for (let c = 0; c <= spokes; c++) {
       ctx.beginPath();
       ctx.moveTo(c * cw, 0);
       ctx.lineTo(c * cw, 1024);
       ctx.stroke();
     }
-    for (let r = 0; r <= rows; r++) {
+    for (let r = 0; r <= rings; r++) {
       ctx.beginPath();
       ctx.moveTo(0, r * ch);
       ctx.lineTo(2048, r * ch);
       ctx.stroke();
     }
 
-    // The oculus: the bright centre at the pole (v = 0).
-    const glow = ctx.createLinearGradient(0, 0, 0, 220);
-    glow.addColorStop(0, "rgba(255,250,228,1)");
-    glow.addColorStop(0.5, "rgba(255,226,160,0.65)");
-    glow.addColorStop(1, "rgba(255,200,120,0)");
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, 2048, 220);
+    // The crown medallion: a starburst around the oculus.
+    const crown = ctx.createRadialGradient(1024, 0, 8, 1024, 0, 320);
+    crown.addColorStop(0, "rgba(255, 252, 236, 1)");
+    crown.addColorStop(0.4, "rgba(255, 228, 168, 0.8)");
+    crown.addColorStop(1, "rgba(255, 200, 120, 0)");
+    ctx.fillStyle = crown;
+    ctx.fillRect(0, 0, 2048, 320);
 
-    // A soft vignette toward the rim.
-    const rim = ctx.createLinearGradient(0, 1024, 0, 760);
-    rim.addColorStop(0, "rgba(12,6,3,0.9)");
-    rim.addColorStop(1, "rgba(12,6,3,0)");
+    // Fine rays from the centre.
+    ctx.strokeStyle = "rgba(255, 240, 200, 0.5)";
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 48; i++) {
+      const x = (i / 48) * 2048;
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x + (x - 1024) * 0.05, 190);
+      ctx.stroke();
+    }
+
+    // Dark rim.
+    const rim = ctx.createLinearGradient(0, 1024, 0, 780);
+    rim.addColorStop(0, "rgba(10, 5, 2, 0.92)");
+    rim.addColorStop(1, "rgba(10, 5, 2, 0)");
     ctx.fillStyle = rim;
-    ctx.fillRect(0, 760, 2048, 264);
+    ctx.fillRect(0, 780, 2048, 244);
   });
 }
 
@@ -333,17 +342,17 @@ function genreLabelMaterial(genre: string): THREE.MeshBasicMaterial {
   const cached = labelMaterials.get(genre);
   if (cached) return cached;
 
-  const tex = canvasTexture(512, 96, (ctx) => {
-    ctx.fillStyle = "#241a0e";
-    ctx.fillRect(0, 0, 512, 96);
-    ctx.strokeStyle = "#b58c26";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(4, 4, 504, 88);
+  const tex = canvasTexture(512, 128, (ctx) => {
+    ctx.fillStyle = "#2a1d0e";
+    ctx.fillRect(0, 0, 512, 128);
+    ctx.strokeStyle = "#a9842a";
+    ctx.lineWidth = 5;
+    ctx.strokeRect(6, 6, 500, 116);
     ctx.fillStyle = "#e8dcc0";
-    ctx.font = "600 40px Archivo Narrow, Helvetica, sans-serif";
+    ctx.font = "700 48px Archivo Narrow, Helvetica, sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText((GENRE_LABEL[genre] ?? genre).toUpperCase(), 256, 52);
+    ctx.fillText((GENRE_LABEL[genre] ?? genre).toUpperCase(), 256, 68);
   });
 
   const material = new THREE.MeshBasicMaterial({ map: tex, toneMapped: false });
@@ -399,6 +408,7 @@ function buildCabinet({ width, books, atlases, indexOf, pickables, minRows = 4 }
 
   const shelfMat = wood("#67452b", 0.78);
   const geoByAtlas: THREE.BufferGeometry[][] = atlases.map(() => []);
+  const seenGenres = new Set<string>();
 
   for (let row = 0; row < rows; row++) {
     const y = SHELF_FIRST + row * SHELF_GAP;
@@ -416,10 +426,14 @@ function buildCabinet({ width, books, atlases, indexOf, pickables, minRows = 4 }
 
       const genre = book.genre ?? "misc";
       if (genre !== prevGenre) {
-        // A little brass label on the shelf lip, where a library would put one.
-        const plate = new THREE.Mesh(new THREE.PlaneGeometry(0.22, 0.042), genreLabelMaterial(genre));
-        plate.position.set(x + 0.11, y + 0.04, depth - 0.052);
-        group.add(plate);
+        // One small label where each genre starts in this cabinet, on the
+        // shelf lip — the way a library marks a section.
+        if (!seenGenres.has(genre)) {
+          const plate = new THREE.Mesh(new THREE.PlaneGeometry(0.17, 0.036), genreLabelMaterial(genre));
+          plate.position.set(x + 0.1, y + 0.038, depth - 0.052);
+          group.add(plate);
+          seenGenres.add(genre);
+        }
         prevGenre = genre;
       }
 
@@ -548,9 +562,10 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
   reading.sort(sortBooks);
   read.sort(sortBooks);
 
-  const toReadAtlas = createSpineAtlases(toRead);
-  const readingAtlas = createSpineAtlases(reading);
-  const readAtlas = createSpineAtlases(read);
+  const toReadAtlas = createSpineAtlases(toRead, 1);
+  // The front shelves are the ones you walk up to: give them sharper spines.
+  const readingAtlas = createSpineAtlases(reading, 2);
+  const readAtlas = createSpineAtlases(read, 2);
 
   const pickables: Array<{ mesh: THREE.Mesh; book: Book }> = [];
   const hitExtras: THREE.Mesh[] = [];
@@ -604,6 +619,115 @@ export function createHall(canvas: HTMLCanvasElement, options: HallOptions = {})
     bb.rotation.y = ry;
     scene.add(bb);
   }
+
+  /* --- the glowing band above the shelves (the room's signature) ------ */
+
+  const clerestoryGlass = canvasTexture(256, 384, (ctx) => {
+    const g = ctx.createLinearGradient(0, 0, 0, 384);
+    g.addColorStop(0, "#ffdf9a");
+    g.addColorStop(0.45, "#f6a83a");
+    g.addColorStop(0.8, "#c46a22");
+    g.addColorStop(1, "#6b3312");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 256, 384);
+
+    // Lead lattice.
+    ctx.strokeStyle = "#2a150a";
+    ctx.lineWidth = 7;
+    ctx.strokeRect(6, 6, 244, 372);
+    for (const y of [96, 192, 288]) {
+      ctx.beginPath();
+      ctx.moveTo(8, y);
+      ctx.lineTo(248, y);
+      ctx.stroke();
+    }
+    for (const x of [85, 170]) {
+      ctx.beginPath();
+      ctx.moveTo(x, 8);
+      ctx.lineTo(x, 376);
+      ctx.stroke();
+    }
+
+    // Small bright heart in each pane.
+    ctx.fillStyle = "rgba(255, 244, 200, 0.55)";
+    for (const [x, y] of [[46, 52], [128, 144], [212, 240], [46, 330], [128, 330], [212, 52]] as const) {
+      ctx.beginPath();
+      ctx.arc(x, y, 9, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+
+  const clerestoryMat = new THREE.MeshBasicMaterial({ map: clerestoryGlass, toneMapped: true });
+  const bandFrameMat = wood("#4a2c18", 0.8);
+
+  function addBand(parent: THREE.Group, width: number) {
+    const count = Math.max(3, Math.round(width / 0.62));
+    const panelW = width / count;
+    for (let i = 0; i < count; i++) {
+      const x = -width / 2 + panelW * (i + 0.5);
+      const frame = new THREE.Mesh(rounded(panelW - 0.03, 0.66, 0.07, 0.01), bandFrameMat);
+      frame.position.set(x, 0, 0);
+      parent.add(frame);
+      const pane = new THREE.Mesh(new THREE.PlaneGeometry(panelW - 0.15, 0.54), clerestoryMat);
+      pane.position.set(x, 0.005, 0.04);
+      parent.add(pane);
+    }
+  }
+
+  // Back wall, either side of the window.
+  for (const sx of [-1, 1]) {
+    const band = new THREE.Group();
+    addBand(band, sideW - 0.16);
+    band.position.set(sx * (winW / 2 + sideW / 2), 3.94, backZ + 0.04);
+    scene.add(band);
+  }
+
+  // Side walls.
+  for (const sx of [-1, 1]) {
+    const band = new THREE.Group();
+    addBand(band, ROOM.d - 0.5);
+    band.position.set(sx * (ROOM.w / 2 - 0.04), 3.94, 0);
+    band.rotation.y = sx > 0 ? -Math.PI / 2 : Math.PI / 2;
+    scene.add(band);
+  }
+
+  /* --- panelling: pilasters, cornice, base rails ---------------------- */
+
+  const trimMat = wood("#3d2414", 0.75);
+
+  // Pilasters: window jambs, corners, and between the side cabinets.
+  const pilaster = (x: number, z: number, ry = 0) => {
+    const p = new THREE.Mesh(rounded(0.16, ROOM.h - 0.15, 0.1, 0.02), trimMat);
+    p.position.set(x, (ROOM.h - 0.15) / 2, z);
+    p.rotation.y = ry;
+    scene.add(p);
+  };
+  pilaster(-winW / 2 - 0.1, backZ + 0.06);
+  pilaster(winW / 2 + 0.1, backZ + 0.06);
+  pilaster(-ROOM.w / 2 + 0.09, backZ + 0.09);
+  pilaster(ROOM.w / 2 - 0.09, backZ + 0.09);
+  pilaster(-ROOM.w / 2 + 0.06, -1.3, Math.PI / 2);
+  pilaster(ROOM.w / 2 - 0.06, -1.3, Math.PI / 2);
+  pilaster(-ROOM.w / 2 + 0.06, ROOM.d / 2 - 0.2, Math.PI / 2);
+  pilaster(ROOM.w / 2 - 0.06, ROOM.d / 2 - 0.2, Math.PI / 2);
+
+  // Cornice along the three walls.
+  const cornice = (w: number, x: number, z: number, ry = 0) => {
+    const c = new THREE.Mesh(rounded(w, 0.14, 0.14, 0.02), trimMat);
+    c.position.set(x, ROOM.h - 0.18, z);
+    c.rotation.y = ry;
+    scene.add(c);
+    const gold = new THREE.Mesh(
+      new THREE.BoxGeometry(w, 0.012, 0.02),
+      new THREE.MeshStandardMaterial({ color: "#a9842a", metalness: 0.7, roughness: 0.4 }),
+    );
+    gold.position.set(x, ROOM.h - 0.26, z + (ry === 0 ? 0.08 : 0));
+    gold.rotation.y = ry;
+    scene.add(gold);
+  };
+  cornice(ROOM.w, 0, backZ + 0.08);
+  cornice(ROOM.d, -ROOM.w / 2 + 0.08, 0, Math.PI / 2);
+  cornice(ROOM.d, ROOM.w / 2 - 0.08, 0, Math.PI / 2);
 
   // Window frame + the view outside.
   const frameMat = wood("#3d2414", 0.7);
