@@ -113,6 +113,33 @@ function wood(color: string, roughness = 0.82) {
   return new THREE.MeshStandardMaterial({ color, map: grain(), roughness, metalness: 0.02 });
 }
 
+function fabricTexture(base: string): THREE.Texture {
+  return canvasTexture(256, 256, (ctx) => {
+    const rand = rng(29);
+    ctx.fillStyle = base;
+    ctx.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 5200; i++) {
+      const light = rand() > 0.5;
+      ctx.fillStyle = light ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)";
+      ctx.fillRect(rand() * 256, rand() * 256, 1.6, 1.6);
+    }
+    ctx.strokeStyle = "rgba(0,0,0,0.04)";
+    ctx.lineWidth = 1;
+    for (let x = 0; x < 256; x += 5) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, 256);
+      ctx.stroke();
+    }
+    for (let y = 0; y < 256; y += 5) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(256, y);
+      ctx.stroke();
+    }
+  });
+}
+
 function plaster(color: string) {
   return new THREE.MeshStandardMaterial({ color, roughness: 0.95, metalness: 0 });
 }
@@ -517,7 +544,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   scene.background = new THREE.Color("#2a1c12");
   scene.fog = new THREE.FogExp2(0x2a1c12, 0.012);
 
-  const camera = new THREE.PerspectiveCamera(66, 1, 0.05, 60);
+  const camera = new THREE.PerspectiveCamera(68, 1, 0.05, 60);
 
   /* --- books ---------------------------------------------------------- */
 
@@ -556,11 +583,11 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
 
   // Rug
   const rug = new THREE.Mesh(
-    new THREE.PlaneGeometry(3.6, 2.6),
+    new THREE.PlaneGeometry(3.1, 2.35),
     new THREE.MeshStandardMaterial({ map: rugTexture(), roughness: 1 }),
   );
   rug.rotation.x = -Math.PI / 2;
-  rug.position.set(0.45, 0.008, 0.15);
+  rug.position.set(0.15, 0.008, 0.1);
   rug.receiveShadow = true;
   scene.add(rug);
 
@@ -670,16 +697,6 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   view.position.set(0, WIN.sill + (WIN.arch + WIN.spring - WIN.sill) / 2, -ROOM.d / 2 - 0.07);
   scene.add(view);
 
-  // Mullions
-  const barMat = wood("#efe8d9", 0.55);
-  const barV = new THREE.Mesh(rounded(0.045, 2.2, 0.05, 0.008), barMat);
-  barV.position.set(0, 1.45, -ROOM.d / 2 + 0.2);
-  scene.add(barV);
-  for (const y of [1.45, 2.05]) {
-    const barH = new THREE.Mesh(rounded(WIN.w, 0.045, 0.05, 0.008), barMat);
-    barH.position.set(0, y, -ROOM.d / 2 + 0.2);
-    scene.add(barH);
-  }
 
   // Sill and window seat
   const sill = new THREE.Mesh(rounded(2.9, 0.09, 0.24, 0.02), wood("#e9e0cf", 0.7));
@@ -695,17 +712,58 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   seatTop.position.set(0, 0.51, -ROOM.d / 2 + 0.42);
   scene.add(seatTop);
 
-  const cushionMat = new THREE.MeshStandardMaterial({ color: "#b3a58d", roughness: 1, map: grain() });
-  const cushionMat2 = new THREE.MeshStandardMaterial({ color: "#9c886c", roughness: 1, map: grain() });
-  [["#d8cbb4", -0.85, 0.75], ["#c3ad8c", -0.18, 0.66], ["#e9e2d4", 0.5, 0.7]].forEach(
-    ([color, x, w], i) => {
-      const cushion = new THREE.Mesh(rounded(Number(w), 0.22, 0.46, 0.07), i === 1 ? cushionMat2 : cushionMat);
-      cushion.position.set(Number(x), 0.69, -ROOM.d / 2 + 0.42);
-      cushion.rotation.z = (i - 1) * 0.06;
-      cushion.castShadow = true;
-      scene.add(cushion);
-    },
+  const cushionA = new THREE.MeshStandardMaterial({
+    map: fabricTexture("#d9cdb6"),
+    roughness: 1,
+    color: "#ffffff",
+  });
+  const cushionB = new THREE.MeshStandardMaterial({
+    map: fabricTexture("#a98a63"),
+    roughness: 1,
+    color: "#ffffff",
+  });
+
+  const cushions: Array<[THREE.Material, number, number, number]> = [
+    [cushionA, -0.92, 0.8, 0.24],
+    [cushionB, -0.16, 0.72, 0.28],
+    [cushionA, 0.55, 0.66, 0.22],
+  ];
+  cushions.forEach(([material, x, w, h], i) => {
+    const cushion = new THREE.Mesh(rounded(w, h, 0.46, 0.1), material);
+    cushion.position.set(x, 0.51 + h / 2 + 0.01, -ROOM.d / 2 + 0.42);
+    cushion.rotation.z = (i - 1) * 0.05;
+    cushion.rotation.y = (i - 1) * 0.04;
+    cushion.castShadow = true;
+    scene.add(cushion);
+  });
+
+  // A folded throw over the left end of the seat.
+  const throwTex = canvasTexture(256, 256, (ctx) => {
+    ctx.fillStyle = "#6d4a3a";
+    ctx.fillRect(0, 0, 256, 256);
+    ctx.strokeStyle = "rgba(232, 220, 200, 0.35)";
+    ctx.lineWidth = 6;
+    for (let x = 0; x < 256; x += 42) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, 256);
+      ctx.stroke();
+    }
+    ctx.lineWidth = 3;
+    for (let y = 0; y < 256; y += 42) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(256, y);
+      ctx.stroke();
+    }
+  });
+  const throwBlanket = new THREE.Mesh(
+    rounded(0.52, 0.06, 0.5, 0.02),
+    new THREE.MeshStandardMaterial({ map: throwTex, roughness: 1 }),
   );
+  throwBlanket.position.set(-1.02, 0.6, -ROOM.d / 2 + 0.42);
+  throwBlanket.rotation.y = 0.12;
+  scene.add(throwBlanket);
 
   // Books lying on the seat (the ones being read)
   reading.slice(0, 3).forEach((book, i) => {
@@ -723,10 +781,10 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   const caseW = SHELF.w;
   const third = Math.ceil(toRead.length / 3);
 
-  const makeCase = (books: Book[], width = caseW, rows = SHELF.rows) =>
+  const makeCase = (books: Book[], width = caseW, rows = SHELF.rows, height = SHELF.h) =>
     buildCase({
       width,
-      height: SHELF.h,
+      height,
       rows,
       books,
       atlases: toReadAtlas.atlases,
@@ -743,7 +801,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   scene.add(right);
 
   // The third case, on the right wall behind the chair.
-  const backCase = makeCase(toRead.slice(third * 2), 2.5);
+  const backCase = makeCase(toRead.slice(third * 2), 2.5, 4, 2.4);
   backCase.position.set(ROOM.w / 2 - 0.2, 0, -1.0);
   backCase.rotation.y = -Math.PI / 2;
   scene.add(backCase);
@@ -769,7 +827,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     leaf.rotation.set(leafRand() * 0.8 - 0.3, a, leafRand() * 0.7 - 0.35);
     plant.add(leaf);
   }
-  plant.position.set(3.35, 0, 1.55);
+  plant.position.set(3.4, 0, 1.7);
   scene.add(plant);
 
   const floorStack = new THREE.Group();
@@ -782,7 +840,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     book.rotation.y = (leafRand() - 0.5) * 0.2;
     floorStack.add(book);
   }
-  floorStack.position.set(3.05, 0, 1.05);
+  floorStack.position.set(3.1, 0, 1.2);
   scene.add(floorStack);
 
   /* --- the leather club chair  /* --- the leather club chair ------------------------------------------ */
@@ -880,15 +938,15 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
 
   for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]] as const) {
     const leg = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.032, 0.026, 0.2, 10),
+      new THREE.CylinderGeometry(0.032, 0.026, 0.27, 10),
       wood("#3a2415", 0.7),
     );
-    leg.position.set(sx * 0.36, 0.1, sz * 0.3);
+    leg.position.set(sx * 0.36, 0.135, sz * 0.3);
     chair.add(leg);
   }
 
-  chair.position.set(1.55, 0, -0.05);
-  chair.rotation.y = -1.15;
+  chair.position.set(2.45, 0, -0.95);
+  chair.rotation.y = -2.2;
   scene.add(chair);
 
   /* --- the round table -------------------------------------------------- */
@@ -954,7 +1012,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     table.add(book);
   }
 
-  table.position.set(2.42, 0, 0.72);
+  table.position.set(2.3, 0, 0.35);
   scene.add(table);
 
   /* --- contact shadows -------------------------------------------------- */
@@ -1083,8 +1141,8 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     maxDolly: 1,
   };
 
-  const base = new THREE.Vector3(-1.85, 1.68, 2.55);
-  const look = new THREE.Vector3(0.95, 1.9, -3.3);
+  const base = new THREE.Vector3(-1.35, 1.68, 2.85);
+  const look = new THREE.Vector3(1.7, 1.9, -3.3);
 
   function pose(yaw = rig.yaw, dolly = rig.dolly) {
     const pos = new THREE.Vector3(base.x + Math.sin(yaw) * 0.45, base.y, base.z - dolly * 1.8);
@@ -1163,7 +1221,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
       rig.goalYaw = Math.max(rig.minYaw, Math.min(rig.maxYaw, rig.goalYaw + e.deltaX * 0.003));
     } else {
-      rig.goalDolly = Math.max(rig.minDolly, Math.min(rig.maxDolly, rig.goalDolly + e.deltaY * 0.0012));
+      rig.goalDolly = Math.max(rig.minDolly, Math.min(rig.maxDolly, rig.goalDolly + e.deltaY * 0.004));
     }
   }
 
@@ -1247,6 +1305,9 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   frame();
 
   return {
+    zoom(step: number) {
+      rig.goalDolly = Math.max(rig.minDolly, Math.min(rig.maxDolly, rig.goalDolly + step));
+    },
     dispose() {
       disposed = true;
       cancelAnimationFrame(raf);
