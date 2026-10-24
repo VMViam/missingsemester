@@ -151,7 +151,7 @@ function rounded(w: number, h: number, d: number, r = 0.01) {
 function herringbone(): THREE.Texture {
   return canvasTexture(1024, 1024, (ctx) => {
     const rand = rng(23);
-    ctx.fillStyle = "#6b4426";
+    ctx.fillStyle = "#7c5230";
     ctx.fillRect(0, 0, 1024, 1024);
     const unit = 64;
 
@@ -185,29 +185,28 @@ function herringbone(): THREE.Texture {
 }
 
 function rugTexture(): THREE.Texture {
-  return canvasTexture(1200, 820, (ctx) => {
-    const W = 1200;
-    const H = 820;
+  return canvasTexture(1400, 980, (ctx) => {
+    const W = 1400;
+    const H = 980;
+    const rand = rng(151);
 
-    ctx.fillStyle = "#652a27";
+    // Ivory field.
+    ctx.fillStyle = "#d8cbb0";
     ctx.fillRect(0, 0, W, H);
-
-    // Woven variation in the field.
-    const rand = rng(131);
-    for (let i = 0; i < 5000; i++) {
-      ctx.fillStyle = rand() > 0.5 ? "rgba(120,60,50,0.06)" : "rgba(30,10,8,0.06)";
-      ctx.fillRect(rand() * W, rand() * H, 6, 2);
+    for (let i = 0; i < 6000; i++) {
+      ctx.fillStyle = rand() > 0.5 ? "rgba(255,250,235,0.08)" : "rgba(120,100,70,0.06)";
+      ctx.fillRect(rand() * W, rand() * H, 5, 2);
     }
 
-    // Borders, outer to inner.
+    // Borders: navy, cream, madder, cream, navy.
     const bands: Array<[string, number]> = [
-      ["#263346", 24],
-      ["#c9b28a", 6],
-      ["#7d3a32", 30],
-      ["#c9b28a", 3],
-      ["#263346", 5],
+      ["#3d4b5c", 30],
+      ["#d8cbb0", 8],
+      ["#8a4a3f", 36],
+      ["#d8cbb0", 5],
+      ["#3d4b5c", 6],
     ];
-    let inset = 14;
+    let inset = 16;
     for (const [color, width] of bands) {
       ctx.strokeStyle = color;
       ctx.lineWidth = width;
@@ -215,16 +214,26 @@ function rugTexture(): THREE.Texture {
       inset += width;
     }
 
+    // Border motifs.
+    ctx.fillStyle = "#d8cbb0";
+    for (let x = 90; x < W - 60; x += 90) {
+      for (const y of [inset - 46, H - inset + 46]) {
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
     // Corner spandrels.
-    ctx.fillStyle = "#263346";
+    ctx.fillStyle = "#3d4b5c";
     for (const [x, y, sx, sy] of [[0, 0, 1, 1], [W, 0, -1, 1], [0, H, 1, -1], [W, H, -1, -1]] as const) {
       ctx.save();
       ctx.translate(x, y);
       ctx.scale(sx, sy);
       ctx.beginPath();
       ctx.moveTo(0, 0);
-      ctx.lineTo(210, 0);
-      ctx.bezierCurveTo(90, 40, 40, 90, 0, 210);
+      ctx.lineTo(220, 0);
+      ctx.bezierCurveTo(100, 50, 50, 100, 0, 220);
       ctx.closePath();
       ctx.fill();
       ctx.strokeStyle = "#c9b28a";
@@ -233,77 +242,89 @@ function rugTexture(): THREE.Texture {
       ctx.restore();
     }
 
-    // Lobed central medallion.
+    // Central medallion: an ivory lobed cartouche on madder.
     const cx = W / 2;
     const cy = H / 2;
     ctx.save();
     ctx.translate(cx, cy);
+
     ctx.beginPath();
-    const lobes = 16;
-    for (let i = 0; i <= lobes * 6; i++) {
-      const a = (i / (lobes * 6)) * Math.PI * 2;
-      const r = 1 + 0.09 * Math.cos(a * lobes);
-      const x = Math.cos(a) * 235 * r;
-      const y = Math.sin(a) * 150 * r;
+    for (let i = 0; i <= 16 * 6; i++) {
+      const a = (i / (16 * 6)) * Math.PI * 2;
+      const r = 1 + 0.06 * Math.cos(a * 16);
+      const x = Math.cos(a) * 215 * r;
+      const y = Math.sin(a) * 136 * r;
       if (i === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.fillStyle = "#263346";
+    ctx.fillStyle = "#8a4a3f";
     ctx.fill();
-    ctx.strokeStyle = "#c9b28a";
-    ctx.lineWidth = 6;
+    ctx.strokeStyle = "#3d4b5c";
+    ctx.lineWidth = 10;
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.ellipse(0, 0, 150, 92, 0, 0, Math.PI * 2);
-    ctx.fillStyle = "#8a3a32";
+    ctx.ellipse(0, 0, 160, 98, 0, 0, Math.PI * 2);
+    ctx.fillStyle = "#e2d6bd";
     ctx.fill();
-    ctx.strokeStyle = "#c9b28a";
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#3d4b5c";
+    ctx.lineWidth = 4;
     ctx.stroke();
 
     // rosette
-    for (let i = 0; i < 12; i++) {
-      const a = (i / 12) * Math.PI * 2;
-      ctx.fillStyle = "#c9b28a";
+    for (let i = 0; i < 16; i++) {
+      const a = (i / 16) * Math.PI * 2;
+      ctx.fillStyle = i % 2 === 0 ? "#8a4a3f" : "#3d4b5c";
       ctx.beginPath();
-      ctx.ellipse(Math.cos(a) * 46, Math.sin(a) * 30, 13, 7, a, 0, Math.PI * 2);
+      ctx.ellipse(Math.cos(a) * 78, Math.sin(a) * 48, 16, 8, a, 0, Math.PI * 2);
       ctx.fill();
     }
-    ctx.fillStyle = "#c9b28a";
+    ctx.fillStyle = "#8a4a3f";
     ctx.beginPath();
-    ctx.arc(0, 0, 20, 0, Math.PI * 2);
+    ctx.arc(0, 0, 26, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#e2d6bd";
+    ctx.beginPath();
+    ctx.arc(0, 0, 10, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 
-    // Small rosettes across the field, kept quiet.
-    for (let y = 120; y < H - 90; y += 96) {
-      for (let x = 130; x < W - 90; x += 108) {
+    // Dense field lattice of small floral sprigs.
+    for (let y = 110; y < H - 90; y += 62) {
+      for (let x = 120; x < W - 90; x += 70) {
         const dx = x - cx;
         const dy = y - cy;
-        if ((dx * dx) / (260 * 260) + (dy * dy) / (175 * 175) < 1) continue;
-        ctx.strokeStyle = "rgba(201,178,138,0.55)";
-        ctx.lineWidth = 2;
+        if (dx * dx / (320 * 320) + dy * dy / (220 * 220) < 1) continue;
+        const sway = ((x / 70 + y / 62) % 2) * 6;
+        ctx.strokeStyle = "rgba(61,75,92,0.42)";
+        ctx.lineWidth = 1.6;
         ctx.beginPath();
-        ctx.arc(x, y, 7, 0, Math.PI * 2);
+        ctx.arc(x + sway, y, 5, 0, Math.PI * 2);
         ctx.stroke();
-        ctx.fillStyle = "rgba(38,51,70,0.7)";
+        ctx.strokeStyle = "rgba(138,74,63,0.38)";
         ctx.beginPath();
-        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.moveTo(x + sway - 8, y);
+        ctx.lineTo(x + sway + 8, y);
+        ctx.moveTo(x + sway, y - 8);
+        ctx.lineTo(x + sway, y + 8);
+        ctx.stroke();
+        ctx.fillStyle = "rgba(216,203,176,0.9)";
+        ctx.beginPath();
+        ctx.arc(x + sway, y, 2, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    // Fringe at the short ends.
-    ctx.strokeStyle = "rgba(232,220,196,0.85)";
+    // Fringe on the short ends.
+    ctx.strokeStyle = "rgba(242,235,218,0.9)";
     ctx.lineWidth = 2;
-    for (let y = 18; y < H - 10; y += 5) {
+    for (let y = 16; y < H - 8; y += 5) {
       ctx.beginPath();
       ctx.moveTo(2, y);
-      ctx.lineTo(12, y + 1);
+      ctx.lineTo(14, y + 1);
       ctx.moveTo(W - 2, y);
-      ctx.lineTo(W - 12, y + 1);
+      ctx.lineTo(W - 14, y + 1);
       ctx.stroke();
     }
   });
@@ -437,10 +458,10 @@ interface CaseOptions {
 function buildCase({ width, height, rows, books, atlases, indexOf, pickables }: CaseOptions) {
   const group = new THREE.Group();
   const depth = SHELF.d;
-  const dark = wood("#4a2f1b", 0.85);
-  const light = wood("#6b472b", 0.78);
+  const dark = wood("#5a3b24", 0.82);
+  const light = wood("#7a5432", 0.76);
 
-  const back = new THREE.Mesh(rounded(width, height, 0.04, 0.006), wood("#3a2415", 0.9));
+  const back = new THREE.Mesh(rounded(width, height, 0.04, 0.006), wood("#4a2f1c", 0.88));
   back.position.set(0, height / 2, 0);
   group.add(back);
 
@@ -629,11 +650,11 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
 
   // Rug
   const rug = new THREE.Mesh(
-    new THREE.PlaneGeometry(3.1, 2.35),
+    new THREE.PlaneGeometry(3.1, 2.2),
     new THREE.MeshStandardMaterial({ map: rugTexture(), roughness: 1 }),
   );
   rug.rotation.x = -Math.PI / 2;
-  rug.position.set(0.15, 0.008, 0.1);
+  rug.position.set(0.85, 0.008, 0.25);
   rug.receiveShadow = true;
   scene.add(rug);
 
@@ -682,7 +703,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   }
 
   // Timber: rafters, ridge, collars, purlins
-  const timber = wood("#6b472b", 0.76);
+  const timber = wood("#8a6240", 0.72);
   for (const sx of [-1, 1]) {
     for (const z of [-2.6, -0.4, 1.9]) {
       const rafter = new THREE.Mesh(rounded(slopeLen, 0.18, 0.16, 0.02), timber);
@@ -774,70 +795,46 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   seatTop.position.set(0, 0.51, -ROOM.d / 2 + 0.42);
   scene.add(seatTop);
 
-  const cushionA = new THREE.MeshStandardMaterial({
-    map: fabricTexture("#d9cdb6"),
+  const linen = new THREE.MeshStandardMaterial({
+    map: fabricTexture("#d9cdb5"),
     roughness: 1,
     color: "#ffffff",
   });
-  const cushionB = new THREE.MeshStandardMaterial({
-    map: fabricTexture("#a98a63"),
+  const ochre = new THREE.MeshStandardMaterial({
+    map: fabricTexture("#a87f58"),
     roughness: 1,
     color: "#ffffff",
   });
 
-  const cushions: Array<[THREE.Material, number, number, number]> = [
-    [cushionA, -0.92, 0.8, 0.24],
-    [cushionB, -0.16, 0.72, 0.28],
-    [cushionA, 0.55, 0.66, 0.22],
-  ];
-  cushions.forEach(([material, x, w, h], i) => {
-    const cushion = new THREE.Mesh(rounded(w, h, 0.46, 0.1), material);
-    cushion.position.set(x, 0.51 + h / 2 + 0.01, -ROOM.d / 2 + 0.42);
-    cushion.rotation.z = (i - 1) * 0.05;
-    cushion.rotation.y = (i - 1) * 0.04;
-    cushion.castShadow = true;
-    scene.add(cushion);
-  });
+  // The long seat cushion, with piping along its front edge.
+  const seatPad = new THREE.Mesh(rounded(2.68, 0.12, 0.5, 0.05), linen);
+  seatPad.position.set(0, 0.635, -ROOM.d / 2 + 0.42);
+  seatPad.castShadow = true;
+  scene.add(seatPad);
 
-  // A folded throw over the left end of the seat.
-  const throwTex = canvasTexture(256, 256, (ctx) => {
-    ctx.fillStyle = "#6d4a3a";
-    ctx.fillRect(0, 0, 256, 256);
-    ctx.strokeStyle = "rgba(232, 220, 200, 0.35)";
-    ctx.lineWidth = 6;
-    for (let x = 0; x < 256; x += 42) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, 256);
-      ctx.stroke();
-    }
-    ctx.lineWidth = 3;
-    for (let y = 0; y < 256; y += 42) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(256, y);
-      ctx.stroke();
-    }
-  });
-  const throwBlanket = new THREE.Mesh(
-    rounded(0.52, 0.06, 0.5, 0.02),
-    new THREE.MeshStandardMaterial({ map: throwTex, roughness: 1 }),
+  const padPipe = new THREE.Mesh(
+    rounded(2.68, 0.018, 0.018, 0.008),
+    new THREE.MeshStandardMaterial({ color: "#b9a98a", roughness: 1 }),
   );
-  throwBlanket.position.set(-1.02, 0.6, -ROOM.d / 2 + 0.42);
-  throwBlanket.rotation.y = 0.12;
-  scene.add(throwBlanket);
+  padPipe.position.set(0, 0.695, -ROOM.d / 2 + 0.67);
+  scene.add(padPipe);
 
-  // Books lying on the seat (the ones being read)
-  reading.slice(0, 3).forEach((book, i) => {
-    const dims = dimsFor(book);
-    const b = new THREE.Mesh(
-      rounded(Math.max(0.2, dims.h), 0.045, 0.15, 0.006),
-      wood(colourFor(book).cloth, 0.85),
-    );
-    b.position.set(-0.45 + i * 0.3, 0.57 + i * 0.01, -ROOM.d / 2 + 0.35);
-    b.rotation.y = (i - 1) * 0.2;
-    scene.add(b);
-  });
+  // Four square throw pillows, leaning into the window.
+  const pillowGeo = rounded(0.46, 0.46, 0.2, 0.1);
+  const pillows: Array<[number, THREE.Material, number, number, number]> = [
+    [-1.06, linen, -0.2, -0.02, 1.02],
+    [-0.62, ochre, -0.06, 0.02, 0.97],
+    [0.62, ochre, 0.05, 0.02, 0.99],
+    [1.06, linen, 0.17, -0.02, 1.03],
+  ];
+  for (const [x, material, tilt, dz, scale] of pillows) {
+    const pillow = new THREE.Mesh(pillowGeo, material);
+    pillow.position.set(x, 0.9, -ROOM.d / 2 + 0.56 + dz);
+    pillow.rotation.set(-0.3, tilt * 0.9, tilt);
+    pillow.scale.setScalar(scale);
+    pillow.castShadow = true;
+    scene.add(pillow);
+  }
 
   // Bookcases flanking the window
   const caseW = SHELF.w;
