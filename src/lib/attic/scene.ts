@@ -1243,21 +1243,46 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   const look = new THREE.Vector3(0.9, 1.9, -3.3);
 
   function pose(yaw = rig.yaw, dolly = rig.dolly) {
-    // Pan across the front wall.
-    const t = yaw > 0.6 ? Math.min(1, (yaw - 0.6) / 0.45) : 0;
+    // Pan across the front wall first.
     const frontTarget = new THREE.Vector3(look.x + Math.sin(yaw) * 4.6, 1.9, look.z);
+
+    // Each case has a square-on stance, so zoom walks in cleanly instead of
+    // cutting diagonally across the room.
+    const LEFT_CASE = new THREE.Vector3(-2.285, 0, -3.22);
+    const RIGHT_CASE = new THREE.Vector3(2.285, 0, -3.22);
+    const RIGHT_WALL_CASE = new THREE.Vector3(3.8, 0, -1.0);
+
+    const stance = (floorPoint: THREE.Vector3, standOff: number, height = 1.35) => {
+      const pos = new THREE.Vector3(floorPoint.x, 1.68, floorPoint.z + standOff);
+      const target = new THREE.Vector3(floorPoint.x, height, floorPoint.z);
+      return { pos, target };
+    };
+
+    let view: { pos: THREE.Vector3; target: THREE.Vector3 } | null = null;
+    let k = 0;
+
+    if (yaw < -0.45) {
+      view = stance(LEFT_CASE, 2.35);
+      k = Math.min(1, (-yaw - 0.45) / 0.25);
+    } else if (yaw > 0.8) {
+      view = { pos: new THREE.Vector3(1.6, 1.7, -1.0), target: new THREE.Vector3(3.8, 1.3, -1.0) };
+      k = Math.min(1, (yaw - 0.8) / 0.2);
+    } else if (yaw > 0.35) {
+      view = stance(RIGHT_CASE, 2.35);
+      k = Math.min(1, (yaw - 0.35) / 0.15);
+    }
+
+    if (view) {
+      const pos = base.clone().lerp(view.pos, dolly * k);
+      const target = frontTarget.clone().lerp(view.target, k);
+      return { pos, target };
+    }
+
+    // Window / centre: zoom straight along the view ray.
     const frontDir = frontTarget.clone().sub(base).normalize();
-    const frontPos = base.clone().addScaledVector(frontDir, dolly * 6.0);
-    frontPos.y = base.y + dolly * 0.12;
-
-    // On the right the case is on the side wall: walk to a spot square-on
-    // to it, clear of the chair, rather than flying diagonally through it.
-    const sidePos = base.clone().lerp(new THREE.Vector3(1.6, 1.7, -1.0), dolly);
-    const sideTarget = new THREE.Vector3(3.8, 1.3, -1.0);
-
-    const pos = frontPos.lerp(sidePos, t);
-    const target = frontTarget.lerp(sideTarget, t);
-    return { pos, target };
+    const pos = base.clone().addScaledVector(frontDir, dolly * 6.0);
+    pos.y = base.y + dolly * 0.12;
+    return { pos, target: frontTarget };
   }
 
   camera.position.copy(pose().pos);
