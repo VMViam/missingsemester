@@ -796,12 +796,12 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   scene.add(seatTop);
 
   const linen = new THREE.MeshStandardMaterial({
-    map: fabricTexture("#d9cdb5"),
+    map: fabricTexture("#cfc1a6"),
     roughness: 1,
     color: "#ffffff",
   });
   const ochre = new THREE.MeshStandardMaterial({
-    map: fabricTexture("#a87f58"),
+    map: fabricTexture("#9c7350"),
     roughness: 1,
     color: "#ffffff",
   });
@@ -820,20 +820,33 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   scene.add(padPipe);
 
   // Four square throw pillows, leaning into the window.
-  const pillowGeo = rounded(0.46, 0.46, 0.2, 0.1);
+  const pillowGeo = rounded(0.48, 0.48, 0.24, 0.14);
+  const pillowPipe = new THREE.MeshStandardMaterial({ color: "#a8957a", roughness: 1 });
   const pillows: Array<[number, THREE.Material, number, number, number]> = [
-    [-1.06, linen, -0.2, -0.02, 1.02],
-    [-0.62, ochre, -0.06, 0.02, 0.97],
-    [0.62, ochre, 0.05, 0.02, 0.99],
-    [1.06, linen, 0.17, -0.02, 1.03],
+    [-1.06, linen, -0.16, -0.02, 1.03],
+    [-0.6, ochre, -0.04, 0.03, 0.97],
+    [0.6, ochre, 0.04, 0.03, 0.99],
+    [1.06, linen, 0.14, -0.02, 1.02],
   ];
   for (const [x, material, tilt, dz, scale] of pillows) {
     const pillow = new THREE.Mesh(pillowGeo, material);
     pillow.position.set(x, 0.9, -ROOM.d / 2 + 0.56 + dz);
-    pillow.rotation.set(-0.3, tilt * 0.9, tilt);
+    pillow.rotation.set(-0.32, tilt * 0.5, tilt * 0.7);
     pillow.scale.setScalar(scale);
     pillow.castShadow = true;
     scene.add(pillow);
+
+    // Piping around the face of each pillow.
+    for (const [w, h, px, py] of [
+      [0.44, 0.014, 0, 0.22],
+      [0.44, 0.014, 0, -0.22],
+      [0.014, 0.44, 0.22, 0],
+      [0.014, 0.44, -0.22, 0],
+    ] as const) {
+      const pipe = new THREE.Mesh(rounded(w, h, 0.014, 0.006), pillowPipe);
+      pipe.position.set(px, py, 0.12);
+      pillow.add(pipe);
+    }
   }
 
   // Bookcases flanking the window
@@ -886,7 +899,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     leaf.rotation.set(leafRand() * 0.8 - 0.3, a, leafRand() * 0.7 - 0.35);
     plant.add(leaf);
   }
-  plant.position.set(3.4, 0, 1.7);
+  plant.position.set(3.55, 0, 2.6);
   scene.add(plant);
 
   const floorStack = new THREE.Group();
@@ -899,7 +912,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     book.rotation.y = (leafRand() - 0.5) * 0.2;
     floorStack.add(book);
   }
-  floorStack.position.set(3.1, 0, 1.2);
+  floorStack.position.set(3.25, 0, 2.2);
   scene.add(floorStack);
 
   /* --- the leather club chair  /* --- the leather club chair ------------------------------------------ */
@@ -1098,7 +1111,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     table.add(book);
   }
 
-  table.position.set(3.0, 0, 1.15);
+  table.position.set(3.18, 0, 1.42);
   scene.add(table);
 
   /* --- contact shadows -------------------------------------------------- */
@@ -1220,8 +1233,8 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     goalYaw: 0.18,
     dolly: 0,
     goalDolly: 0,
-    minYaw: -0.85,
-    maxYaw: 0.85,
+    minYaw: -1.0,
+    maxYaw: 1.0,
     minDolly: 0,
     maxDolly: 0.92,
   };
@@ -1289,7 +1302,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     if (dragging) {
       const dx = e.clientX - dragX;
       dragDistance += Math.abs(dx);
-      rig.goalYaw = Math.max(rig.minYaw, Math.min(rig.maxYaw, dragYaw - dx * 0.0028));
+      rig.goalYaw = Math.max(rig.minYaw, Math.min(rig.maxYaw, dragYaw + dx * 0.0032));
       return;
     }
 
@@ -1308,7 +1321,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   function onWheel(e: WheelEvent) {
     e.preventDefault();
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-      rig.goalYaw = Math.max(rig.minYaw, Math.min(rig.maxYaw, rig.goalYaw + e.deltaX * 0.003));
+      rig.goalYaw = Math.max(rig.minYaw, Math.min(rig.maxYaw, rig.goalYaw + e.deltaX * 0.004));
     } else {
       rig.goalDolly = Math.max(rig.minDolly, Math.min(rig.maxDolly, rig.goalDolly + e.deltaY * 0.004));
     }
@@ -1396,6 +1409,9 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   return {
     zoom(step: number) {
       rig.goalDolly = Math.max(rig.minDolly, Math.min(rig.maxDolly, rig.goalDolly + step));
+    },
+    pan(step: number) {
+      rig.goalYaw = Math.max(rig.minYaw, Math.min(rig.maxYaw, rig.goalYaw + step));
     },
     dispose() {
       disposed = true;
