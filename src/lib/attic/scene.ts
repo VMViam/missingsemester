@@ -605,7 +605,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   renderer.toneMappingExposure = 1.1;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color("#2a1c12");
@@ -1242,47 +1242,64 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   const base = new THREE.Vector3(-1.35, 1.68, 2.9);
   const look = new THREE.Vector3(0.9, 1.9, -3.3);
 
+  /**
+   * Anchor stances. Each one stands square-on to a case, at the height of
+   * its middle shelf, so the view starts level and centred.
+   */
+  const LEFT = {
+    pos: new THREE.Vector3(-2.285, 1.5, -0.87),
+    target: new THREE.Vector3(-2.285, 1.5, -3.22),
+  };
+  const WINDOW = {
+    pos: new THREE.Vector3(0, 1.5, 0.2),
+    target: new THREE.Vector3(1.5, 1.5, -3.3),
+  };
+  const RIGHT_FRONT = {
+    pos: new THREE.Vector3(2.285, 1.5, -0.87),
+    target: new THREE.Vector3(2.285, 1.5, -3.22),
+  };
+  const RIGHT_WALL = {
+    pos: new THREE.Vector3(1.6, 1.2, -1.0),
+    target: new THREE.Vector3(3.8, 1.2, -1.0),
+  };
+
+  // Each stance holds over a range of pan, then blends to the next. That way
+  // full pan is exactly square-on, with no half-way aim.
+  const STANCES = [
+    { yaw: -1.2, ...LEFT },
+    { yaw: -0.8, ...LEFT },
+    { yaw: -0.35, ...WINDOW },
+    { yaw: 0.35, ...WINDOW },
+    { yaw: 0.55, ...RIGHT_FRONT },
+    { yaw: 0.8, ...RIGHT_FRONT },
+    { yaw: 1.0, ...RIGHT_WALL },
+    { yaw: 1.2, ...RIGHT_WALL },
+  ];
+
+  function stanceAt(yaw: number) {
+    if (yaw <= STANCES[0].yaw) return STANCES[0];
+    if (yaw >= STANCES[STANCES.length - 1].yaw) return STANCES[STANCES.length - 1];
+
+    for (let i = 0; i < STANCES.length - 1; i++) {
+      const a = STANCES[i];
+      const b = STANCES[i + 1];
+      if (yaw >= a.yaw && yaw <= b.yaw) {
+        const t = (yaw - a.yaw) / (b.yaw - a.yaw);
+        return {
+          pos: a.pos.clone().lerp(b.pos, t),
+          target: a.target.clone().lerp(b.target, t),
+        };
+      }
+    }
+    return STANCES[1];
+  }
+
   function pose(yaw = rig.yaw, dolly = rig.dolly) {
-    // Pan across the front wall first.
-    const frontTarget = new THREE.Vector3(look.x + Math.sin(yaw) * 4.6, 1.9, look.z);
-
-    // Each case has a square-on stance, so zoom walks in cleanly instead of
-    // cutting diagonally across the room.
-    const LEFT_CASE = new THREE.Vector3(-2.285, 0, -3.22);
-    const RIGHT_CASE = new THREE.Vector3(2.285, 0, -3.22);
-    const RIGHT_WALL_CASE = new THREE.Vector3(3.8, 0, -1.0);
-
-    const stance = (floorPoint: THREE.Vector3, standOff: number, height = 1.35) => {
-      const pos = new THREE.Vector3(floorPoint.x, 1.68, floorPoint.z + standOff);
-      const target = new THREE.Vector3(floorPoint.x, height, floorPoint.z);
-      return { pos, target };
-    };
-
-    let view: { pos: THREE.Vector3; target: THREE.Vector3 } | null = null;
-    let k = 0;
-
-    if (yaw < -0.45) {
-      view = stance(LEFT_CASE, 2.35);
-      k = Math.min(1, (-yaw - 0.45) / 0.25);
-    } else if (yaw > 0.8) {
-      view = { pos: new THREE.Vector3(1.6, 1.7, -1.0), target: new THREE.Vector3(3.8, 1.3, -1.0) };
-      k = Math.min(1, (yaw - 0.8) / 0.2);
-    } else if (yaw > 0.35) {
-      view = stance(RIGHT_CASE, 2.35);
-      k = Math.min(1, (yaw - 0.35) / 0.15);
-    }
-
-    if (view) {
-      const pos = base.clone().lerp(view.pos, dolly * k);
-      const target = frontTarget.clone().lerp(view.target, k);
-      return { pos, target };
-    }
-
-    // Window / centre: zoom straight along the view ray.
-    const frontDir = frontTarget.clone().sub(base).normalize();
-    const pos = base.clone().addScaledVector(frontDir, dolly * 6.0);
-    pos.y = base.y + dolly * 0.12;
-    return { pos, target: frontTarget };
+    // The stance moves continuously with the pan; zoom always travels from
+    // the start toward it, so there is no angle where zoom refuses to move.
+    const stance = stanceAt(yaw);
+    const pos = base.clone().lerp(stance.pos, dolly);
+    return { pos, target: stance.target };
   }
 
   camera.position.copy(pose().pos);
@@ -1296,7 +1313,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   let hovered: Book | null = null;
   let focused: Book | null = null;
   let flight: { fromPos: THREE.Vector3; toPos: THREE.Vector3; fromT: THREE.Vector3; toT: THREE.Vector3; t: number; dur: number } | null = null;
-  const lookAt = look.clone();
+  const lookAt = pose().target.clone();
 
   function flyTo(pos: THREE.Vector3, target: THREE.Vector3, dur = 0.9) {
     flight = {
