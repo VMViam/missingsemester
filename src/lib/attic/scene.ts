@@ -1233,8 +1233,8 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     goalYaw: 0.18,
     dolly: 0,
     goalDolly: 0,
-    minYaw: -1.0,
-    maxYaw: 1.0,
+    minYaw: -1.12,
+    maxYaw: 1.12,
     minDolly: 0,
     maxDolly: 0.92,
   };
@@ -1243,9 +1243,15 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   const look = new THREE.Vector3(0.9, 1.9, -3.3);
 
   function pose(yaw = rig.yaw, dolly = rig.dolly) {
-    // Pan around the room; zoom travels along the view ray, so it works on
-    // the left case, the window and the right case alike.
-    const target = new THREE.Vector3(look.x + Math.sin(yaw) * 4.6, 1.9, look.z);
+    // Pan across the front wall. On the right, the case lives on the side
+    // wall, so the look-point slides forward and centres it as you pan.
+    const t = yaw > 0.6 ? Math.min(1, (yaw - 0.6) / 0.45) : 0;
+    const frontX = look.x + Math.sin(yaw) * 4.6;
+    const target = new THREE.Vector3(
+      (1 - t) * frontX + t * 3.8,
+      (1 - t) * 1.9 + t * 1.35,
+      (1 - t) * look.z + t * -1.0,
+    );
     const dir = target.clone().sub(base).normalize();
     const pos = base.clone().addScaledVector(dir, dolly * 6.0);
     pos.y = base.y + dolly * 0.12;
