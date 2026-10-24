@@ -1236,7 +1236,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
     minYaw: -1.12,
     maxYaw: 1.12,
     minDolly: 0,
-    maxDolly: 0.92,
+    maxDolly: 1.8,
   };
 
   const base = new THREE.Vector3(-1.35, 1.68, 2.9);
@@ -1247,20 +1247,20 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
    * its middle shelf, so the view starts level and centred.
    */
   const LEFT = {
-    pos: new THREE.Vector3(-2.285, 1.5, -0.87),
-    target: new THREE.Vector3(-2.285, 1.5, -3.22),
+    pos: new THREE.Vector3(-2.285, 1.66, -0.87),
+    target: new THREE.Vector3(-2.285, 1.66, -3.22),
   };
   const WINDOW = {
     pos: new THREE.Vector3(0, 1.5, 0.2),
     target: new THREE.Vector3(1.5, 1.5, -3.3),
   };
   const RIGHT_FRONT = {
-    pos: new THREE.Vector3(2.285, 1.5, -0.87),
-    target: new THREE.Vector3(2.285, 1.5, -3.22),
+    pos: new THREE.Vector3(2.285, 1.66, -0.87),
+    target: new THREE.Vector3(2.285, 1.66, -3.22),
   };
   const RIGHT_WALL = {
-    pos: new THREE.Vector3(1.6, 1.2, -1.0),
-    target: new THREE.Vector3(3.8, 1.2, -1.0),
+    pos: new THREE.Vector3(1.6, 1.15, -1.0),
+    target: new THREE.Vector3(3.8, 1.15, -1.0),
   };
 
   // Each stance holds over a range of pan, then blends to the next. That way
@@ -1295,10 +1295,19 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   }
 
   function pose(yaw = rig.yaw, dolly = rig.dolly) {
-    // The stance moves continuously with the pan; zoom always travels from
-    // the start toward it, so there is no angle where zoom refuses to move.
+    // The stance moves continuously with the pan. Up to 1 the camera walks
+    // to the stance; past 1 it keeps walking toward the shelf itself, stopping
+    // just short of the books so a few rows can fill the whole screen.
     const stance = stanceAt(yaw);
-    const pos = base.clone().lerp(stance.pos, dolly);
+    const pos = base.clone().lerp(stance.pos, Math.min(1, dolly));
+
+    if (dolly > 1) {
+      const dir = stance.target.clone().sub(stance.pos).normalize();
+      const room = stance.pos.distanceTo(stance.target) - 0.32;
+      const extra = Math.min(room, (dolly - 1) * 2.6);
+      pos.addScaledVector(dir, extra);
+    }
+
     return { pos, target: stance.target };
   }
 
