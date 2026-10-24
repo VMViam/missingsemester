@@ -124,14 +124,14 @@ import Base from "../../layouts/Base.astro";
   zoomIn?.addEventListener("click", () => attic.zoom(0.22));
   zoomOut?.addEventListener("click", () => attic.zoom(-0.22));
 
-  document.getElementById("pan-left")?.addEventListener("click", () => attic.pan(-0.22));
-  document.getElementById("pan-right")?.addEventListener("click", () => attic.pan(0.22));
+  document.getElementById("pan-left")?.addEventListener("click", () => attic.pan(-0.3));
+  document.getElementById("pan-right")?.addEventListener("click", () => attic.pan(0.3));
 
   window.addEventListener("keydown", (e) => {
     if (e.key === "+" || e.key === "=") attic.zoom(0.2);
     if (e.key === "-" || e.key === "_") attic.zoom(-0.2);
-    if (e.key === "ArrowLeft") attic.pan(-0.18);
-    if (e.key === "ArrowRight") attic.pan(0.18);
+    if (e.key === "ArrowLeft") attic.pan(-0.25);
+    if (e.key === "ArrowRight") attic.pan(0.25);
   });
 
   requestAnimationFrame(() => loading.classList.add("is-gone"));

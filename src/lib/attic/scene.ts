@@ -1243,18 +1243,20 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   const look = new THREE.Vector3(0.9, 1.9, -3.3);
 
   function pose(yaw = rig.yaw, dolly = rig.dolly) {
-    // Pan across the front wall. On the right, the case lives on the side
-    // wall, so the look-point slides forward and centres it as you pan.
+    // Pan across the front wall.
     const t = yaw > 0.6 ? Math.min(1, (yaw - 0.6) / 0.45) : 0;
-    const frontX = look.x + Math.sin(yaw) * 4.6;
-    const target = new THREE.Vector3(
-      (1 - t) * frontX + t * 3.8,
-      (1 - t) * 1.9 + t * 1.35,
-      (1 - t) * look.z + t * -1.0,
-    );
-    const dir = target.clone().sub(base).normalize();
-    const pos = base.clone().addScaledVector(dir, dolly * 6.0);
-    pos.y = base.y + dolly * 0.12;
+    const frontTarget = new THREE.Vector3(look.x + Math.sin(yaw) * 4.6, 1.9, look.z);
+    const frontDir = frontTarget.clone().sub(base).normalize();
+    const frontPos = base.clone().addScaledVector(frontDir, dolly * 6.0);
+    frontPos.y = base.y + dolly * 0.12;
+
+    // On the right the case is on the side wall: walk to a spot square-on
+    // to it, clear of the chair, rather than flying diagonally through it.
+    const sidePos = base.clone().lerp(new THREE.Vector3(1.6, 1.7, -1.0), dolly);
+    const sideTarget = new THREE.Vector3(3.8, 1.3, -1.0);
+
+    const pos = frontPos.lerp(sidePos, t);
+    const target = frontTarget.lerp(sideTarget, t);
     return { pos, target };
   }
 
@@ -1327,7 +1329,7 @@ export function createAttic(canvas: HTMLCanvasElement, options: AtticOptions = {
   function onWheel(e: WheelEvent) {
     e.preventDefault();
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-      rig.goalYaw = Math.max(rig.minYaw, Math.min(rig.maxYaw, rig.goalYaw + e.deltaX * 0.004));
+      rig.goalYaw = Math.max(rig.minYaw, Math.min(rig.maxYaw, rig.goalYaw + e.deltaX * 0.006));
     } else {
       rig.goalDolly = Math.max(rig.minDolly, Math.min(rig.maxDolly, rig.goalDolly + e.deltaY * 0.004));
     }
