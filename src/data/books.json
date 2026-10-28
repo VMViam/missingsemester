@@ -12,18 +12,6 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01kg5n38fp3h55jamtg43ereb5",
-    "title": "A Mind For Numbers",
-    "author": "Barbara Oakley",
-    "status": "reading",
-    "category": "misc",
-    "progress": 2,
-    "dateAdded": "2026-03-30",
-    "year": 2019,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/29781480/__JJgDWICd27LbCTdpd38_c1ASBb9X-YKzB8PH6x2Pk-cover_ynCwVLI.png",
-    "spineColor": "#6a4444"
-  },
-  {
     "id": "rw-01kgcgmghjvkbf8qzqyw22jxfz",
     "title": "Designing Your Life",
     "author": "Bill Burnett",
@@ -120,18 +108,6 @@
     "year": 2019,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438746398/TBytpAk8KAzAUi5Oq5bE96kkdoCCGwxx1ZlxXP246AI-cove_dtwNZZu.jpg",
     "spineColor": "#278660"
-  },
-  {
-    "id": "rw-01knc8r4461hq8hd6hje5cz7m0",
-    "title": "The Seven Spiritual Laws of Success",
-    "author": "Deepak Chopra",
-    "status": "reading",
-    "category": "misc",
-    "progress": 54,
-    "dateAdded": "2026-04-04",
-    "year": 1999,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/16135498/3Q1HG3aIWkaxWIRqO7OFxlqlcfDdgIpav1Wml-8CQQY-cover_9QTImue.png",
-    "spineColor": "#6a4444"
   },
   {
     "id": "rw-01kn0592qz1ersjmtsacj0xgdb",
@@ -312,16 +288,17 @@
     "spineColor": "#322020"
   },
   {
-    "id": "rw-01knhtf9kjdt4xx8htvn07pw9y",
+    "id": "rw-01m5ze260wf2ftaaxqp66agvhy",
     "title": "Your Best Friend",
     "author": "Radheshyam Das",
     "status": "reading",
     "category": "misc",
     "progress": 1,
-    "dateAdded": "2026-04-06",
-    "year": 2026,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/441088081/Z3IhBU1ClTE_rsU92RPoxW4gfqraHBtVQ4b7aZBKJGM-cove_umLTPig.png",
-    "spineColor": "#6a4444"
+    "dateAdded": "2026-10-27",
+    "year": 2008,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513144878/eY4ux29q2PuHYt5icv5NHsIQIC4dJyi2Ndr7QSj7oEM-cove_XkRLPxB.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn07553v7rbr74cyf4cdvwgk",
@@ -453,6 +430,14 @@
     "spineColor": "#745122"
   },
   {
+    "id": "rw-01m5zn811c8pgp08dx9qcphqp0",
+    "title": "reader/misc files/1689543/Switch-How to Change Things When Change Is Hard Chip Heath Dan Heat",
+    "author": "Unknown",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27"
+  },
+  {
     "id": "rw-01kmzx6j65p5xm0er0n4j9racd",
     "title": "Smart Until It's Dumb: Why artificial intelligence keeps making epic mistakes (and why the AI bubble will burst)",
     "author": "Unknown",
@@ -464,25 +449,52 @@
     "spineColor": "#828226"
   },
   {
-    "id": "rw-01knhwjd624j461jrf5z30714f",
+    "id": "rw-01m5zjecch5z118dxkyr39aw5z",
+    "title": "Nectar of Book Distribution",
+    "author": "Unknown",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513159353/yLBqvzmSzdxi_KgSWQzJ_DIvHUlIiZXEaRmiGRtr3Q8-cove_xsUKwuI.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
+    "id": "rw-01m5zj9ve81hehyqfj2p3yv4ps",
+    "title": "Scientific Basis of Krishna Consciousness OCR",
+    "author": "Unknown",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513158335/sbWz7rxPchC_6J9dv6MpkNLiTSMrqKUE__LGks8VgpY-cove_cwvK88Z.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
+    "id": "rw-01m5zfn68epjwtq39ezmr2z5ws",
     "title": "Your Secret Journey",
     "author": "Unknown",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-04-06",
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/441107892/5U94QvdswObO85__MRVByozgWEne6HFYDUAnwI410BA-cove_vDYmzbn.png",
-    "spineColor": "#6a4444"
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513150287/vA_kjx9p6fcFi7IsVnhOHe9xBdC4iVta70eY5KbA7tk-cove_NPWrqqJ.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
-    "id": "rw-01knhtf655rep0xg40e3cs0yha",
+    "id": "rw-01m5zfms12evrbfep11fgw6dhh",
     "title": "Victory Over Death",
     "author": "Unknown",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-04-06",
+    "dateAdded": "2026-10-27",
     "year": 2026,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/441088067/HS_oCWfn7y58V99Y-QPAbrRAngcfm6UMW-DUUQzBjbs-cove_drrSjRg.png",
-    "spineColor": "#6a4444"
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513150236/S_ln6vQAcnQwv2n3atXDzKUKToqv3dFsC8Ju77cilVM-cove_SdG311m.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01knj3h45jvky0c03vvmxn5y0y",
@@ -496,15 +508,100 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01knj3jc3dwfnged5vh86xvhxf",
-    "title": "Srimad Bhagavatam (All 12 Cantos Set)",
+    "id": "rw-01m60r36c1w89svwy4b6m35cpv",
+    "title": "Srimad Bhagavatam: Canto 12: The Age of Deterioration",
     "author": "A. C. Bhaktivedanta Swami Prabhupada",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-04-06",
-    "year": 2020,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/441183005/lX_0UkME2LhOukee-LG8nlzbSiDDNeKmIM5EjvVsJww-cov_GgHA9tl.jpeg",
-    "spineColor": "#866027"
+    "dateAdded": "2026-10-28"
+  },
+  {
+    "id": "rw-01m60r2y621a9pj54dcz1rwhev",
+    "title": "Srimad Bhagavatam: Canto 11: General History",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28"
+  },
+  {
+    "id": "rw-01m60r2scvbrsrzxxyjrteb5nr",
+    "title": "Srimad Bhagavatam: Canto 10: The Summum Bonum",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28"
+  },
+  {
+    "id": "rw-01m60r2mdabjcvmr27wfa8avek",
+    "title": "Srimad Bhagavatam: Canto 9: Liberation",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28"
+  },
+  {
+    "id": "rw-01m60r2gwz6yagz6pxj3dpxr97",
+    "title": "Srimad Bhagavatam: Canto 8: Withdrawal of the Cosmic Creations",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28"
+  },
+  {
+    "id": "rw-01m60r2czfnpetkxbk6t47r691",
+    "title": "Srimad Bhagavatam: Canto 7: The Science of God",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28"
+  },
+  {
+    "id": "rw-01m60r297ajkkeqkqd4stmskt7",
+    "title": "Srimad Bhagavatam: Canto 6: Prescribed Duties for Mankind",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28"
+  },
+  {
+    "id": "rw-01m60r21wjyng51j4qt8b7f4ng",
+    "title": "Srimad Bhagavatam: Canto 5: The Creative Impetus",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28"
+  },
+  {
+    "id": "rw-01m60r1w3a9yajhcc7dgc36w92",
+    "title": "Srimad Bhagavatam: Canto 4: The Creation of the Fourth Order",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28"
+  },
+  {
+    "id": "rw-01m60r1q5wtnnea5ymr93m9ac8",
+    "title": "Srimad Bhagavatam: Canto 3: The Status Quo",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28"
+  },
+  {
+    "id": "rw-01m60r1k5c8tjhxpzrbhw2sq1f",
+    "title": "Srimad Bhagavatam: Canto 2: The Cosmic Manifestation",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28"
+  },
+  {
+    "id": "rw-01m60r02x1q4z6ntszftxer2pk",
+    "title": "Srimad Bhagavatam: Canto 1: Creation",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28"
   },
   {
     "id": "rw-01knj3j60m8h4kgffg249ccdbx",
@@ -537,6 +634,18 @@
     "year": 1997,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/441182952/TVzkyg3wPoAV1_VV_JvqBYLliprcwPbvHSYsOavnvho-cove_eHdXYdP.jpg",
     "spineColor": "#846d2a"
+  },
+  {
+    "id": "rw-01m5zgjz8z9rz27w1kpx680f6q",
+    "title": "A Manual of Vaishnava Etiquette and Lifestyle",
+    "author": "A. C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513153120/LKL11myolxSIxE5TzF8PrXwFPuTEVlwP2deng1-BoVA-cove_Hn3zwTo.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kmzxmw0vjva5qxcpz8b9c3yy",
@@ -736,15 +845,16 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01knc8pm5r6f43whpqe5gqm6a1",
-    "title": "Motivation And Personality",
-    "author": "Abraham H. Maslow",
+    "id": "rw-01m5zc42yxz2jpf8j1z46gkwzw",
+    "title": "Motivation and Personality",
+    "author": "Abraham Harold Maslow",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-04-04",
-    "year": 2008,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/61921042/C6cOAlrnC_6VU4zRStoUFv45zz8eMkcmQVZssr3RsQs-cover_pxMk2IF.png",
-    "spineColor": "#6a4444"
+    "dateAdded": "2026-10-27",
+    "year": 2024,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513139139/T7M9k04HCJAM64QSgA3-5cpl7h3vNipDSzo7TPM96J8-data_xRSZRpc.jpg",
+    "spineColor": "#1c425f",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01knc8qbjpyks6jht3btwxwm0c",
@@ -822,6 +932,17 @@
     "year": 2016,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/510264416/c--n-WwUy1iXcC26GZzVlSZq9iPHRmkJAOsBtwA6UQA-cove_55SZg8T.jpg",
     "spineColor": "#275c86"
+  },
+  {
+    "id": "rw-01m60mvgk8w1ab1fj56xkfdm6v",
+    "title": "Understanding Human Nature: The Psychology of Personality",
+    "author": "Alfred Adler, Colin Brett",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513313786/QPILgqclAijNDs16yI0BjTHWArmp_vJaL_JFkTkTo0A-cove_NN2Zmiv.jpg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn01rjz0y7fdxc8prqc77vfe",
@@ -1042,6 +1163,18 @@
     "spineColor": "#1a4959"
   },
   {
+    "id": "rw-01m5zn3c6s2j49xwrm2jz4397m",
+    "title": "A Mind for Numbers: How to Excel at Math and Science (Even If You Flunked Algebra)",
+    "author": "Barbara Oakley",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513167712/G3pGqPNqapoO5JgXDdDhwz4xx4M6YNCqS4MgszxRNO0-cove_awVHafZ.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01kn04tfm16mnng983vmw3pd6y",
     "title": "Uncommon Sense Teaching Practical Insights In Brain Science To Help Students Learn",
     "author": "Barbara Oakley",
@@ -1073,6 +1206,18 @@
     "year": 2020,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/2844630/WXjx-kB1DJRUHupK7BTn3ZKZuQ2Y7XQQwunqZMH8CuA-cover-2844630.png",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m5z9pjdt0vwc20m11ztaqm9q",
+    "title": "Why Smart People Make Big Money Mistakes and How to Correct Them: Lessons From the Life-Changing Science of Behavioral Economics",
+    "author": "Belsky, Gary",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 2010,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513130946/A0Mjz3Nj6Akqq4olnptuY6Lq9zxbuxETDaZAHo35xbs-cover-cover.jpeg",
+    "spineColor": "#1e2c66",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01kn04mjq21vw2jx74dwry43xy",
@@ -1138,17 +1283,6 @@
     "year": 2003,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438745476/ebGyJawl6qg1TJFqKXWviUVyEBccqRuWe0KcdoZk0s8-cover-cover.jpg",
     "spineColor": "#322020"
-  },
-  {
-    "id": "rw-01kn0c6e93gzcz82x85k9th80j",
-    "title": "Nectar Of Book Distribution",
-    "author": "Bhaktivedanta Swami Prabhupada",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2009,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438768701/qaCzA0LmR4kjYl-cxID9w2CwUKYcokfMocU29WN1GOU-cove_dxiTAj8.png",
-    "spineColor": "#6a4444"
   },
   {
     "id": "rw-01kn0baq5qfj3er1rvhffyjhec",
@@ -1248,15 +1382,16 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01kmzxjkg7de8nenmc1tpqs63j",
-    "title": "Mindless Eating",
+    "id": "rw-01m5zn367fp7vmqqryngbvajg9",
+    "title": "Mindless Eating: Why We Eat More Than We Think",
     "author": "Brian Wansink",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2006,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438664470/pTlLli3Pl82tcUFkkM2x2N88KB2-S2-sFLCOinz6eiU-cove_6bmCSxx.png",
-    "spineColor": "#6a4444"
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513167705/Q_U1OObw2nuVd79jQE3BXt6zVEo8JBaKav3EP8Yk524-cove_76qu71M.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kmzxe93r58eb72rxamhmn4x3",
@@ -1445,17 +1580,6 @@
     "spineColor": "#557422"
   },
   {
-    "id": "rw-01kmzxq6vdy361cn1gtdk0nrwm",
-    "title": "Switch: How To Change Things When Change Is Hard",
-    "author": "Chip Heath, Dan Heath",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2010,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/3826375/hcsVIAVzbiFbU35y52n1E-VyTqvR2c7-VmJAWfaKyTs-cover-3826375.png",
-    "spineColor": "#283f6d"
-  },
-  {
     "id": "rw-01kn74h9d5kx0xnznne2xhsjf2",
     "title": "Hyper Focus How To Be More Productive In A World Of Distraction",
     "author": "Chris Bailey",
@@ -1564,15 +1688,16 @@
     "spineColor": "#3f1212"
   },
   {
-    "id": "rw-01kn03sem2407ch408d2dv2jt9",
-    "title": "The Innovator's Dilemma",
+    "id": "rw-01m5zc49v9e9p2zj854qwxprkc",
+    "title": "The Innovator's Dilemma: When New Technologies Cause Great Firms to Fail (Management of Innovation and Change)",
     "author": "Clayton M. Christensen",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2005,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/23613365/xQ3RCk66Q3J3Cj5KGchfsncMPCslzKh_2FwqYJV5tpQ-cover_kOQZvvM.png",
-    "spineColor": "#12123f"
+    "dateAdded": "2026-10-27",
+    "year": 2013,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513139192/deZKufgkxHiZMzc_WBZxUpgTKBNIw6cB5QdyBfajAG8-cover-00047.jpeg",
+    "spineColor": "#1b2558",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01kn741fnfpa3nqpegh9f1gp4v",
@@ -1783,6 +1908,18 @@
     "spineColor": "#6a4444"
   },
   {
+    "id": "rw-01m60mv5htzd1wba2ymedvk5jc",
+    "title": "Drive: The Surprising Truth About What Motivates Us",
+    "author": "Daniel H. Pink",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28",
+    "year": 2018,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513313765/WXSsKhEtbcL6GXlD2DPo5xhEDt5Hds_DOuDG9V_2IaA-cov_6ht1pSw.jpeg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01knhmp9t3dcme6w5n31sdx12a",
     "title": "Thinking, Fast and Slow",
     "author": "Daniel Kahneman",
@@ -1969,17 +2106,6 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01kmzxn1e1kfsr60gjm1n7s06a",
-    "title": "The Compass Of Pleasure-How Our Brains Make Fatty Foods, Orgasm, Exercise, Marijuana, Generosity, Vodka, Learning, And Gambling Feel So Good",
-    "author": "David J. Linden",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2012,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438665546/f7bewb-zpm2J6L0qQxJiR2h-B03tWUC4kq6BdAbzdQM-cove_Yy85mMR.png",
-    "spineColor": "#322020"
-  },
-  {
     "id": "rw-01kmzxfryzbvejx32zn5dcwa74",
     "title": "You Are Not So Smart",
     "author": "David McRaney",
@@ -2000,6 +2126,18 @@
     "year": 2008,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438749630/mQzN43SkR2OeAXp1WmtwiXuomMYTXSpjFLtDXYfHkcc-x_c_N9CEV3w.jpeg",
     "spineColor": "#6a6a44"
+  },
+  {
+    "id": "rw-01m5z9pbw12138kgkfpkqe2vc1",
+    "title": "The seven spiritual laws of success: a practical guide to the fulfillment of your dreams",
+    "author": "Deepak Chopra",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 1994,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513130942/NGMruUBsuSsTEEW152q3wlLpUFqZYMxRPMjqmhWrI_g-cov_4eSv2yo.jpeg",
+    "spineColor": "#80572e",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01m5c2feheymq1xhjdb8wm3pr8",
@@ -2108,6 +2246,18 @@
     "spineColor": "#322020"
   },
   {
+    "id": "rw-01m5zc3zef65rpefyc0mdqc1hp",
+    "title": "How to Develop a Perfect Memory",
+    "author": "Dominic O'Brien",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 1993,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513139117/He0_GhjDU-ZkFMeMgchfMba9CC89e0gBMksYwcfSJMk-cover-cover.jpeg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01kn05jhsd6y0wjdj9j58amm2j",
     "title": "How to Develop a Brilliant Memory Week by Week",
     "author": "Dominic O'Brien",
@@ -2126,17 +2276,6 @@
     "category": "misc",
     "dateAdded": "2026-03-30",
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/100604437/a_AuijSQ5p0Yok5lUkM8dQ7_VvFPtL82RXKBWoh2JYM-cove_UWqlCye.png",
-    "spineColor": "#6a4444"
-  },
-  {
-    "id": "rw-01kn05j6rva83rey6ne119fxqp",
-    "title": "How To Develop A Perfect Memory",
-    "author": "Dominic O'Brien",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2003,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438748686/RAk6Prx5fz6fOwMHevCa-QQwBT9Oi6vdNf5bUwQUM4I-cove_qvyriTc.png",
     "spineColor": "#6a4444"
   },
   {
@@ -2195,17 +2334,6 @@
     "spineColor": "#322020"
   },
   {
-    "id": "rw-01kn0bjw0de3xqqv451yn8bk4w",
-    "title": "Who Moved My Cheese?",
-    "author": "Dr Spencer Johnson, Kenneth Blanchard",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2002,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438767276/HWZs0KI7SNzGEOd8FOFpXtN31aqyfpAaJV7bIXWN6Ko-cove_hdvlgAg.png",
-    "spineColor": "#6a4444"
-  },
-  {
     "id": "rw-01knc82yrcd8p65j5w0nd84659",
     "title": "Many Lives, Many Masters",
     "author": "Dr. Brian Weiss",
@@ -2215,6 +2343,18 @@
     "year": 2012,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/440509533/kIPV2-Ndj-SUrgUDKdtwc5YDJEVFR0q93h8SBQPG27k-cove_wZSYg2b.png",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m5zg99290sfm6pfj3c1r2hws",
+    "title": "Who Moved My Cheese?: An Amazing Way to Deal With Change in Your Work and in Your Life",
+    "author": "Dr. Spencer Johnson",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513152337/jA35NOdb7bW4jKSelL7xermX4N6Cohly5uOtOwM2cxw-cove_rul4X93.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn07apqg5rc2g0gnd0kheqw1",
@@ -2656,17 +2796,6 @@
     "spineColor": "#243860"
   },
   {
-    "id": "rw-01kmzxqj48xzafxwtthtb8jdv8",
-    "title": "Why Smart People Make Big Money Mistakes---And How To Correct Them",
-    "author": "Gary Belsky, Thomas Gilovich",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2008,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/122975556/PeIcdvPm7uOUsG0HhPd_LYuavLoNDFPEigKa0wnHKl8-cove_ClvlzkL.png",
-    "spineColor": "#6a4444"
-  },
-  {
     "id": "rw-01kn741dd7mjw9nppwk2rsxc05",
     "title": "The Five Love Languages: The Secret to Love that Lasts",
     "author": "Gary D Chapman",
@@ -2918,17 +3047,6 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01kn0c6wcgtgfh2mgavs3t28e2",
-    "title": "A Manual Of Vaiṣṇava Etiquette And Lifestyle",
-    "author": "His Divine Grace A. C. Bhaktivedānta Swami Prabhupāda",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2003,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438768774/4Jbui86jucN_PpL56hWFujnoHTGz_Qo-Ui6BEz-70-Y-cove_vbpt7jW.png",
-    "spineColor": "#6a4444"
-  },
-  {
     "id": "rw-01knj3hx3dz150dbnr46zvnk00",
     "title": "Teachings of Lord Kapila",
     "author": "His Divine Grace A.C. Bhaktivedanta Swami Prabhupada",
@@ -3064,6 +3182,18 @@
     "dateAdded": "2026-03-30",
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438749357/7Xza8wA3XsqBtgbcc7MEDRM74Vxqbp3equvCpvlnDsg-cove_2rbE9aR.jpg",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m60mtw9m8g7aha2f65jyg7c1",
+    "title": "The Full Facts Book of Cold Reading: The Definitive Guide to How Cold Reading Is Used in the Psychic Industry",
+    "author": "Ian Rowland",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28",
+    "year": 2019,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513313751/sMLtOKa-qdph0veY7seBWl1XOid6vMRI4YWu2diVK_Y-cover-cover.jpeg",
+    "spineColor": "#143d44",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01kn7413fjbynfz32y37j6eysq",
@@ -3298,6 +3428,17 @@
     "spineColor": "#6a4444"
   },
   {
+    "id": "rw-01m5z9p3j91g0m3pz4sesf9mfs",
+    "title": "Good to Great",
+    "author": "Jim Collins",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513130929/1LUrGFppFqYZsvYgUXlxBnbrVnkc_zL9k30wkUq7ogg-cove_e1AyUTu.png",
+    "spineColor": "#7b2424",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01kn04m8qfks224adbjbmhkbmz",
     "title": "Built to Last",
     "author": "Jim Collins",
@@ -3328,17 +3469,6 @@
     "year": 2020,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438746350/wnWhGtDZDzSCNHssNrf7Tl-69O2OCOC56YmniRx2kOU-cove_gSqtR3M.jpg",
     "spineColor": "#6d6820"
-  },
-  {
-    "id": "rw-01kn04kw14kwgyxty1tmpwkt28",
-    "title": "Good To Great Why Some Companies Make The Leap And Others Don't",
-    "author": "Jim Collins",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2006,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/5015864/mOsno5DjtNfa4ZXtn_hB2z0tVdB_F6QY3T9mur075xw-cover-5015864.png",
-    "spineColor": "#6a4444"
   },
   {
     "id": "rw-01kn0a8yrckkmyp4ds4wv591cd",
@@ -3657,15 +3787,16 @@
     "spineColor": "#866727"
   },
   {
-    "id": "rw-01kn01sb45db2kmqfgjqamndp2",
-    "title": "The Body Language of Sex, Power, and Aggression",
+    "id": "rw-01m5zc4n4z42eh5x8y236vv6er",
+    "title": "The Body Language of Sex, Power & Aggression: How to Recognize It and How to Use It",
     "author": "Julius Fast",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2005,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438737039/QdKYvT_yqoec2ULKSD4gEyv_nfE1qgcbXUelXpwfa3Y-cove_H4Mcvbs.png",
-    "spineColor": "#6a4444"
+    "dateAdded": "2026-10-27",
+    "year": 2013,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513139248/DKseAneIuGob6NVm5OaFMmfsugIG8xU0AUZStf2-znE-cove_bCEXEKo.png",
+    "spineColor": "#441414",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01knhmntmenrtdj7pn45dwyd9k",
@@ -3822,15 +3953,15 @@
     "spineColor": "#862727"
   },
   {
-    "id": "rw-01kmzxpx2z6qry1a2knjgx3syr",
+    "id": "rw-01m5z9p65w8qk6gqg1zdqxbw0k",
     "title": "The Power of Less",
     "author": "Leo Babauta",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2009,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/51733537/grvfQPtANAGjJ9BQqcL7zx12gY7OFcS6J8V13CEwlO8-cover_nLBY90a.png",
-    "spineColor": "#6a4444"
+    "dateAdded": "2026-10-27",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513130935/5QGNsEen8jW-cDuwmdRLasSCu_x97XYwLWYZLex3N7U-my_c_W7BBAR2.jpg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kmzxn4qgdg27mpteqn4te7w6",
@@ -3844,6 +3975,18 @@
     "spineColor": "#6d5120"
   },
   {
+    "id": "rw-01m5zk019kcc2sfgr3qqjb18fc",
+    "title": "The Compass of Pleasure: How Our Brains Make Fatty Foods, Orgasm, Exercise, Marijuana, Generosity, Vodka, Learning, and Gambling Feel So Good",
+    "author": "Linden, David J.",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 2011,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513161273/6rocrpCpUcnyq-a6rSGipWvwUfZp14WNgH3VpAnNWo0-cove_Am3qZP3.jpg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01kn07bcgcaq8j6vx9r3pg6vnf",
     "title": "The Female Brain",
     "author": "Louann Brizendine",
@@ -3855,14 +3998,27 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01knjamneaqxcqq7g97f29z9jr",
-    "title": "You Can Heal your Life",
-    "author": "Louise L. Hay-1",
+    "id": "rw-01m5zn88j6fqa6rm75wyp4whv3",
+    "title": "You Can Heal Your Life",
+    "author": "Louise L. Hay",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-04-06",
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/441201718/iaaaa2HMiJI-6X_8aff85D5W8FmzF6I5YvF3OOBfQek-cove_Zhz7Q4M.jpg",
-    "spineColor": "#866f27"
+    "dateAdded": "2026-10-27",
+    "year": 2010,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513168257/dkq966uMirV3dbT-SisFxML6RrGDO4AskcRBUxpXVNc-img_47-cover.jpg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
+    "id": "rw-01m5zjv20zsepd8r9b51b1zq3b",
+    "title": "Letters From a Stoic (Penguin Classics)",
+    "author": "Lucius Annaeus Seneca",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513160741/xh9FFcH_5FM9wY4A0PvSX-3zZ4Gk-0KaaDCYDKWYfvY-Sene_eitECs8.jpg",
+    "spineColor": "#322020",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01kn00frkm3qmsawa2n7wjfjqd",
@@ -3907,6 +4063,18 @@
     "year": 2011,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438747574/kf6G3WN5NDSRXRM9hyoCSfHyO77llRM0q0jWJq5pMS8-cove_Ds6WnfY.jpg",
     "spineColor": "#12293f"
+  },
+  {
+    "id": "rw-01m60mvchvyq1bdqbp4jzwe8m3",
+    "title": "Talking to Strangers: What We Should Know About the People We Don’t Know",
+    "author": "Malcolm Gladwell",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28",
+    "year": 2019,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513313778/KrdQcGPIWLZ5fkhk0uZpEkyMIDm7b7HUDVvezgQIG7M-cov_z2BAtmI.jpeg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01knjamff4xgptajfv3k3rjtm0",
@@ -3965,6 +4133,17 @@
     "spineColor": "#4a4a52",
     "spineWidth": 20,
     "genre": "philosophy"
+  },
+  {
+    "id": "rw-01m60mvng1pnmxkap46g83d18a",
+    "title": "The Confidence Game: The Psychology of the Con and Why We Fall for It Every Time",
+    "author": "Maria Konnikova",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-28",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513313799/C0SkbU6JmZBrkmsms_5ULN9_h2fK1drSnyWfbnd5r8Q-cove_H8y6Fpj.png",
+    "spineColor": "#746822",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01knc8ksnfd96qh2vsf84p0mqr",
@@ -4033,14 +4212,16 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01knc8pax192btkn53vcbmzy1r",
-    "title": "Learned Optimism How To Change Your Mind And Your Life",
+    "id": "rw-01m5zjtywm4nfmk2qq0882ehfs",
+    "title": "Learned Optimism: How to Change Your Mind and Your Life",
     "author": "Martin E. P. Seligman",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-04-04",
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/30775217/_DBeonjijOhRrb7f6aH7FyUcXupNBIrzYstBMNKwmHw-cover_6Dysue1.png",
-    "spineColor": "#6a4444"
+    "dateAdded": "2026-10-27",
+    "year": 2011,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513160726/ESg-djSOdjgAT4zNo0JDZYmF8bMS0j_FUqt-CR-1HEM-cover-cover.jpeg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn07b1n0q71kf57rbbte71qs",
@@ -4200,16 +4381,6 @@
     "dateAdded": "2026-03-30",
     "year": 2005,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/19054954/3QHUkpBz_xj9Hnhi0dj0W2ziLdP30JbrhuZKT67a6tY-cover_y3gqEQI.png",
-    "spineColor": "#6a4444"
-  },
-  {
-    "id": "rw-01kn07axmn07m02j8w6qjmc7d2",
-    "title": "My Secret Garden",
-    "author": "Nancy Friday",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/179988760/7Ytn-lpDpg1PDvT2CFNdga46SU4BkNusX2VdA2azG9w-cove_u5I30Dn.png",
     "spineColor": "#6a4444"
   },
   {
@@ -4507,6 +4678,18 @@
     "spineColor": "#351d1d"
   },
   {
+    "id": "rw-01m5zc453yz5d8fbsjjtn7xbpn",
+    "title": "The Hidden Persuaders",
+    "author": "Packard, Vance",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 2007,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513139176/wbSwtt4hitk-R8MrhkajQep7QGWH7N6Y5QZdBCRvdi0-cove_GvKz3C4.jpg",
+    "spineColor": "#322020",
+    "foilColor": "#d9bd72"
+  },
+  {
     "id": "rw-01knhmpc97hdrrddzah7er3mqt",
     "title": "Why We Buy: The Science of Shopping",
     "author": "Paco Underhill",
@@ -4616,15 +4799,16 @@
     "spineColor": "#664141"
   },
   {
-    "id": "rw-01knhxhs93gq2hmh423jaa92j0",
-    "title": "The Phenomenon Of Man",
+    "id": "rw-01m5zmt6na9zmw0hrzfav65jjd",
+    "title": "The Phenomenon of Man",
     "author": "Pierre Teilhard de Chardin",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-04-06",
+    "dateAdded": "2026-10-27",
     "year": 2026,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/441118131/eL1Y3FyW3g5hYRNenePF23SZU62b2m_kFzGavnewlZc-cove_4L7D8Eg.png",
-    "spineColor": "#263b3b"
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513167092/vZW4bPZOm0JrRpTDrl0tk0F7bXu1OHYc6s_P06ycxXk-cove_mIQXFge.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn079rhfm6t3t0gf4v71hghh",
@@ -4648,37 +4832,40 @@
     "spineColor": "#756138"
   },
   {
-    "id": "rw-01kn0brt2mne45h35bpxg0vvbf",
-    "title": "Self Manager",
-    "author": "Radheshyam Das",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2008,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438767817/zPeJXj0gFQ0ZRMO-xLYm0W3dma9QKHGae_TLBDdedgc-cove_LzLXV9h.png",
-    "spineColor": "#6a4444"
-  },
-  {
-    "id": "rw-01kn0bre04bbxscs7m4eepx3ez",
-    "title": "Proactive Leader",
-    "author": "Radheshyam Das",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2008,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438767790/V_bzQuh5C6YeIfem04kXn8JstNj1Dgb0QpVYwnJCMZo-cove_uMAA9tg.png",
-    "spineColor": "#6a4444"
-  },
-  {
-    "id": "rw-01kn0br4dpr1pewx52hsbsw1ty",
+    "id": "rw-01m5zfnc2ww9qss9ngmaqbhram",
     "title": "Positive Thinker",
     "author": "Radheshyam Das",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2008,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438767746/hby7YqZozFB9I8d8vrJ7n41mXlHSuyPc9xx4CGxqROg-cove_hSRz9HR.png",
-    "spineColor": "#6a4444"
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513150302/EuQWQelWWKuWu4p_dcUlvDPGO4EtdpayN6lm3KCNo5s-cove_36j9VTr.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
+    "id": "rw-01m5zfn0aqfg86vx4qb80sze53",
+    "title": "Proactive Leader",
+    "author": "Radheshyam Das",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513150267/ALyVP_Ae5tE-y_G4Ondcs1ihzqLiqATy_j4wp50ZSkA-cove_c9u5fl1.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
+    "id": "rw-01m5zfmhcqk3szn5m22f23qqx1",
+    "title": "Self Manager",
+    "author": "Radheshyam Das",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513150136/dGV1qcns5-GmDSVgZP_6hZEunc1ybXHIP5D1fROO2FM-cove_O0r8AjW.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn0bs1fz3s8749r6vtd8ptea",
@@ -4909,15 +5096,16 @@
     "spineColor": "#6d2026"
   },
   {
-    "id": "rw-01kn07b6e4jdcamaf6tp5jd6xs",
+    "id": "rw-01m5zkr8vkgbc5x4wyb93nzy1p",
     "title": "The Art of Seduction",
     "author": "Robert Greene",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2005,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/67345663/FR2kCrVkwZN0ExvP520deMl3odTOZgwMIQsxoIVwMwY-cover_AtzgIIX.png",
-    "spineColor": "#322020"
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513164312/43iCifaVH94zLoBqqRoboukFSFUfPHUYue-flO0aFRs-cove_gXfJSSV.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn0bjt24vxzqmyty2a0kb6hp",
@@ -5402,17 +5590,6 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01kn05v3a975m5racpjrjzx7ss",
-    "title": "Letters From A Stoic",
-    "author": "Seneca",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2014,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/69807447/sftTwmoAdfUDpuLUMY8KeVV2afipiDCoUEbODNAP-uY-cover_mwtFSGY.png",
-    "spineColor": "#868627"
-  },
-  {
     "id": "rw-01kn07wyjrf2dn2qmftj8krwhx",
     "title": "Mastering Your Hidden Self, A Guide to the Huna Way: Study Guide",
     "author": "Serge Kahili King",
@@ -5619,15 +5796,16 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01kn0c6sjyjgkt1r7e89y98rec",
-    "title": "Preface To Tattva-vivek",
-    "author": "Srila Bhaktivinoda Thakura",
+    "id": "rw-01m5zfmacf1xztrny6yggzkycw",
+    "title": "Tattva-Vivek",
+    "author": "Srila Bhaktivinode Thakura",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2006,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438768758/avlar-0SJKtS8W7XwEeiJPwoFFN8Gukdr6ZBV6iRwg8-cove_ocIoMWO.png",
-    "spineColor": "#6a4444"
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513150112/lWO-5tl5ciLJbTuRSQJuqGIWCtciHl9dpCFWk543eYc-cove_IWsSdSY.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn74jfxbxya7wagwa25sgy9q",
@@ -5813,17 +5991,6 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01kn0bvs4tynyva4jcrv5za332",
-    "title": "The Scientific Basis of Krishna Consciousness",
-    "author": "Svarupa Damodara Dasa",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2016,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438767995/k2dcUcd3qyKZmGKUxF-j3IKxZD7DGeSHLXSasmR1KyY-cove_zEb2kyP.png",
-    "spineColor": "#61613e"
-  },
-  {
     "id": "rw-01kn741pa306yvh2b2agh35p17",
     "title": "The Optimism Bias: A Tour of the Irrationally Positive Brain",
     "author": "Tali Sharot",
@@ -5966,15 +6133,16 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01kmzxqcw4j8p5bdz06pczs4mw",
+    "id": "rw-01m5zc4byqtxtqtvs60k7gk1h3",
     "title": "Traffic: Why We Drive the Way We Do (And What It Says About Us)",
     "author": "Tom Vanderbilt",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2008,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438666307/AeR4mUfFOghRm4MUslfhcss_S1XUpwyso3eFhLKtWLk-cove_bHPhWiK.png",
-    "spineColor": "#6a4444"
+    "dateAdded": "2026-10-27",
+    "year": 2009,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513139197/9EDFJSIzhQnEt1pTldt6IiZvQeIXtEK929xMI5Nqyfw-cover-cover.jpeg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn04kn4twa02m9csjej5jmxf",
@@ -6042,17 +6210,6 @@
     "spineColor": "#6a6a44"
   },
   {
-    "id": "rw-01kmzxnexbyg9na245xk2r98s5",
-    "title": "The Hidden Persuaders",
-    "author": "Vance Packard, Mark Crispin Miller",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2008,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438665627/TX3Em4fGqEcQq9dMpZ8Ex0on3PkMbrDNSZWaVun2mFE-cove_neoWQLU.png",
-    "spineColor": "#322020"
-  },
-  {
     "id": "rw-01knc8pd72wa874afm24yew8z3",
     "title": "Man's Search For Meaning",
     "author": "Viktor E. Frankl",
@@ -6064,25 +6221,16 @@
     "spineColor": "#16293c"
   },
   {
-    "id": "rw-01kn03znt5nnqm8hhcph30kgn2",
-    "title": "Employees First, Customers Second",
-    "author": "Vineet Nayar",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "year": 2022,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/286504319/yxLQwzsNVw3tXfaJzOx1MIJEnm0Y7VecGe5sDBUHtAw-cove_PYPHOBB.png",
-    "spineColor": "#6a6a44"
-  },
-  {
-    "id": "rw-01kn0bjdypr7mpcr4pqm0dn013",
+    "id": "rw-01m5zgewe58a9twymk2wtvy1pz",
     "title": "The Science of Being Well",
-    "author": "Wallace D. Wattles, Dr. Alexandra Gayek",
+    "author": "Wallace D. Wattles",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-03-30",
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438767260/QIGH1WMI4zjJmYJ9K8Dj0pHJEFhxlgsaFreLwCrrWn4-cove_oCD25vE.png",
-    "spineColor": "#6a4444"
+    "dateAdded": "2026-10-27",
+    "year": 2026,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513152738/_jpZygFEI_TbRGUX-Eml6UzpQcQ1nRtLdQJPkBkyUIg-cove_8HOkAKN.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn0bjbmrshvdyy6h5v3nbv7q",
