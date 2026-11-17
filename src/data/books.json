@@ -131,8 +131,7 @@
     "dateAdded": "2026-11-15",
     "year": 2021,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/520375680/BWE_5b4QFCi9J0hGS_gZ3Vo6eCOI0QMzkwppdUj08vI-cove_gPBMXeu.png",
-    "spineColor": "#6a6a44",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#6a6a44"
   },
   {
     "id": "rw-01kn74kg4e5dw07753hsqr41f5",
@@ -819,6 +818,16 @@
     "dateAdded": "2026-03-30",
     "year": 2021,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438744406/y5QU03JvM6pAJCAYg1rRllvbDeB-rmNtjAf5awsRZes-cove_6ZJoZCQ.jpg",
+    "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01kn03rryd2a2ct064185hsgq1",
+    "title": "Give and Take",
+    "author": "Adam M. Grant",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-03-30",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438744440/6QAeshXvR5tvFF0CXZwKqWL8RwDlYw7Zf3m94ywrH-U-cover-00008.jpeg",
     "spineColor": "#6a4444"
   },
   {
@@ -2802,16 +2811,6 @@
     "dateAdded": "2026-03-30",
     "year": 2009,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438744347/_QGuiZaynZfNBcdDA0KcZJcrK1JNIFh9_n_-FeDUggw-cove_5YbNn0q.jpg",
-    "spineColor": "#6a4444"
-  },
-  {
-    "id": "rw-01kn03rryd2a2ct064185hsgq1",
-    "title": "B00AFPTSI0 EBOK",
-    "author": "Grant , Adam M.",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-03-30",
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438744440/6QAeshXvR5tvFF0CXZwKqWL8RwDlYw7Zf3m94ywrH-U-cover-00008.jpeg",
     "spineColor": "#6a4444"
   },
   {
