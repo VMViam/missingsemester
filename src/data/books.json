@@ -758,8 +758,7 @@
     "dateAdded": "2026-11-19",
     "year": 2024,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522129384/OYJgn1FheJzmFwisbunL2hbm8E5_OQwju77CrsM8fh8-data_I2bXUiW.jpg",
-    "spineColor": "#1c425f",
-    "foilColor": "#d9bd72"
+    "spineColor": "#1c425f"
   },
   {
     "id": "rw-01knc8qbjpyks6jht3btwxwm0c",
@@ -1071,8 +1070,7 @@
     "dateAdded": "2026-11-19",
     "year": 2021,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522100470/fjbft5eSYGxR3ntV_Ge4uvKgWPS8Slewmc7RFY6pMoY-cove_U73vmq1.png",
-    "spineColor": "#1a4959",
-    "foilColor": "#d9bd72"
+    "spineColor": "#1a4959"
   },
   {
     "id": "rw-01m7th3s8gys8ret2mye1359te",
@@ -1083,8 +1081,7 @@
     "dateAdded": "2026-11-19",
     "year": 2019,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522100229/hSvC7PGq0oVDQCQ4YmP7tuofiM4Nii2rBtRr4jB80jY-cove_yfMymMn.png",
-    "spineColor": "#6a4444",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#6a4444"
   },
   {
     "id": "rw-01m7tnrd1zd9mtnpp0avrzzf47",
@@ -1265,8 +1262,7 @@
     "dateAdded": "2026-11-19",
     "year": 2004,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522100296/C_Dd2UA51OTzYBsfwnn7ISsK8bxC5V27CZhKOplzA_g-cove_u3tbkbS.png",
-    "spineColor": "#6a4444",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#6a4444"
   },
   {
     "id": "rw-01knhxh74xnmtar89xn94ty30m",
@@ -1923,8 +1919,7 @@
     "dateAdded": "2026-11-19",
     "year": 2006,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522100538/fIA6TKq1GJOBJjtY17Ppi90e_o6uoklAWbS-mNwys4k-cove_E8LL8hh.png",
-    "spineColor": "#441414",
-    "foilColor": "#d9bd72"
+    "spineColor": "#441414"
   },
   {
     "id": "rw-01kmzxedmf9gynxk2er2py1y03",
@@ -2053,8 +2048,7 @@
     "category": "misc",
     "dateAdded": "2026-11-19",
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522100215/b9xSpJU6LFtN-qxvAxvK41PXFDO27M8k04yltMZax4A-cover-cover.jpeg",
-    "spineColor": "#123f3f",
-    "foilColor": "#d9bd72"
+    "spineColor": "#123f3f"
   },
   {
     "id": "rw-01kn03mj9sscw471szfc0gfkfh",
@@ -2649,8 +2643,7 @@
     "dateAdded": "2026-11-19",
     "year": 2010,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522129254/H34Hi2SMCJx3JKM3WFQngqjc7C81i3ngGmC7VKbvpFY-cover-cover.jpeg",
-    "spineColor": "#322020",
-    "foilColor": "#d9bd72"
+    "spineColor": "#322020"
   },
   {
     "id": "rw-01kn0568hrygmm8yk9h7rpw5m0",
@@ -3239,6 +3232,18 @@
     "spineColor": "#6d6820"
   },
   {
+    "id": "rw-01m7ymgswv0ttjqxsccfctfr6r",
+    "title": "Finite and Infinite Games",
+    "author": "James P. Carse",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "year": 1986,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522738143/Tz7IaHW91MpWe-hl8yWPUNJhBj-cZQ2CiKk7Osv6iCs-my--_vYffYkr.jpg",
+    "spineColor": "#868627",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01kmzxfek7x0axpwmh9xjjqzft",
     "title": "The Secret Life of Pronouns",
     "author": "James W. Pennebaker",
@@ -3733,8 +3738,7 @@
     "dateAdded": "2026-11-19",
     "year": 2023,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522100484/X0vZ7ckJM58388Wxw2zAKxK7Z1Ht3IugG0QJh7X1K6Y-cove_8npg1zg.png",
-    "spineColor": "#744522",
-    "foilColor": "#d9bd72"
+    "spineColor": "#744522"
   },
   {
     "id": "rw-01kn057hnf4y6msc5t1kn9ebej",
@@ -3898,8 +3902,7 @@
     "dateAdded": "2026-11-19",
     "year": 2009,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522100516/05zIUYFkseqRlKsir2akDL1mFHLpJ3FDXmYrSAqtlvI-cove_5DX43e4.png",
-    "spineColor": "#6a4444",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#6a4444"
   },
   {
     "id": "rw-01m5zn88j6fqa6rm75wyp4whv3",
@@ -4303,8 +4306,7 @@
     "category": "misc",
     "dateAdded": "2026-11-19",
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522100481/8eOV_lQV-ZHYBn8A1wR2ZpHQ1VOQS58wDaM5hayb_XA-cove_xDezmK4.png",
-    "spineColor": "#6a4444",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#6a4444"
   },
   {
     "id": "rw-01kn07aswwnvtp4jj69hz8bt3m",
@@ -5049,8 +5051,7 @@
     "dateAdded": "2026-11-19",
     "year": 2005,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522100512/B3ro-ohHPof5kAU_AlanG_pZ0OJledhZtZ9_UuU88-8-cove_khZGwKo.png",
-    "spineColor": "#322020",
-    "foilColor": "#d9bd72"
+    "spineColor": "#322020"
   },
   {
     "id": "rw-01kn0bjt24vxzqmyty2a0kb6hp",
@@ -5160,8 +5161,7 @@
     "dateAdded": "2026-11-19",
     "year": 2005,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522100530/UtNcUdgqE1T9f4FcJbRJZ8IJRHzpOkTDGFw7qBAR2Vg-cove_ka2NDKS.png",
-    "spineColor": "#868627",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#868627"
   },
   {
     "id": "rw-01kn0bdvf7930235mft2fhc5qa",
@@ -5402,8 +5402,7 @@
     "dateAdded": "2026-11-19",
     "year": 2014,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522100548/qiVXZi448tfkMNLgH1ZOVNYkY_wkSKvQkDaZKghr3D4-cove_ebblNaR.png",
-    "spineColor": "#275786",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#275786"
   },
   {
     "id": "rw-01kn05ww9g9jpc62xpm22ga2wb",
@@ -5940,8 +5939,7 @@
     "dateAdded": "2026-11-20",
     "year": 1974,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522288128/ZCm0GsG7kD4wIdS5rEF0CPz2IUWOR70w-eq3rnimp9s-cove_m9tJaaP.jpg",
-    "spineColor": "#6a6a44",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#6a6a44"
   },
   {
     "id": "rw-01kn741pa306yvh2b2agh35p17",
@@ -6007,8 +6005,7 @@
     "dateAdded": "2026-11-19",
     "year": 2015,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522129298/ndRfuBr4wLJXMtrWHF7ct1UPWmmn-kUrc_tULmWvbFY-cove_uXMQf17.jpg",
-    "spineColor": "#28626d",
-    "foilColor": "#d9bd72"
+    "spineColor": "#28626d"
   },
   {
     "id": "rw-01kn07x1h8agd6gx78eb9nk11q",
