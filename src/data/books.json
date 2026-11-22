@@ -299,18 +299,6 @@
     "spineColor": "#322020"
   },
   {
-    "id": "rw-01kn05twd1khemgv0enhcmfcxt",
-    "title": "The Obstacle is the Way",
-    "author": "Ryan Holiday",
-    "status": "reading",
-    "category": "misc",
-    "progress": 13,
-    "dateAdded": "2026-03-30",
-    "year": 2014,
-    "coverUrl": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1391440316i/18668059.jpg",
-    "spineColor": "#6a4444"
-  },
-  {
     "id": "rw-01kftqdrd2psnx8j0a1z9bm57d",
     "title": "Clear Thinking",
     "author": "Shane Parrish",
@@ -575,6 +563,18 @@
     "spineColor": "#6d4b28"
   },
   {
+    "id": "rw-01m805vpkwe9enqz7rja3h0aqv",
+    "title": "Krsna, the Reservoir of Pleasure",
+    "author": "A.C. Bhaktivedanta Swami Prabhupada",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "year": 2011,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522905917/Y9su2ePjt8s7eKF7J1NaoCeptUo8zCV4MEyWz9aWDt4-cover-cover.jpeg",
+    "spineColor": "#591a22",
+    "foilColor": "#d9bd72"
+  },
+  {
     "id": "rw-01knj3j1s36f9k3ckfhe0qfppy",
     "title": "Sri Isopanisad-1974 Edition",
     "author": "A.C. Bhaktivedanta Swami Prabhupada",
@@ -650,17 +650,6 @@
     "year": 2010,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/441182878/ogggxfggoZlIs4LI5BvKMntKAiOS1rsIWkrYU5ZEUpA-cov_XpUZI4S.jpeg",
     "spineColor": "#862727"
-  },
-  {
-    "id": "rw-01knj3gd4cr95gkz7mnha9jsh8",
-    "title": "Krsna, the Reservoir of Pleasure",
-    "author": "A.C. Bhaktivedanta Swami Prabhupada",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-04-06",
-    "year": 2011,
-    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/441182885/fil1cSujQJ2X6TaeccM669hsjcI3Tq9CLXbUvV-LXOY-cover-cover.jpeg",
-    "spineColor": "#591a22"
   },
   {
     "id": "rw-01knj3g75bz5w9dx6jfp7mgx56",
@@ -750,6 +739,17 @@
     "spineColor": "#6a4444"
   },
   {
+    "id": "rw-01m806a49v7p6f1g1smbkzap3s",
+    "title": "Toward a Psychology of Being",
+    "author": "Abraham H. Maslow",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522906761/xDLVumvgYVVUwYgLhU3FMaK7xNB5IQhVbofpnCF2598-cover-cover.jpg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01m7trjpcrh59331mv9a9txxdx",
     "title": "Motivation and Personality",
     "author": "Abraham Harold Maslow",
@@ -804,12 +804,27 @@
     "spineColor": "#6a4444"
   },
   {
-    "id": "rw-01m7tnpgnr9ntwy3yhgyhmtpet",
-    "title": "How Proust Can Change Your Life",
-    "author": "Alain De Botton",
+    "id": "rw-01m802wyvneyfbe8x2h902vcqv",
+    "title": "Refactoring UI",
+    "author": "Adam Wathan, Steve Schoger",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-11-19"
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522901788/BXqHNiV7Mpbzo-iBEH9e7AnXWC71twWWhjmR0UO0fFU-id87_MXLBegd.png",
+    "spineColor": "#12293f",
+    "foilColor": "#d9bd72"
+  },
+  {
+    "id": "rw-01m805xt2ny9x4dmk74w6mg7vb",
+    "title": "How Proust Can Change Your Life",
+    "author": "Alain de Botton",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "year": 2006,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522905993/HVmCR5zdHDX5Il2rQx_awOxu33ooLJ2TtjpT3rSdE9E-cover-cover.jpeg",
+    "spineColor": "#6a6a44",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn03ngkjhmkveyhkshn7v8e6",
@@ -1254,6 +1269,18 @@
     "spineColor": "#6a4444"
   },
   {
+    "id": "rw-01m805wq0zv07jsra5eb7j3m12",
+    "title": "Many Lives, Many Masters",
+    "author": "Brian L. Weiss",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "year": 2012,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522905959/pBVi3xpyaQS51fBkXqIhPrduExrkGg2185Yhs6XMa7k-cover-cover.jpeg",
+    "spineColor": "#276786",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01m7th4e3wcjy8t2g6a7hebw8f",
     "title": "Change Your Thinking, Change Your Life: How to Unlock Your Full Potential for Success and Achievement",
     "author": "Brian Tracy",
@@ -1370,6 +1397,17 @@
     "year": 2010,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438763751/si4EAW9XBoD1b0Pi4m95mF-hBwlRRtuOw_SxfH6csbY-cover-cover.jpeg",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m802wyzatcqk8y4h4tz27xk5",
+    "title": "Self-Theories",
+    "author": "Carol S. Dweck",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522901780/5591vKoXmPNUpTIJcv6tv7fm2yC2iamoXNmfLTqpip0-Cove_2Rkvhq4.jpg",
+    "spineColor": "#351d1d",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01kn0a9n8awemjp4seh7f3afzz",
@@ -1856,6 +1894,18 @@
     "spineColor": "#6a4444"
   },
   {
+    "id": "rw-01m802wz2x9tg7rvyn1n1k8n0v",
+    "title": "The Social Animal",
+    "author": "David Brooks",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "year": 2011,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522901783/o49iTKWHu2J1Qk7QUNEX40oWISmzG5tezVsR8NG2IKM-cove_UkOgRxT.jpg",
+    "spineColor": "#591a1a",
+    "foilColor": "#d9bd72"
+  },
+  {
     "id": "rw-01kn741s7hz9vwns0x23ysvnpw",
     "title": "The Road to Character",
     "author": "David Brooks",
@@ -2188,6 +2238,17 @@
     "spineColor": "#605624"
   },
   {
+    "id": "rw-01m806a4cbcnyj0dmzswn0zgze",
+    "title": "Emotional Design: Why We Love (or Hate) Everyday Things",
+    "author": "Donald A. Norman",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522906765/pDtYljfksisarIurT5IzK-qHjK2OTdltW03ImKYUUM8-cove_u0pwGiu.jpg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01kn74jr15mvh55xqbshs9stwd",
     "title": "Thinking In Systems: A Primer",
     "author": "Donella H. Meadows, Diana Wright",
@@ -2230,14 +2291,6 @@
     "year": 2018,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/239547923/XKZuPuMzuIurt7DAZG6VMf1WHHQ4lu83d1wKYjLeZ9w-cove_NVOrTiA.png",
     "spineColor": "#322020"
-  },
-  {
-    "id": "rw-01m7tnpzq3kv02teqvpxet62n3",
-    "title": "Many Lives, Many Masters",
-    "author": "Dr. Brian Weiss",
-    "status": "to-read",
-    "category": "misc",
-    "dateAdded": "2026-11-19"
   },
   {
     "id": "rw-01m5zg99290sfm6pfj3c1r2hws",
@@ -2370,6 +2423,17 @@
     "year": 2009,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438663222/g3mjZoTBnayKyJaOs0Xt8jr36oqstGHHHYYnP2HXgRY-cove_MZR71y0.jpg",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m802wz1ttmxfdvp81k1jmtah",
+    "title": "The Social Animal",
+    "author": "Elliot Aronson",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522901785/y-nU-RncRa9a9QpGCN4LllN-SsmPXH1PFWvngChI7qM-cove_Kq7pIvQ.jpg",
+    "spineColor": "#866f27",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn0bf7mxfc5ghsrnrmdcxz68",
@@ -2635,6 +2699,18 @@
     "spineColor": "#322020"
   },
   {
+    "id": "rw-01m805x29wfeprg72drcs21jwa",
+    "title": "Letter to His Father",
+    "author": "Franz Kafka",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "year": 2008,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522905975/g-NxmaEqSHxlUCkr2pOTsrvGpTm6DIA95oMXSv7FDug-cover-cover.jpeg",
+    "spineColor": "#351d1d",
+    "foilColor": "#d9bd72"
+  },
+  {
     "id": "rw-01m7trhewn3x95wreef8k3nhaq",
     "title": "Bargaining for Advantage",
     "author": "G. Richard Shell",
@@ -2820,6 +2896,17 @@
     "year": 2008,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/272425950/QDAtc_wRlOJ6SLU8CTO_XK9mCq17TZqBjI7ZTLarzco-cove_3VTtgj0.png",
     "spineColor": "#322020"
+  },
+  {
+    "id": "rw-01m806a4b4vgq1xf81m6wadsty",
+    "title": "Sense and Nonsense in Psychology",
+    "author": "H. J. Eysenck",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522906764/0S6mm6AYbfA4l1AXFlWbVC8blIFWQI6QLLKiCzMZpPg-cove_ZbsOfsw.jpg",
+    "spineColor": "#322020",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01m5c2f9b520vjhaxrk87vgb4q",
@@ -3240,8 +3327,7 @@
     "dateAdded": "2026-11-21",
     "year": 1986,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522738143/Tz7IaHW91MpWe-hl8yWPUNJhBj-cZQ2CiKk7Osv6iCs-my--_vYffYkr.jpg",
-    "spineColor": "#868627",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#868627"
   },
   {
     "id": "rw-01kmzxfek7x0axpwmh9xjjqzft",
@@ -3544,6 +3630,18 @@
     "spineColor": "#322020"
   },
   {
+    "id": "rw-01m802wytbxww556z8fzdxx63v",
+    "title": "Laws of UX",
+    "author": "Jon Yablonski",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "year": 2024,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522901784/XDMVUBpdeifDZHnfub83f1LSu19PN3E0IliMymBQ7pg-cove_uHRY7oC.png",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01kmzxh0s7bv9k39qrb5xcstrm",
     "title": "How We Decide",
     "author": "Jonah Lehrer",
@@ -3553,6 +3651,17 @@
     "year": 2009,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/124956642/tSI4d2ypdae_sHN__ksJZj_7x_LSTseAmMS_mGyJrxs-cove_vEXItau.png",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m802wywy68q92pzt6hrcb42g",
+    "title": "Thinking and Deciding",
+    "author": "Jonathan Baron",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522901779/OZDD0MUzyQR_RsxSFLftxTztiDpcTMltFbzVF5XKrEE-cove_Roi9Kep.jpg",
+    "spineColor": "#4b6a23",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01kn064ke4fetx3eavrr0rwb8q",
@@ -3575,6 +3684,17 @@
     "year": 2012,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438749622/-OVxBhFLO-S8skwUInEDF-yEa6wZnUxVhjvhXAEcFqc-cove_fkdWGOA.jpg",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m806a477acre4ej5w00w5zrj",
+    "title": "Maps of Meaning: The Architecture of Belief",
+    "author": "Jordan B. Peterson",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522906763/EsR76a9qh2W2zw4rVNunKaIZY2wWybuUQaySW0xaXSo-cove_FtVmu5v.jpg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
   },
   {
     "id": "rw-01kn0bayx82gc65ze7jgxg82za",
@@ -4184,6 +4304,17 @@
     "spineColor": "#6a4444"
   },
   {
+    "id": "rw-01m802wyy828rwp5dtbtkyedbs",
+    "title": "Moneyball",
+    "author": "Michael Lewis",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522901781/sW8zWlyR90uwp3KbksQBi4xurf55Z37jMLBuQvNSqwU-cove_4C7oh7Q.jpg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01kn059fx3sy2fbb3y3dmx9xam",
     "title": "Ready, Fire, Aim: Zero to $100 Million in No Time Flat",
     "author": "Michael Masterson",
@@ -4700,6 +4831,17 @@
     "year": 2014,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/441056273/b10VJCBRY56QN_Y9fBveodtqclFn7tjDGjqvl604AG4-cove_6xsFKZm.jpg",
     "spineColor": "#28566d"
+  },
+  {
+    "id": "rw-01m802wz56be49y7femhff69c5",
+    "title": "Marketing Insights from A to Z",
+    "author": "Philip Kotler",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522901786/SqH30weGUWL_J3B2Yh7jPyMoWST-cQB6Dg-Ty3kyYBI-cove_Vnx12kF.jpg",
+    "spineColor": "#322020",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01kn74j8h66pcb6c5bfsb7edqm",
@@ -5339,6 +5481,18 @@
     "spineColor": "#322020"
   },
   {
+    "id": "rw-01m805xgemd4y6vvqstjmhh8ba",
+    "title": "The Obstacle Is the Way",
+    "author": "Ryan Holiday",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "year": 2014,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522905986/b4VEmhy4xhMcVAEQGorZwZ-3HLLlAnVR0RCKeiM1e_M-cove_TpQCtjF.jpg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01kn05tjsjgdj2sqk9xt3gse9c",
     "title": "Ego Is the Enemy",
     "author": "Ryan Holiday",
@@ -5715,6 +5869,17 @@
     "year": 2017,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438744400/sI_v87edgqR-QaLBhId6_K7lTW1D_nx0dF6BaPmJvIM-cove_QTZEhRO.jpg",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m806a48kf40vk62fv42pxv9t",
+    "title": "The Interpretation of Dreams",
+    "author": "Sigmund Freud",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522906757/Nky3OKzfhLIRuBdTyHHEceSf0nf6a1BTa-J_egs_wvo-cover-cover.jpg",
+    "spineColor": "#322020",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01knhmn260axvw10swfvp8gb8b",
@@ -6160,6 +6325,18 @@
     "spineColor": "#6a6a44"
   },
   {
+    "id": "rw-01m802wz0hv4kdzf74rg046ay4",
+    "title": "Phantoms in the Brain",
+    "author": "V. S. Ramachandran, Sandra Blakeslee",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "year": 2011,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522901782/XnU24TP2mezxJN7MtV4nwyfd_9oETi5rXPiNdlLqdis-cover-cover.jpeg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01knc8pd72wa874afm24yew8z3",
     "title": "Man's Search For Meaning",
     "author": "Viktor E. Frankl",
@@ -6212,6 +6389,17 @@
     "dateAdded": "2026-03-30",
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438733731/a7HLn8j6qbAkWDwsJhLOVWiMO320Q6x7iUJB4Bxrnfs-cove_qrkN4uM.png",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m802wz44mcdmawdhrzdyjkay",
+    "title": "Understanding Arguments: An Introduction to Informal Logic",
+    "author": "Walter Sinnott-Armstrong, Robert J. Fogelin",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-21",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/522901787/B8t7z-AAiMiQTB8C9cKDLjUe6ZA_swrFNBJknqJqXFk-cove_rO4Kmcq.jpg",
+    "spineColor": "#322020",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01kn03yyg5xb2jd8ja3f2adp2a",
