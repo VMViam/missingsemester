@@ -1273,8 +1273,7 @@
     "dateAdded": "2026-11-24",
     "year": 2019,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/523650261/9qkoEIrQokboznRqiNEMA_0OSg4ugKQ9CFgYmv0oqYs-cove_5MFYuWM.jpg",
-    "spineColor": "#322020",
-    "foilColor": "#d9bd72"
+    "spineColor": "#322020"
   },
   {
     "id": "rw-01m805wq0zv07jsra5eb7j3m12",
@@ -1444,8 +1443,7 @@
     "category": "misc",
     "dateAdded": "2026-11-24",
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/523650266/gvxE_-dkcX1Ch9p4wAjSTzvlf8C6nsqnVXPa19zat7I-npp-_n1FeVT7.jpg",
-    "spineColor": "#70703d",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#70703d"
   },
   {
     "id": "rw-01kn06454tr3wvxvmz9sny3pfp",
@@ -2610,8 +2608,7 @@
     "category": "misc",
     "dateAdded": "2026-11-24",
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/523719826/1U-fdDvMN_VK7QOBohzXAw-xj2TlZ-wJht0ALq5weG8-img0-cover.jpg",
-    "spineColor": "#322020",
-    "foilColor": "#d9bd72"
+    "spineColor": "#322020"
   },
   {
     "id": "rw-01kn014wjxxhd2kxdk06e0c54b",
@@ -3240,6 +3237,18 @@
     "spineColor": "#868627"
   },
   {
+    "id": "rw-01m88t73k0fcgsgnraaeznrk9h",
+    "title": "Storycraft",
+    "author": "Jack Hart",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-25",
+    "year": 2021,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/524148414/KA1nYktVC_LUhwCXnSq3RD3A7EdmXUlawgRHWwTFjsE-My_C_bBWSDgS.jpg",
+    "spineColor": "#744522",
+    "foilColor": "#d9bd72"
+  },
+  {
     "id": "rw-01kn0a9zwpq0zjee7d1et4eqbv",
     "title": "Kill Your Porn & Masturbation Habit",
     "author": "Jack Johnson",
@@ -3437,8 +3446,18 @@
     "dateAdded": "2026-11-24",
     "year": 2020,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/375401668/EYB7nlpWd1P0IfkDgYrzXv6E6U2f1NEddxnDINeG3lc-cove_kPBgvY9.png",
-    "spineColor": "#6a4444",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m89543zmp4y82j1q5vvxbr0n",
+    "title": "Ten Steps to Complex Learning",
+    "author": "Jeroen J. G. Van Merriënboer",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-25",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/302666824/J-ENzGQ3X3ZKpLEMn-r9oI1Q7VcOa6zi2gZhwjh1KyI-cove_5gH2kWa.png",
+    "spineColor": "#322020",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01kn040zgt3e76zwm2wkdtfs1j",
@@ -3632,8 +3651,7 @@
     "dateAdded": "2026-11-24",
     "year": 2013,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/523650253/j515d-Qts_FeUECQixzraki3Hx4tx9oPgSSk4FGd9jw-cover-cover.jpeg",
-    "spineColor": "#70703d",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#70703d"
   },
   {
     "id": "rw-01kn04syesvsbn6qb629ekkwk1",
@@ -3781,8 +3799,7 @@
     "category": "misc",
     "dateAdded": "2026-11-24",
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/225385104/y1OGjoPqkLgqESI1_10uZcDueAyLuB-61lAs_Na2BPQ-cove_umGSoCM.png",
-    "spineColor": "#144444",
-    "foilColor": "#d9bd72"
+    "spineColor": "#144444"
   },
   {
     "id": "rw-01knc8r1qmp0cnyb5qan768mmp",
@@ -3804,8 +3821,7 @@
     "dateAdded": "2026-11-24",
     "year": 2012,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/523650263/wZmHhYIH4YEZJKiws_keEWLdoWwqXPl8_j-QKY2qid0-cover-cover.jpeg",
-    "spineColor": "#6a4444",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#6a4444"
   },
   {
     "id": "rw-01knhmpf3966c9r6jn7a240c8d",
@@ -4081,6 +4097,18 @@
     "spineColor": "#6a4444"
   },
   {
+    "id": "rw-01m895b05ar0b7evym4z8vhq9e",
+    "title": "Learning as a Generative Activity",
+    "author": "Logan Fiorella, Richard E. Mayer",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-25",
+    "year": 2014,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/27085213/CKxgDsVOIQUtRLKqQYeeIb4ZiPqlm9W8cD3wPMNp7rs-cover_YW0sGkg.png",
+    "spineColor": "#123f3f",
+    "foilColor": "#d9bd72"
+  },
+  {
     "id": "rw-01m7th6w7rde5w70hem1rwzcd9",
     "title": "The Female Brain",
     "author": "Louann Brizendine",
@@ -4101,6 +4129,18 @@
     "year": 2010,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/513168257/dkq966uMirV3dbT-SisFxML6RrGDO4AskcRBUxpXVNc-img_47-cover.jpg",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m8932w633fh51t9n4ygtqm2k",
+    "title": "How Learning Works",
+    "author": "Lovett",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-25",
+    "year": 2023,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/524165904/UOHdrv6pid_L-jpkaZ30lKczOSMxuDThv37cVq-oaxc-cove_eo8BbdQ.jpg",
+    "spineColor": "#742236",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01m5zjv20zsepd8r9b51b1zq3b",
@@ -4336,7 +4376,17 @@
     "dateAdded": "2026-11-24",
     "year": 2015,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/523650255/MOr2yHcKdwY1sSmOlYRPS0vw7Hkvhz90IXR9gJrX-i8-cover-cover.jpeg",
-    "spineColor": "#6a4444",
+    "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m88t73m8g5p6v7qfw62fybst",
+    "title": "Storyworthy",
+    "author": "Matthew Dicks",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-25",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/524148413/l-GnEi-efGvjk054v2-4oyGtgaf4uSzTkW2GJMieIpg-my-c_iY4UaBX.jpg",
+    "spineColor": "#7b5324",
     "foilColor": "#e8d9a8"
   },
   {
@@ -5204,8 +5254,7 @@
     "dateAdded": "2026-11-23",
     "year": 2017,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/21987959/XRSbQRjPLvklw3Jot9o0N5_xf3z0VpJ2YRu0gLfNmyk-cover_jMdA6UD.png",
-    "spineColor": "#661e39",
-    "foilColor": "#d9bd72"
+    "spineColor": "#661e39"
   },
   {
     "id": "rw-01kn0ab6dgeh71c39xqd39scne",
@@ -5345,7 +5394,7 @@
     "author": "Robert M. Pirsig",
     "status": "to-read",
     "category": "misc",
-    "dateAdded": "2026-04-04",
+    "dateAdded": "2026-11-25",
     "year": 2004,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/440516219/X-zLjNpXqRRrlzRgxUlKfHNR2poD1m25sW9ijEjU7Sw-cove_PZCRKcN.png",
     "spineColor": "#6a4444"
@@ -5556,8 +5605,7 @@
     "dateAdded": "2026-11-24",
     "year": 2014,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/523650254/UnjBxjnI35whh0BLOuiH2bTuVwYyRXWZp0PqO9QVsRo-cove_YOUDhMo.jpg",
-    "spineColor": "#6a4444",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#6a4444"
   },
   {
     "id": "rw-01kn053dcxqdkxr0c78h06agn4",
@@ -5763,6 +5811,18 @@
     "year": 2011,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/107941089/p661YZuqOAddXmYX0dGO1MV5zwEcOsVBax9zB2lzs7g-cove_hnsHYZV.png",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m895q3dq66zeesf9meh9dbks",
+    "title": "Get Better at Anything",
+    "author": "Scott H. Young",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-25",
+    "year": 2024,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/524174639/taNaZvjw2OQ-N2iad6Xu4_EmrAPplWJl7OsL-joSjrQ-cove_ZDuDTi3.jpg",
+    "spineColor": "#322020",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01kn04w9wpbe0a7rhpqk5wgg8g",
@@ -6454,8 +6514,7 @@
     "dateAdded": "2026-11-24",
     "year": 2001,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/523719825/AmYw87gFNOo2kgQlNU4KhzZhTMvAO8L8BaAuc8c60KE-cov_TTbI20p.jpeg",
-    "spineColor": "#6a4444",
-    "foilColor": "#e8d9a8"
+    "spineColor": "#6a4444"
   },
   {
     "id": "rw-01m5zgewe58a9twymk2wtvy1pz",
@@ -6499,6 +6558,17 @@
     "dateAdded": "2026-03-30",
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/438733731/a7HLn8j6qbAkWDwsJhLOVWiMO320Q6x7iUJB4Bxrnfs-cove_qrkN4uM.png",
     "spineColor": "#6a4444"
+  },
+  {
+    "id": "rw-01m8954kd2vbd696vy6g0stnjt",
+    "title": "Understanding Arguments: An Introduction to Informal Logic",
+    "author": "Walter Sinnott-Armstrong, Robert J. Fogelin",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-25",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/524173276/dTbHvnAB00KePEWkHT91qfIE5LyAiq1my-9jJgyfs4A-cove_5wvJEex.jpg",
+    "spineColor": "#322020",
+    "foilColor": "#d9bd72"
   },
   {
     "id": "rw-01m802wz44mcdmawdhrzdyjkay",
@@ -6555,6 +6625,17 @@
     "spineColor": "#866f27"
   },
   {
+    "id": "rw-01m8932w7fjp8vfqqzs8vmvhk8",
+    "title": "Good Habits, Bad Habits",
+    "author": "Wendy Wood",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-25",
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/524165905/Sl__5IJTGgqBPJi2TX9B2Zlm2u21hki5tgUt6k4QyAc-cove_4urm2xu.jpg",
+    "spineColor": "#6a4444",
+    "foilColor": "#e8d9a8"
+  },
+  {
     "id": "rw-01kn05a1fsqdj3rtzyqseyd6f1",
     "title": "The Status Game: On Social Position and How We Use It",
     "author": "Will Storr",
@@ -6585,7 +6666,18 @@
     "dateAdded": "2026-11-24",
     "year": 2023,
     "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/318115574/0MqmmLWSyY2Yoc9U3YI71x2o6j0oZ5b3aqvnz_i06HQ-cove_OH2L39a.png",
-    "spineColor": "#12293f",
+    "spineColor": "#12293f"
+  },
+  {
+    "id": "rw-01m89578y756gh19kkwn6ngjy4",
+    "title": "Understanding How We Learn: A Visual Guide",
+    "author": "Yana Weinstein",
+    "status": "to-read",
+    "category": "misc",
+    "dateAdded": "2026-11-25",
+    "year": 2018,
+    "coverUrl": "https://readwise-assets.s3.amazonaws.com/media/reader/parsed_document_assets/770442/Uu-iPMq0gPxujEvyGsF59EAJipiKwYser8rwpFBVI04-cover-770442.png",
+    "spineColor": "#1e4c66",
     "foilColor": "#d9bd72"
   },
   {
